@@ -1,0 +1,81 @@
+openapi: 3.0.0
+info:
+  title: Pet
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3031
+
+paths:
+  /pets:
+    get:
+      operationId: getPets
+      responses:
+        '200':
+          description: A lot of pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pet'
+    post:
+      operationId: createPet
+      parameters:
+        - name: pet
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+            additionalProperties: false
+            required: ['name']
+      responses:
+        '200':
+          description: The newly created pet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+
+
+  /pets/{petId}:
+    get:
+      operationId: getPetById
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            additionalProperties: false
+      responses:
+        '200':
+          description: A single pet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pet'
+
+components:
+  schemas:
+    pet:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        food:
+          $ref: '#/components/schemas/food'
+      required: ['id', 'name']
+      additionalProperties: false
+    food:
+      type: object
+      properties:
+        name:
+          type: string
+      required: ['name']
+      additionalProperties: false
