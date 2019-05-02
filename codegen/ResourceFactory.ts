@@ -7,25 +7,8 @@ import Mustache from 'mustache'
 import { groupBy } from 'lodash'
 import { capitalize } from "./utils";
 import { isReferenceObject } from "./isReferenceObject";
-
-export interface PathDescription {
-    resourceName: string
-    path: string
-    method: 'get' | 'post' | 'delete' | 'options' | 'put' | 'head'
-    operationId: string
-    parameterTypeName: string
-    parameterTypeDefinition: string
-
-    response: {
-        definition: string
-        name: string
-    }
-}
-
-export interface ResourceDescription {
-    resourceName: string
-    paths: PathDescription[]
-}
+import { ResourceTemplatePathType } from "./templates/server/ResourceTemplatePathType";
+import { ResourceTemplateType } from "./templates/server/ResourceTemplateType";
 
 export interface ResourceFactoryContext {
     imports: { properties: string[], path: string }[]
@@ -62,13 +45,13 @@ export class ResourceFactory {
 
         const paths = await this.getPathDescriptions(swagger.paths)
 
-        const groupByKey: keyof PathDescription = 'resourceName'
+        const groupByKey: keyof ResourceTemplatePathType = 'resourceName'
         const pathsByResource = groupBy(paths, groupByKey)
 
         const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'Resource.mustache'))).toString()
 
         for (const resourceName of Object.keys(pathsByResource)) {
-            const resourceDescription: ResourceDescription = { resourceName, paths: pathsByResource[resourceName] }
+            const resourceDescription: ResourceTemplateType = { resourceName, paths: pathsByResource[resourceName] }
             const resourceFileString = Mustache.render(templateString, resourceDescription)
             await fs.writeFile(path.join(destDir, `${resourceName}Resource.ts`), resourceFileString)
             this.context.resources.push({
@@ -93,14 +76,14 @@ export class ResourceFactory {
         await fs.writeFile(path.join(destDir, 'ResourceConfig.ts'), fileContent)
     }
 
-    async getPathDescriptions(swaggerPaths: OpenAPIV3.Document['paths']): Promise<PathDescription[]> {
-        const pathDescriptions: PathDescription[] = []
+    async getPathDescriptions(swaggerPaths: OpenAPIV3.Document['paths']): Promise<ResourceTemplatePathType[]> {
+        const pathDescriptions: ResourceTemplatePathType[] = []
         const swaggerPathsNames = Object.keys(swaggerPaths)
 
         for (const path of swaggerPathsNames) {
             const swaggerPathObject = swaggerPaths[path]
             const resourceName = this.getResourceNameForPath(path)
-            const pathVerbs: PathDescription['method'][] = ['get', 'post', 'delete', 'put', 'options', 'head']
+            const pathVerbs: ResourceTemplatePathType['method'][] = ['get', 'post', 'delete', 'put', 'options', 'head']
             for (const pathVerb of pathVerbs) {
                 const pathItemObject = swaggerPathObject[pathVerb]
 
@@ -126,7 +109,7 @@ export class ResourceFactory {
         return pathDescriptions
     }
 
-    async getPathResponseDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<PathDescription['response']> {
+    async getPathResponseDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<ResourceTemplatePathType['response']> {
         if (!pathItemObject.responses) {
             throw new Error('Missing responses')
         }
