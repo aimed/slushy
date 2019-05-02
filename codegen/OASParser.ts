@@ -38,7 +38,7 @@ export class OASParser {
         await fs.writeFile(swaggerOutPath, JSON.stringify(swagger, null, 2))
 
         const typeFactory = new TypeFactory()
-        await typeFactory.createTypes(context)
+        await typeFactory.createTypesFile(context)
 
         const resourceFactory = new ResourceFactory()
         await resourceFactory.createResources(swagger, destDir)
