@@ -1,4 +1,4 @@
-import { AtlantisProps } from "./Atlantis";
+import { AtlantisProps } from "./AtlantisProps";
 import { OpenAPIV3 } from 'openapi-types';
 import { AtlantisRequest, AtlantisResponse } from "./ServerImpl";
 export type AtlantisContext<TContext = {}> = {

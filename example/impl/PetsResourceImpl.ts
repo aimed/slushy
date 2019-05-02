@@ -17,7 +17,7 @@ export class PetsResourceImpl implements PetsResource {
     public async createPet(params: CreatePetParams): Promise<CreatePetResponse> {
         const pet: CreatePetResponse = {
             id: this.pets.length + 1,
-            ...params.pet
+            name: params.name,
         }
         this.pets.push(pet)
         return pet

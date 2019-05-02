@@ -1,6 +1,6 @@
 import { Middleware } from "./Middleware";
 import bodyParser from 'body-parser'
-import { AtlantisProps } from "../Atlantis";
+import { AtlantisProps } from "../AtlantisProps";
 
 export class BodyParser implements Middleware {
     create(_props: AtlantisProps) {

@@ -12,7 +12,7 @@ export class RequestParametersExtractor<TContext = {}> {
      * Extracts all parameters for the current operation from the request.
      */
     public async getParameters<TParams>(context: AtlantisContext<TContext>): Promise<TParams> {
-        const operation = context.operationObject
+        const { operationObject, req } = context
 
         const params: { [index: string]: any } = {}
 
@@ -24,19 +24,27 @@ export class RequestParametersExtractor<TContext = {}> {
             required: []
         }
 
-        for (const parameter of operation.parameters || []) {
+        for (const parameter of operationObject.parameters || []) {
             if (isReferenceObject(parameter)) {
                 // TODO: Not supported right now
                 continue
             }
 
             const parameterInRequestProperty = {
-                path: context.req.params,
-                query: context.req.query,
-                body: context.req.body,
+                path: req.params,
+                query: req.query,
+                body: req.body,
             }
 
-            let value = parameterInRequestProperty[parameter.in as keyof typeof parameterInRequestProperty][parameter.name]
+            const hasRequestMapping = (inValue: string): inValue is keyof typeof parameterInRequestProperty => {
+                return Boolean(inValue in parameterInRequestProperty)
+            }
+
+            if (!hasRequestMapping(parameter.in)) {
+                throw new Error(`Invalid parameter in value '${parameter.in}', only ${Object.keys(parameterInRequestProperty).join(', ')} are supported`)
+            }
+
+            let value = parameterInRequestProperty[parameter.in][parameter.name]
             if (parameter.schema) {
                 paramSchema.properties[parameter.name] = parameter.schema
                 if (parameter.required) {
@@ -58,10 +66,29 @@ export class RequestParametersExtractor<TContext = {}> {
 
         const isValid = await this.validator.validate(paramSchema, params)
         if (!isValid) {
-            // TODO: Throw proper error with status code
             throw new BadRequestError(this.validator.errorsText())
         }
 
         return params as TParams
+    }
+
+    public async getRequestBody<TBody>(context: AtlantisContext<TContext>): Promise<TBody> {
+        const { operationObject: { requestBody }, req } = context
+        // TODO: Support reference objects
+        if (requestBody && !isReferenceObject(requestBody)) {
+            if (requestBody.required && !req.body) {
+                throw new BadRequestError('Request body is required')
+            }
+
+            // TODO: Support more mime types
+            if (requestBody.content['application/json'] && requestBody.content['application/json'].schema) {
+                const isValid = await this.validator.validate(requestBody.content['application/json'].schema, req.body)
+                if (!isValid) {
+                    throw new BadRequestError(this.validator.errorsText())
+                }
+            }
+        }
+        // FIXME: Not validated right now
+        return req.body as TBody
     }
 }

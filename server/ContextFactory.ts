@@ -1,7 +1,7 @@
 import { AtlantisRequest, AtlantisResponse, AtlantisContext } from ".";
 
 import { OpenAPIV3 } from "openapi-types";
-import { AtlantisProps } from "./Atlantis";
+import { AtlantisProps } from "./AtlantisProps";
 import { OpenApiBridge } from "./ServerImpl";
 
 export class ContextFactory<TContext = {}> {

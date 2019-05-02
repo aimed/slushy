@@ -1,16 +1,8 @@
-import { OpenAPIV3 } from "openapi-types";
 import { fs } from "mz";
 import { AtlantisRouter } from "./AtlantisRouter";
-import { AtlantisResourceConfiguration } from "./AtlantisResourceConfiguration";
 import { AtlantisApplication, AtlantisApplicationFactory } from "./ServerImpl";
-
-export interface AtlantisConfig {
-    resourceConfiguration: AtlantisResourceConfiguration
-}
-
-export interface AtlantisProps extends AtlantisConfig {
-    openApi: OpenAPIV3.Document
-}
+import { AtlantisProps } from "./AtlantisProps";
+import { AtlantisConfig } from "./AtlantisConfig";
 
 export class Atlantis {
 

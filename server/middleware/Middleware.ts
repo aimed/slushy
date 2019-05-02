@@ -1,5 +1,5 @@
 import { AtlantisRequest, AtlantisResponse } from "../ServerImpl";
-import { AtlantisProps } from "../Atlantis";
+import { AtlantisProps } from "../AtlantisProps";
 
 export interface Middleware {
     // new(): Middleware

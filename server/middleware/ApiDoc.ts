@@ -1,5 +1,5 @@
 import { Middleware } from "./Middleware";
-import { AtlantisProps } from "../Atlantis";
+import { AtlantisProps } from "../AtlantisProps";
 import openApiUi from 'swagger-ui-express'
 
 export class ApiDoc implements Middleware {

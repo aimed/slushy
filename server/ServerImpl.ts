@@ -2,6 +2,7 @@
  * This abstracts away the underlying server implementation
  */
 import express from 'express'
+import { AtlantisProps } from "./AtlantisProps";
 
 export class AtlantisApplicationFactory {
     public static create(): AtlantisApplication {
