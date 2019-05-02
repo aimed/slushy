@@ -6,11 +6,12 @@ import * as path from 'path'
 import Mustache from 'mustache'
 import { groupBy } from 'lodash'
 import { capitalize } from "./utils";
+import { isReferenceObject } from "./isReferenceObject";
 
 export interface PathDescription {
     resourceName: string
     path: string
-    method: 'get' | 'post' | 'delete' | 'options' | 'put'
+    method: 'get' | 'post' | 'delete' | 'options' | 'put' | 'head'
     operationId: string
     parameterTypeName: string
     parameterTypeDefinition: string
@@ -99,7 +100,7 @@ export class ResourceFactory {
         for (const path of swaggerPathsNames) {
             const swaggerPathObject = swaggerPaths[path]
             const resourceName = this.getResourceNameForPath(path)
-            const pathVerbs: PathDescription['method'][] = ['get', 'post', 'delete', 'put', 'options']
+            const pathVerbs: PathDescription['method'][] = ['get', 'post', 'delete', 'put', 'options', 'head']
             for (const pathVerb of pathVerbs) {
                 const pathItemObject = swaggerPathObject[pathVerb]
 
@@ -186,8 +187,4 @@ export class ResourceFactory {
         const parameterTypeDefinition = await compileJsonSchema(inputTypeSchema, parameterTypeName, { bannerComment: '' })
         return { parameterTypeName, parameterTypeDefinition }
     }
-}
-
-export function isReferenceObject(maybe: unknown): maybe is OpenAPIV3.ReferenceObject {
-    return typeof maybe === 'object' && maybe != null && !!(maybe as OpenAPIV3.ReferenceObject).$ref
 }

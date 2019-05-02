@@ -1,9 +1,9 @@
 import { AtlantisContext } from "./AtlantisContext";
 import { JSONSchema4 } from "json-schema";
-import { isReferenceObject } from "../codegen/ResourceFactory";
 import { OpenAPIV3 } from "openapi-types";
 import { BadRequestError } from "./errors/BadRequestError";
 import Ajv from 'ajv'
+import { isReferenceObject } from "./isReferenceObject";
 
 export class RequestParametersExtractor<TContext = {}> {
     private readonly validator = new Ajv({ allErrors: true })
@@ -31,9 +31,9 @@ export class RequestParametersExtractor<TContext = {}> {
             }
 
             const parameterInRequestProperty = {
-                path: req.params,
-                query: req.query,
-                body: req.body,
+                path: req.params[parameter.name],
+                query: req.query[parameter.name],
+                body: req.body, // FIXME: There can only be a single body parameter, which will then be evaluated.
             }
 
             const hasRequestMapping = (inValue: string): inValue is keyof typeof parameterInRequestProperty => {
@@ -44,7 +44,7 @@ export class RequestParametersExtractor<TContext = {}> {
                 throw new Error(`Invalid parameter in value '${parameter.in}', only ${Object.keys(parameterInRequestProperty).join(', ')} are supported`)
             }
 
-            let value = parameterInRequestProperty[parameter.in][parameter.name]
+            let value = parameterInRequestProperty[parameter.in]
             if (parameter.schema) {
                 paramSchema.properties[parameter.name] = parameter.schema
                 if (parameter.required) {

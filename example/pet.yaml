@@ -22,11 +22,15 @@ paths:
     post:
       operationId: createPet
       parameters:
-        - name: name
+        - name: pet
           in: body
           required: true
           schema:
-            type: string
+            type: object
+            properties:
+              name:
+                type: string
+            required: ["name"]
       responses:
         '200':
           description: The newly created pet

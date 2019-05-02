@@ -24,7 +24,7 @@ export class ContextFactory<TContext = {}> {
 
     protected getPathItemObject(req: AtlantisRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {
         const { route: { path } } = req
-        const swaggerPath = this.openApiBridge.makeSwaggerPath(path)
+        const swaggerPath = this.openApiBridge.makeOASPath(path)
         const pathItemObject = openApi.paths[swaggerPath]
 
         return pathItemObject

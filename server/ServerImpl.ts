@@ -2,7 +2,6 @@
  * This abstracts away the underlying server implementation
  */
 import express from 'express'
-import { AtlantisProps } from "./AtlantisProps";
 
 export class AtlantisApplicationFactory {
     public static create(): AtlantisApplication {
@@ -28,7 +27,7 @@ export class OpenApiBridge {
         return path.replace(/\{([a-zA-Z0-9]*)\}/g, (_match, matches) => `:${matches}`)
     }
 
-    public makeSwaggerPath(path: string): string {
+    public makeOASPath(path: string): string {
         return path.replace(/:([a-zA-Z0-9]*)/g, (_match, matches) => `{${matches}}`)
     }
 }

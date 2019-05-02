@@ -9,12 +9,13 @@
             "type": "node",
             "request": "launch",
             "args": [
-                "${workspaceRoot}/src/codegen/index.ts"
-            ],
-            "runtimeArgs": [
                 "--nolazy",
                 "-r",
-                "ts-node/register"
+                "ts-node/register",
+                "${workspaceRoot}/codegen/index.ts",
+                "gen",
+                "${workspaceRoot}/example/pet.yaml",
+                "${workspaceRoot}/example/generated"
             ],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
