@@ -2,6 +2,7 @@ import { OpenAPIV3 } from "openapi-types";
 import { fs } from 'mz'
 import Mustache from 'mustache'
 import * as path from 'path'
+import * as prettier from 'prettier'
 
 export class CodeGenContext {
     constructor(
@@ -10,8 +11,16 @@ export class CodeGenContext {
         public openApi: OpenAPIV3.Document,
     ) { }
 
+    private get templatesDir() {
+        return this.joinPath(__dirname, 'templates', 'server')
+    }
+
     async renderTemplate(template: string, data: any): Promise<string> {
-        return Mustache.render(await this.readFile(this.joinPath(__dirname, 'templates', 'server', template)), data)
+        return Mustache.render(await this.readFile(this.joinPath(this.templatesDir, template)), data)
+    }
+
+    prettifyTS(ts: string) {
+        return prettier.format(ts, { semi: false, parser: 'typescript', printWidth: 120, singleQuote: true })
     }
 
     /**

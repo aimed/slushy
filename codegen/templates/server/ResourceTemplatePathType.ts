@@ -3,10 +3,12 @@ export interface ResourceTemplatePathType {
     path: string;
     method: 'get' | 'post' | 'delete' | 'options' | 'put' | 'head';
     operationId: string;
-    parameterTypeName: string;
-    parameterTypeDefinition: string;
+    parameter: {
+        name: string
+        definition: string
+    }
     response: {
-        definition: string;
         name: string;
+        definition: string;
     };
 }

@@ -1,14 +1,12 @@
 import { OpenAPIV3 } from "openapi-types";
-import { JSONSchema4 } from "json-schema";
-import { compile as compileJsonSchema } from 'json-schema-to-typescript'
-import { fs } from "mz";
-import * as path from 'path'
-import Mustache from 'mustache'
 import { groupBy } from 'lodash'
 import { capitalize } from "./utils";
 import { isReferenceObject } from "./isReferenceObject";
 import { ResourceTemplatePathType } from "./templates/server/ResourceTemplatePathType";
 import { ResourceTemplateType } from "./templates/server/ResourceTemplateType";
+import { CodeGenContext } from "./CodeGenContext";
+import { TypeFactory } from "./TypeFactory";
+import { log } from "./log";
 
 export interface ResourceFactoryContext {
     resources: {
@@ -18,6 +16,8 @@ export interface ResourceFactoryContext {
 }
 
 export class ResourceFactory {
+    public constructor(private readonly typeFactory = new TypeFactory()) { }
+
     context: ResourceFactoryContext = {
         resources: []
     }
@@ -37,55 +37,56 @@ export class ResourceFactory {
         return capitalize(prefix)
     }
 
-    async createResources(swagger: OpenAPIV3.Document, outDir: string) {
-        if (!(await fs.exists(outDir))) {
-            await fs.mkdir(outDir)
-        }
+    getOutDir(context: CodeGenContext): string {
+        return context.joinPath(context.destDir, 'resources')
+    }
 
-        const destDir = path.join(outDir, 'resources')
-        if (!(await fs.exists(destDir))) {
-            await fs.mkdir(destDir)
-        }
+    async createResources(context: CodeGenContext) {
+        const { mkDir } = context
 
-        const paths = await this.getPathDescriptions(swagger.paths)
+        const destDir = this.getOutDir(context)
+        await mkDir(destDir)
+
+        const paths = await this.getPathDescriptions(context)
 
         const groupByKey: keyof ResourceTemplatePathType = 'resourceName'
         const pathsByResource = groupBy(paths, groupByKey)
 
-        const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'ResourceTemplate.mustache'))).toString()
-
         for (const resourceName of Object.keys(pathsByResource)) {
+            log('Creating resource', resourceName)
             const resourceDescription: ResourceTemplateType = { resourceName, paths: pathsByResource[resourceName] }
-            const resourceFileString = Mustache.render(templateString, resourceDescription)
-            await fs.writeFile(path.join(destDir, `${resourceName}Resource.ts`), resourceFileString)
+            const resourceFileString = await context.renderTemplate('ResourceTemplate.mustache', resourceDescription)
+            await context.writeFile(context.joinPath(destDir, `${resourceName}Resource.ts`), context.prettifyTS(resourceFileString))
             this.context.resources.push({
                 resource: `${resourceName}`,
                 path: `./${resourceName}Resource.ts`,
             })
         }
 
-        await this.createResourceConfig(destDir)
-        await this.createIndexFile(destDir)
+        log('Creating ResourceConfig')
+        await this.createResourceConfig(context)
+        log('Creating exports')
+        await this.createIndexFile(context)
     }
 
-    async createIndexFile(destDir: string) {
+    async createIndexFile(context: CodeGenContext) {
         const fileExports = this.context.resources.map(resource => `export * from '${resource.path.replace('.ts', '')}'`)
         fileExports.push(`export * from './ResourceConfig'`)
-        await fs.writeFile(path.join(destDir, 'index.ts'), fileExports.join('\r\n'))
+        await context.writeFile(context.joinPath(this.getOutDir(context), 'index.ts'), fileExports.join('\r\n'))
     }
 
-    async createResourceConfig(destDir: string) {
-        const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'ResourceConfigTemplate.mustache'))).toString()
-        const fileContent = Mustache.render(templateString, this.context)
-        await fs.writeFile(path.join(destDir, 'ResourceConfig.ts'), fileContent)
+    async createResourceConfig(context: CodeGenContext) {
+        const fileContent = await context.renderTemplate('ResourceConfigTemplate.mustache', this.context)
+        await context.writeFile(context.joinPath(this.getOutDir(context), 'ResourceConfig.ts'), context.prettifyTS(fileContent))
     }
 
-    async getPathDescriptions(swaggerPaths: OpenAPIV3.Document['paths']): Promise<ResourceTemplatePathType[]> {
+    async getPathDescriptions(context: CodeGenContext): Promise<ResourceTemplatePathType[]> {
+        const { openApi } = context
         const pathDescriptions: ResourceTemplatePathType[] = []
-        const swaggerPathsNames = Object.keys(swaggerPaths)
+        const swaggerPathsNames = Object.keys(openApi.paths)
 
         for (const path of swaggerPathsNames) {
-            const swaggerPathObject = swaggerPaths[path]
+            const swaggerPathObject = openApi.paths[path]
             const resourceName = this.getResourceNameForPath(path)
             const pathVerbs: ResourceTemplatePathType['method'][] = ['get', 'post', 'delete', 'put', 'options', 'head']
             for (const pathVerb of pathVerbs) {
@@ -105,7 +106,7 @@ export class ResourceFactory {
                     method: pathVerb,
                     operationId: pathItemObject.operationId,
                     response: await this.getPathResponseDescription(pathItemObject),
-                    ...await this.getPathParameterDescription(pathItemObject),
+                    parameter: await this.getPathParameterDescription(pathItemObject),
                 })
             }
         }
@@ -143,22 +144,27 @@ export class ResourceFactory {
         }
 
         const name = `${capitalize(pathItemObject.operationId)}Response`
-        const definition = await compileJsonSchema(jsonResponseType.schema, name, { bannerComment: '' })
+        const definition = this.typeFactory.createType(jsonResponseType.schema, name)
         return { definition, name }
     }
 
-    async getPathParameterDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<{ parameterTypeName: string, parameterTypeDefinition: string }> {
+    async getPathParameterDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<ResourceTemplatePathType['parameter']> {
         const { parameters = [], operationId } = pathItemObject
         const inputTypeSchema = {
-            type: 'object' as JSONSchema4['type'],
-            properties: {} as { [k: string]: JSONSchema4 },
+            type: 'object' as 'object',
+            properties: {} as { [k: string]: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject },
             additionalProperties: false,
             required: [] as string[],
         }
 
         for (const parameter of parameters) {
             if (isReferenceObject(parameter)) {
-                throw new Error('$ref parameter definitions are not supported.')
+                // TODO: Can probably just be set
+                throw new Error('$ref parameter definitions are not supported')
+            }
+
+            if (!parameter.schema) {
+                throw new Error(`No schema defined for parameter ${parameter.name} of operation ${operationId}`)
             }
 
             if (parameter.required) {
@@ -170,8 +176,8 @@ export class ResourceFactory {
             }
         }
 
-        const parameterTypeName = capitalize(`${operationId}Params`)
-        const parameterTypeDefinition = await compileJsonSchema(inputTypeSchema, parameterTypeName, { bannerComment: '' })
-        return { parameterTypeName, parameterTypeDefinition }
+        const name = capitalize(`${operationId}Params`)
+        const definition = this.typeFactory.createType(inputTypeSchema, name)
+        return { name, definition }
     }
 }

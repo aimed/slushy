@@ -3,10 +3,9 @@ import { OpenAPIV3 } from "openapi-types";
 import { isReferenceObject } from "../server/isReferenceObject";
 import { capitalize } from "./utils";
 import { log } from "./log";
-import * as prettier from 'prettier'
 
 export class TypeFactory {
-    async createTypesFile(context: CodeGenContext) {
+    async createTypesFileFromComponentSchemas(context: CodeGenContext) {
         const { openApi, mkDir, joinPath, destDir } = context
         const typesDir = joinPath(destDir, 'types')
         await mkDir(typesDir)
@@ -26,23 +25,34 @@ export class TypeFactory {
         for (const typeAlias of typeAliases) {
             const schema = openApi.components.schemas[typeAlias]
             if (!isReferenceObject(schema) && schema.properties) {
-                const tsDef = this.getTSObjectType(schema)
                 const typeName = capitalize(typeAlias)
-                // All types are exported as 'type' and not interface, because they might be union types.
+                const tsDef = this.getTSObjectType(schema)
                 const typeDef = `type ${typeName} = ${tsDef}`
                 typeDefs.push(typeDef)
             }
         }
-        const typeDefFileContent = prettier.format(typeDefs.join('\r\n'), { semi: false, parser: 'typescript' })
+        const typeDefFileContent = context.prettifyTS(typeDefs.join('\r\n'))
         await context.writeFile(context.joinPath(context.destDir, 'types.ts'), typeDefFileContent)
+    }
+
+    createType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject, name: string) {
+        // For references this will result in something like `type A = B`
+        const type = isReferenceObject(schema) ? this.resolveReferenceType(schema) : this.getTSObjectType(schema)
+        // All types are exported as 'type' and not interface, because they might be union types.
+        const typeDef = `type ${name} = ${type}`
+        return typeDef
+    }
+
+    resolveReferenceType(schema: OpenAPIV3.ReferenceObject): string {
+        if (!schema.$ref.startsWith('#/components/schemas/')) {
+            throw new Error('Currently only local refs to \'#/components/schemas/\' are allowed, you might have forgotten to use swagger-parser.bundle')
+        }
+        return capitalize(schema.$ref.replace('#/components/schemas/', ''))
     }
 
     getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject): string {
         if (isReferenceObject(schema)) {
-            if (!schema.$ref.startsWith('#/components/schemas/')) {
-                throw new Error('Currently only local refs to \'#/components/schemas/\' are allowed, you might have forgotten to use swagger-parser.bundle')
-            }
-            return capitalize(schema.$ref.replace('#/components/schemas/', ''))
+            return this.resolveReferenceType(schema)
         }
 
         switch (schema.type) {

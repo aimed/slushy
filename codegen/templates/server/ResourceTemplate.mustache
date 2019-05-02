@@ -1,7 +1,7 @@
 import { AtlantisContext, AtlantisRouter } from '../../../server'
 
 {{#paths}}
-{{{parameterTypeDefinition}}}
+{{{parameter.definition}}}
 {{/paths}}
 
 {{#paths}}
@@ -14,7 +14,7 @@ export interface {{resourceName}}Resource<TContext = {}> {
     {{#paths}}
 
     {{operationId}}(
-        params: {{parameterTypeName}},
+        params: {{parameter.name}},
         context: AtlantisContext<TContext>,
     ): Promise<{{response.name}}>
     {{/paths}}
@@ -24,7 +24,7 @@ export interface {{resourceName}}Resource<TContext = {}> {
 export class {{resourceName}}ResourceDefinition {
     public async bindRoutes(router: AtlantisRouter, resource: {{resourceName}}Resource) {
         {{#paths}}
-        router.{{method}}<{{parameterTypeName}}, {{response.name}}>('{{{path}}}', resource.{{operationId}}.bind(resource))
+        router.{{method}}<{{parameter.name}}, {{response.name}}>('{{{path}}}', resource.{{operationId}}.bind(resource))
         {{/paths}}
 
         return this
