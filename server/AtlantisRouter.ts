@@ -5,6 +5,7 @@ import { AtlantisError } from "./errors/AtlantisError";
 import { AtlantisContext } from "./AtlantisContext";
 import { RequestParametersExtractor } from "./RequestParametersExtractor";
 import { ContextFactory } from "./ContextFactory";
+import { ApiDoc } from "./middleware/ApiDoc";
 
 export type RouteHandler<TParams, TResponse, TContext> = (params: TParams, context: AtlantisContext<TContext>) => Promise<TResponse>
 
@@ -16,7 +17,8 @@ export class AtlantisRouter<TContext = {}> {
         private readonly contextFactory = new ContextFactory(),
         private readonly openApiBridge = new OpenApiBridge(),
     ) {
-        router.use(new BodyParser().create())
+        router.use(...new BodyParser().create(this.props))
+        router.use('/api-docs', ...new ApiDoc().create(this.props))
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {

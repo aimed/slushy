@@ -1,0 +1,9 @@
+{
+  "name": "@hydrokit/atlantis",
+  "version": "1.0.0",
+  "description": "Atlantis Server",
+  "main": "dist/index.js",
+  "repository": "https://github.com/aimed/atlantis",
+  "author": "Maximilian Taeschner",
+  "license": "MIT"
+}

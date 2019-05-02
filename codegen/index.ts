@@ -8,8 +8,8 @@ import { ResourceFactory } from './ResourceFactory';
 import { capitalize } from './utils';
 
 async function parseSwagger() {
-    const sourceFile = path.join(__dirname, '..', '..', 'example', 'pet.yaml')
-    const destDir = path.join(__dirname, '..', '..', 'example', 'generated')
+    const sourceFile = path.join(__dirname, '..', 'example', 'pet.yaml')
+    const destDir = path.join(__dirname, '..', 'example', 'generated')
     if (!(await fs.exists(destDir))) {
         await fs.mkdir(destDir)
     }

@@ -1,4 +1,4 @@
-import { Atlantis } from "../../src/server";
+import { Atlantis } from "../../server";
 import { ResourceConfig } from "../generated/resources/ResourceConfig";
 import { PetsResourceImpl } from "./PetsResourceImpl";
 
