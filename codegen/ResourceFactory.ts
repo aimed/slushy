@@ -11,8 +11,6 @@ import { ResourceTemplatePathType } from "./templates/server/ResourceTemplatePat
 import { ResourceTemplateType } from "./templates/server/ResourceTemplateType";
 
 export interface ResourceFactoryContext {
-    imports: { properties: string[], path: string }[]
-
     resources: {
         path: string
         resource: string
@@ -21,10 +19,16 @@ export interface ResourceFactoryContext {
 
 export class ResourceFactory {
     context: ResourceFactoryContext = {
-        imports: [],
         resources: []
     }
 
+    /**
+     * For a given path create a resource name.
+     * @example
+     * /         -> Index
+     * /pets     -> Pets
+     * /pets/:id -> Pets
+     */
     getResourceNameForPath(path: string): string {
         const [, prefix] = path.split('/')
         if (!prefix || prefix.startsWith('{')) {
@@ -48,7 +52,7 @@ export class ResourceFactory {
         const groupByKey: keyof ResourceTemplatePathType = 'resourceName'
         const pathsByResource = groupBy(paths, groupByKey)
 
-        const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'Resource.mustache'))).toString()
+        const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'ResourceTemplate.mustache'))).toString()
 
         for (const resourceName of Object.keys(pathsByResource)) {
             const resourceDescription: ResourceTemplateType = { resourceName, paths: pathsByResource[resourceName] }
@@ -71,7 +75,7 @@ export class ResourceFactory {
     }
 
     async createResourceConfig(destDir: string) {
-        const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'ResourceConfig.mustache'))).toString()
+        const templateString = (await fs.readFile(path.join(__dirname, 'templates', 'server', 'ResourceConfigTemplate.mustache'))).toString()
         const fileContent = Mustache.render(templateString, this.context)
         await fs.writeFile(path.join(destDir, 'ResourceConfig.ts'), fileContent)
     }

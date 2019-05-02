@@ -1,12 +1,10 @@
 import SwaggerParser from 'swagger-parser'
-import * as path from 'path'
 import { OpenAPIV3 } from 'openapi-types'
 import { fs } from 'mz'
 import { ResourceFactory } from './ResourceFactory';
 import { log } from './log';
 import { CodeGenContext } from './CodeGenContext';
 import { TypeFactory } from './TypeFactory';
-import Mustache from 'mustache'
 
 export class OASParser {
     async mkDir(dir: string) {
@@ -22,18 +20,13 @@ export class OASParser {
         // FIXME: Remove
         const swagger: OpenAPIV3.Document = await SwaggerParser.validate(sourceFile)
 
-        const context: CodeGenContext = {
+        const context = new CodeGenContext(
             sourceFile,
             destDir,
-            openApi: await SwaggerParser.bundle(sourceFile),
-            mkDir: this.mkDir,
-            writeFile: fs.writeFile,
-            readFile: async file => (await fs.readFile(file)).toString(),
-            joinPath: path.join.bind(path),
-            renderTemplate: async (template, data) => Mustache.render(await context.readFile(context.joinPath(__dirname, 'templates', 'server', template)), data)
-        }
+            await SwaggerParser.bundle(sourceFile)
+        )
 
-        const swaggerOutPath = path.join(destDir, 'openapi.json')
+        const swaggerOutPath = context.joinPath(destDir, 'openapi.json')
         log('Writing openapi.json to', swaggerOutPath)
         await fs.writeFile(swaggerOutPath, JSON.stringify(swagger, null, 2))
 

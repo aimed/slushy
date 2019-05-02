@@ -1,7 +1,7 @@
 
 import commander from 'commander'
-import { OASParser } from './OASParser';
-import { log } from './log';
+import { OASParser } from './OASParser'
+import { log } from './log'
 
 commander
     .version(require('./package.json').version, '-v, --version')
