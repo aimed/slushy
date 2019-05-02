@@ -10,7 +10,6 @@ async function run() {
         })
     })
     await atlantis.start(3031)
-    console.log('started');
 }
 
 run()

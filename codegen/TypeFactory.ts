@@ -33,7 +33,7 @@ export class TypeFactory {
             }
         }
         const typeDefFileContent = prettier.format(typeDefs.join('\r\n'), { semi: false, parser: 'typescript' })
-        await context.writeFile(context.joinPath(context.destDir, 'test.ts'), typeDefFileContent)
+        await context.writeFile(context.joinPath(context.destDir, 'types.ts'), typeDefFileContent)
     }
 
     getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject): string {
