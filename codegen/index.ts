@@ -6,19 +6,28 @@ import { JSONSchema4 } from 'json-schema'
 import { fs } from 'mz'
 import { ResourceFactory } from './ResourceFactory';
 import { capitalize } from './utils';
+import { log } from './log';
+import commander from 'commander'
 
-async function parseSwagger() {
-    const sourceFile = path.join(__dirname, '..', 'example', 'pet.yaml')
-    const destDir = path.join(__dirname, '..', 'example', 'generated')
+commander
+    .version(require('./package.json').version, '-v, --version')
+    .command('gen <openApiFile> <outDir>')
+    .action(async function (openApiFile, outDir) {
+        parseSwagger(openApiFile, outDir)
+            .then(() => log('Done!'))
+            .catch(error => console.error(error.stack || error.message))
+    })
+
+async function parseSwagger(sourceFile: string, destDir: string) {
     if (!(await fs.exists(destDir))) {
         await fs.mkdir(destDir)
     }
 
-    console.log('Validating OpenApi definition')
+    log('Validating OpenApi definition')
     const swagger: OpenAPIV3.Document = await SwaggerParser.validate(sourceFile)
 
     const swaggerOutPath = path.join(destDir, 'openapi.json')
-    console.log('Writing openapi.json to', swaggerOutPath)
+    log('Writing openapi.json to', swaggerOutPath)
     await fs.writeFile(swaggerOutPath, JSON.stringify(swagger, null, 2))
 
     const factory = new ResourceFactory()
@@ -41,5 +50,4 @@ async function generateTypes(generatedDir: string, schemas: { [name: string]: JS
     }))
 }
 
-parseSwagger()
-    .catch(error => console.error(error.stack || error.message))
+commander.parse(process.argv)
