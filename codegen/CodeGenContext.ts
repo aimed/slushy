@@ -8,6 +8,9 @@ export class CodeGenContext {
     constructor(
         public sourceFile: string,
         public destDir: string,
+        /**
+         * A BUNDLED version of the open api definition.
+         */
         public openApi: OpenAPIV3.Document,
     ) { }
 
@@ -23,9 +26,6 @@ export class CodeGenContext {
         return prettier.format(ts, { semi: false, parser: 'typescript', printWidth: 120, singleQuote: true })
     }
 
-    /**
-     * A BUNDLED version of the open api definition.
-     */
     async mkDir(dir: string) {
         if (!(await fs.exists(dir))) {
             await fs.mkdir(dir)
