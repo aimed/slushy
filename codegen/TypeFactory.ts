@@ -75,7 +75,10 @@ export class TypeFactory {
     }
 
     getTSObjectType(schema: OpenAPIV3.SchemaObject): string {
-        const { properties, required = [], additionalProperties, oneOf, anyOf, allOf } = schema
+        const { type, properties, required = [], additionalProperties, oneOf, anyOf, allOf } = schema
+        if (type && type !== 'object') {
+            return this.getTSType(schema)
+        }
 
         if (properties) {
             const propertyDefs: string[] = []
