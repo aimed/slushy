@@ -4,6 +4,7 @@ import { isReferenceObject } from '../codegen/ResourceFactory';
 import Ajv from 'ajv'
 import { JSONSchema4 } from 'json-schema';
 import { AtlantisRequest, AtlantisResponse, AtlantisRouterImplementationFactory, AtlantisRouterImplementation, AtlantisRequestHandler } from "./ServerImpl";
+import { BodyParser } from "./middleware/BodyParser";
 
 export type AtlantisContext<TContext = {}> = {
     req: AtlantisRequest
@@ -20,7 +21,9 @@ export class AtlantisRouter<TContext = {}> {
     public constructor(
         public readonly props: AtlantisProps,
         private readonly router: AtlantisRouterImplementation = AtlantisRouterImplementationFactory.create(),
-    ) { }
+    ) {
+        router.use(new BodyParser().create())
+    }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         this.router.get(this.makeRouterPath(path), this.makeHandlerExecutable(handler))
