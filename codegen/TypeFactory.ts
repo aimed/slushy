@@ -5,6 +5,7 @@ import { OpenAPIV3 } from "openapi-types";
 import { isReferenceObject } from "../server/isReferenceObject";
 import { capitalize } from "./utils";
 import { log } from "./log";
+import * as prettier from 'prettier'
 
 export class TypeFactory {
     async createTypes(context: CodeGenContext) {
@@ -31,9 +32,8 @@ export class TypeFactory {
                 typeDefs.push(typeDef)
             }
         }
-        await context.writeFile(context.joinPath(context.destDir, 'test.ts'), typeDefs.join('\r\n'))
-        // const lol = await compile(typeDef, 'ApiTypes', { declareExternallyReferenced: true, unreachableDefinitions: true })
-        console.log(typeDefs)
+        const typeDefFileContent = prettier.format(typeDefs.join('\r\n'), { semi: false, parser: 'typescript' })
+        await context.writeFile(context.joinPath(context.destDir, 'test.ts'), typeDefFileContent)
     }
 
     getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject): string {
