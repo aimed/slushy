@@ -33,7 +33,7 @@ export class RequestParametersExtractor<TContext = {}> {
             const parameterInRequestProperty = {
                 path: req.params[parameter.name],
                 query: req.query[parameter.name],
-                body: req.body, // FIXME: There can only be a single body parameter, which will then be evaluated.
+                body: req.body, // There can only be a single body parameter, which will then be evaluated.
             }
 
             const hasRequestMapping = (inValue: string): inValue is keyof typeof parameterInRequestProperty => {
