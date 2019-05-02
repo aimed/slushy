@@ -19,6 +19,22 @@
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
+        },
+        {
+            "name": "Example",
+            "type": "node",
+            "request": "launch",
+            "args": [
+                "${workspaceRoot}/example/impl/index.ts"
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register"
+            ],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
         }
     ]
 }

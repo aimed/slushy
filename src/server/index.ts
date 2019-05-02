@@ -1,4 +1,5 @@
 export * from './Atlantis'
 export * from './AtlantisRouter'
+export * from './AtlantisContext'
 export * from './AtlantisResourceConfiguration'
 export * from './ServerImpl'
