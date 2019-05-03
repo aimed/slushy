@@ -43,6 +43,7 @@ components:
 ```
 
 **Then**: Generate code using ```yarn gen <schemaFile> <outputDir>``` 🎩
+
 This will generate the following:
 - A `dir/types.ts` file, that contains all objects (e.g. `Pet`). These are types you can use to implement you code.
 - Multiple resource type stubs in `dir/resources`, e.g. `PetResource`. These are controller interface you have to implement.
