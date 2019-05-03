@@ -48,7 +48,7 @@ This will generate the following:
 - Multiple resource type stubs in `dir/resources`, e.g. `PetResource`. These are controller interface you have to implement.
 - A ResourceDefinition that you have to pass to `Atlantis`, which will bind the OAS paths to your controllers.
 
-Pet:
+Pet (generated):
 ```ts
 export type Pet = {
   id: number
@@ -56,7 +56,7 @@ export type Pet = {
 }
 ```
 
-PetsResource:
+PetsResource (generated):
 ```ts
 export type GetPetsParams = {}
 
@@ -66,11 +66,11 @@ export type GetPetsResponse = Array<Pet>
 export interface PetsResource<TContext = {}> {
   getPets(params: GetPetsParams, context: AtlantisContext<TContext>): Promise<GetPetsResponse>
 }
-
 ```
 
 
 **Last**: Setup the server
+
 It's easy:
 ```ts
 async function run() {
