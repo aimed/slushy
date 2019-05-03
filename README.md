@@ -9,7 +9,7 @@ Current features:
 **First**: Define your OAS (OpenApi) Schema ✒️
 
 It's just like swagger. The following example defines one route `/pets` that will return an Array of Pets.
-<details><summary>Show example</summary>
+
 ```yaml
 openapi: 3.0.0
 
@@ -41,14 +41,13 @@ components:
       required: ['id', 'name']
       additionalProperties: false
 ```
-</details>
 
 **Then**: Generate code using ```yarn gen <schemaFile> <outputDir>``` 🎩
 This will generate the following:
 - A `dir/types.ts` file, that contains all objects (e.g. `Pet`). These are types you can use to implement you code.
 - Multiple resource type stubs in `dir/resources`, e.g. `PetResource`. These are controller interface you have to implement.
 - A ResourceDefinition that you have to pass to `Atlantis`, which will bind the OAS paths to your controllers.
-<details><summary>Show example</summary>
+
 Pet:
 ```ts
 export type Pet = {
@@ -69,7 +68,6 @@ export interface PetsResource<TContext = {}> {
 }
 
 ```
-</details>
 
 
 **Last**: Setup the server
