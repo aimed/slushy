@@ -67,6 +67,9 @@ components:
           type: number
         name:
           type: string
+        breed:
+          type: string
+          enum: ['dalmatian', 'dachshund']
         food:
           $ref: '#/components/schemas/food'
       required: ['id', 'name']
