@@ -69,19 +69,19 @@ export class ResourceFactory {
             })
         }
 
-        log('Creating ResourceConfig')
         await this.createResourceConfig(context)
-        log('Creating exports')
         await this.createIndexFile(context)
     }
 
     async createIndexFile(context: CodeGenContext) {
+        log('Creating exports')
         const fileExports = this.context.resources.map(resource => `export * from '${resource.path.replace('.ts', '')}'`)
         fileExports.push(`export * from './ResourceConfig'`)
         await context.writeFile(context.joinPath(this.getOutDir(context), 'index.ts'), fileExports.join('\r\n'))
     }
 
     async createResourceConfig(context: CodeGenContext) {
+        log('Creating ResourceConfig')
         const fileContent = await context.renderTemplate('ResourceConfigTemplate.mustache', this.context)
         await context.writeFile(context.joinPath(this.getOutDir(context), 'ResourceConfig.ts'), context.prettifyTS(fileContent))
     }
