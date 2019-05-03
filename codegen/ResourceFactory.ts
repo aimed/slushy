@@ -155,7 +155,7 @@ export class ResourceFactory {
     }
 
     async getPathParameterDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<ResourceTemplatePathType['parameter']> {
-        const { parameters = [], operationId } = pathItemObject
+        const { parameters = [], operationId, requestBody } = pathItemObject
         const inputTypeSchema = {
             type: 'object' as 'object',
             properties: {} as { [k: string]: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject },
@@ -179,6 +179,26 @@ export class ResourceFactory {
 
             inputTypeSchema.properties[parameter.name] = {
                 ...parameter.schema
+            }
+        }
+
+        if (requestBody) {
+            if (isReferenceObject(requestBody)) {
+                throw new Error('$ref requestBody is not supported')
+            }
+
+            if (!requestBody.content['application/json'] || Object.keys(requestBody).length !== 0) {
+                throw new Error('The requestBody currently only supports a single \'application/json\' entry')
+            }
+
+            if (!requestBody.content['application/json'].schema) {
+                throw new Error('The requestBody must contain a schema')
+            }
+
+            const requestBodyInputKey = 'requestBody'
+            inputTypeSchema.properties[requestBodyInputKey] = requestBody.content['application/json'].schema
+            if (requestBody.required) {
+                inputTypeSchema.required.push(requestBodyInputKey)
             }
         }
 

@@ -64,31 +64,20 @@ export class RequestParametersExtractor<TContext = {}> {
             params[parameter.name] = value
         }
 
+        // TODO: Support mode mime types
+        const requestBody = operationObject.requestBody
+        if (requestBody && !isReferenceObject(requestBody) && requestBody.content['application/json'] && requestBody.content['application/json'].schema) {
+            if (requestBody.required) {
+                paramSchema.required.push('requestBody')
+            }
+            paramSchema.properties.requestBody = requestBody.content['application/json'].schema
+        }
+
         const isValid = await this.validator.validate(paramSchema, params)
         if (!isValid) {
             throw new BadRequestError(this.validator.errorsText())
         }
 
         return params as TParams
-    }
-
-    public async getRequestBody<TBody>(context: AtlantisContext<TContext>): Promise<TBody> {
-        const { operationObject: { requestBody }, req } = context
-        // TODO: Support reference objects
-        if (requestBody && !isReferenceObject(requestBody)) {
-            if (requestBody.required && !req.body) {
-                throw new BadRequestError('Request body is required')
-            }
-
-            // TODO: Support more mime types
-            if (requestBody.content['application/json'] && requestBody.content['application/json'].schema) {
-                const isValid = await this.validator.validate(requestBody.content['application/json'].schema, req.body)
-                if (!isValid) {
-                    throw new BadRequestError(this.validator.errorsText())
-                }
-            }
-        }
-        // FIXME: Not validated right now
-        return req.body as TBody
     }
 }
