@@ -1,13 +1,11 @@
 import { AtlantisContext, AtlantisRouter } from '../../../server'
+import { {{#importedTypes}}{{.}},{{/importedTypes}} } from '../types'
 
 {{#paths}}
-{{{parameter.definition}}}
-{{/paths}}
+export {{{parameter.definition}}}
 
-{{#paths}}
-{{#response}}
-{{{definition}}}
-{{/response}}
+export {{{response.definition}}}
+
 {{/paths}}
 
 export interface {{resourceName}}Resource<TContext = {}> {

@@ -12,14 +12,16 @@ export interface ResourceFactoryContext {
     resources: {
         path: string
         resource: string
-    }[]
+    }[],
+    importedTypes: string[],
 }
 
 export class ResourceFactory {
     public constructor(private readonly typeFactory = new TypeFactory()) { }
 
     context: ResourceFactoryContext = {
-        resources: []
+        resources: [],
+        importedTypes: []
     }
 
     /**
@@ -54,7 +56,11 @@ export class ResourceFactory {
 
         for (const resourceName of Object.keys(pathsByResource)) {
             log('Creating resource', resourceName)
-            const resourceDescription: ResourceTemplateType = { resourceName, paths: pathsByResource[resourceName] }
+            const resourceDescription: ResourceTemplateType = {
+                resourceName,
+                paths: pathsByResource[resourceName],
+                importedTypes: Array.from(new Set(this.context.importedTypes))
+            }
             const resourceFileString = await context.renderTemplate('ResourceTemplate.mustache', resourceDescription)
             await context.writeFile(context.joinPath(destDir, `${resourceName}Resource.ts`), context.prettifyTS(resourceFileString))
             this.context.resources.push({
@@ -144,7 +150,7 @@ export class ResourceFactory {
         }
 
         const name = `${capitalize(pathItemObject.operationId)}Response`
-        const definition = this.typeFactory.createType(jsonResponseType.schema, name)
+        const definition = this.typeFactory.createType(jsonResponseType.schema, name, this.context.importedTypes)
         return { definition, name }
     }
 
@@ -177,7 +183,7 @@ export class ResourceFactory {
         }
 
         const name = capitalize(`${operationId}Params`)
-        const definition = this.typeFactory.createType(inputTypeSchema, name)
+        const definition = this.typeFactory.createType(inputTypeSchema, name, this.context.importedTypes)
         return { name, definition }
     }
 }
