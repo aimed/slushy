@@ -6,6 +6,9 @@
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT",
+  "files": [
+    "dist/**/*"
+  ],
   "dependencies": {
     "ajv": "^6.10.0",
     "body-parser": "^1.19.0",

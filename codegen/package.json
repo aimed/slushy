@@ -6,6 +6,7 @@
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT",
+  "bin": "./dist/index.js",
   "dependencies": {
     "commander": "^2.20.0",
     "lodash": "^4.17.11",
@@ -14,6 +15,9 @@
     "prettier": "^1.17.0",
     "swagger-parser": "^6.0.5"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "devDependencies": {
     "@types/lodash": "^4.14.123",
     "@types/mustache": "^0.8.32",
