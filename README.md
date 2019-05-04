@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/aimed/slushy.svg?branch=master)](https://travis-ci.org/aimed/slushy)
+
 🚧 Early prototype ahead 🚧
 
 # Slushy - fully typed and validated APIs 🍦🍭
