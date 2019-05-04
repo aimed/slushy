@@ -3,6 +3,7 @@
   "version": "0.1.3",
   "description": "Slushy Server",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT",
