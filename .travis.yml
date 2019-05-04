@@ -1,32 +1,29 @@
 language: node_js
-
 cache: yarn
-
 node_js:
 - lts/*
-
 install:
 - yarn install
 - yarn bootstrap
-
 script:
 - yarn build
-
 env:
   matrix:
-    secure: obTu2vhpTp/asCPAH2kU8xL7wBi6P8N+7RVNz7QQSevsDSmAhJaBfnsjdtpsR+EgwFdtoQT1boY0mvB/co0lJifHKyUTtSeiX+GB6QU6AGryJulWQ9UisIkVOxzwJVIxbeIyvjXL4aMSR2TRzUofYH+WTbZ0PhhUwQ0Ggid6f2sk3DjTUtJ2InhXtfNfdGsXfl23fvj2Xm2CiecKMzlNLWjeNtJY2wT5nkN98ddNXC6kz5zc5pBPoXF6lbdYULalTLFt0/eTi51Z4OpDAXUhZU85IrQg/k5mwf7Th04y8pMkMfibYGrTMR47DMPVuma4EfOc/wuHgQ4GJ8x3d0TR6Ykc9uQaeP0hqmcG6tUlNmVxGQhEpJxICUVuXW/1ENMi2Te3guFLoNgQxnKYbuaDPLthOw7aByk4kIDAP2IoWoo8xqTQJshQMnzK8HlJ9TZIIVtQyGwjFWu5DVTNNVBgWA+cbEEqcC0/DGt/cRqhky2lLZVrxXPW3RF2MLevQh2wUvLgOdFU434fa+l3wgVqP6JwYGrajIJSUCRKMNn2uDVNGrD0HHKGsuqfEdIHRCsvwhTs/uu4zcq6LwVQQ+lMYD406YnuUTvftvMg8coAndsnwEE7TnsN6i/YbTRHhDDiLlvQPyUVzXs7aLX1IXygd0WD4HLEKvkEtKSCORQFg2A=
+  - secure: obTu2vhpTp/asCPAH2kU8xL7wBi6P8N+7RVNz7QQSevsDSmAhJaBfnsjdtpsR+EgwFdtoQT1boY0mvB/co0lJifHKyUTtSeiX+GB6QU6AGryJulWQ9UisIkVOxzwJVIxbeIyvjXL4aMSR2TRzUofYH+WTbZ0PhhUwQ0Ggid6f2sk3DjTUtJ2InhXtfNfdGsXfl23fvj2Xm2CiecKMzlNLWjeNtJY2wT5nkN98ddNXC6kz5zc5pBPoXF6lbdYULalTLFt0/eTi51Z4OpDAXUhZU85IrQg/k5mwf7Th04y8pMkMfibYGrTMR47DMPVuma4EfOc/wuHgQ4GJ8x3d0TR6Ykc9uQaeP0hqmcG6tUlNmVxGQhEpJxICUVuXW/1ENMi2Te3guFLoNgQxnKYbuaDPLthOw7aByk4kIDAP2IoWoo8xqTQJshQMnzK8HlJ9TZIIVtQyGwjFWu5DVTNNVBgWA+cbEEqcC0/DGt/cRqhky2lLZVrxXPW3RF2MLevQh2wUvLgOdFU434fa+l3wgVqP6JwYGrajIJSUCRKMNn2uDVNGrD0HHKGsuqfEdIHRCsvwhTs/uu4zcq6LwVQQ+lMYD406YnuUTvftvMg8coAndsnwEE7TnsN6i/YbTRHhDDiLlvQPyUVzXs7aLX1IXygd0WD4HLEKvkEtKSCORQFg2A=
+  - secure: ADTHBxCiEQrjPSMtotQVvbkvZGw/WH93R7vILhWGCKz/fEXHpxrt9uCtv6VkPb/KqBY/ku/ybMH3gKDUJfAASWqCTuNl5BkzXmIGE3lTuyxgGMj44cHBfyy3QzNtzKYcMWOmaPOEhkOsKsqM1ZEb+Mo4wjzVkNNrEPRSHCcnH9BDsTR+0fkyUkfHukC1+sX+Hq+vhdwBxA9okPYI3QH1gvRnYDWQ7hRWgaD9O+NNNquM1TKjTGzfSekD96szJa5bs+ttwkS0cp/HbXZGUB0VhAT7AA8kFam9votlBh+IseO8H+K3OeARmkbF7VYQniUUuocXoh+0mCb+KWPbw3uzX3B6oUI6sqm8pKWNopoQE/SKMA4PZqu0tH3o4vhZRdjTf3qjppbmu+X5HqQc57OFcUJlBVVNWG8KsxgNxLI/t3Aq/Xa5wn7qRJIvXufdXuDA5UiYAB9KUTCkPskwVkNZJuvEm1K1Vzr9taTtrUK6iAZ/C8gb2TqPhsF7zEBoMzKY7859Elxkdku8DFdrLuaE75C+KYeVfuJ1wwtZ/d1fEa2GADeNY3U4amMB6FDBCbcs1znI3j0LgxeIkOn9DEGiH1WVWvQ+jN1wS7aAk7pkMX5Yphz6sCMiAxeh9E2acqATH8gEG6ygKxfqln/Z3ovbJcnh3QLDTJXY8yuxgIQhu9c=
 
-# after_success:
-#   - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-#   - git remote add pub https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
-#   - git fetch pub master # needed?
-#   - git checkout master # got an error w/o this one
-#   # - "git commit -a -m \"docs: update readme\""
+after_success:
+  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+  # - git remote add pub https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+  # - git fetch pub master # needed?
+  # - git checkout master # got an error w/o this one
+  # - "git commit -a -m \"docs: update readme\""
 
-# deploy:
-#   provider: script
-#   script: "yarn lerna publish --git-remote pub"
-#   skip_cleanup: true
-#   keep_history: true
-#   on:
-#     branch: master
+deploy:
+  provider: script
+  script: "yarn lerna publish --github-release"
+  # script: "yarn lerna publish --git-remote pub"
+  skip_cleanup: true
+  keep_history: true
+  on:
+    branch: master
