@@ -1,9 +1,9 @@
 import { Middleware } from "./Middleware";
-import { AtlantisProps } from "../AtlantisProps";
+import { SlushyProps } from "../SlushyProps";
 import openApiUi from 'swagger-ui-express'
 
 export class ApiDoc implements Middleware {
-    create(props: AtlantisProps) {
+    create(props: SlushyProps) {
         return [openApiUi.serve, openApiUi.setup(props.openApi)]
     }
 }

@@ -1,7 +1,7 @@
-import { AtlantisRequest, AtlantisResponse, AtlantisContext } from ".";
+import { SlushyRequest, SlushyResponse, SlushyContext } from ".";
 
 import { OpenAPIV3 } from "openapi-types";
-import { AtlantisProps } from "./AtlantisProps";
+import { SlushyProps } from "./SlushyProps";
 import { OpenApiBridge } from "./ServerImpl";
 
 export class ContextFactory<TContext = {}> {
@@ -9,9 +9,9 @@ export class ContextFactory<TContext = {}> {
         private readonly openApiBridge = new OpenApiBridge()
     ) { }
 
-    public async buildContext(req: AtlantisRequest, res: AtlantisResponse, props: AtlantisProps): Promise<AtlantisContext<TContext>> {
+    public async buildContext(req: SlushyRequest, res: SlushyResponse, props: SlushyProps): Promise<SlushyContext<TContext>> {
         // FIXME: Add TContext
-        const context: AtlantisContext<TContext> = {
+        const context: SlushyContext<TContext> = {
             req,
             res,
             props: props,
@@ -22,7 +22,7 @@ export class ContextFactory<TContext = {}> {
         return context
     }
 
-    protected getPathItemObject(req: AtlantisRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {
+    protected getPathItemObject(req: SlushyRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {
         const { route: { path } } = req
         const swaggerPath = this.openApiBridge.makeOASPath(path)
         const pathItemObject = openApi.paths[swaggerPath]
@@ -30,7 +30,7 @@ export class ContextFactory<TContext = {}> {
         return pathItemObject
     }
 
-    protected getOperationObject(req: AtlantisRequest, openApi: OpenAPIV3.Document): OpenAPIV3.OperationObject {
+    protected getOperationObject(req: SlushyRequest, openApi: OpenAPIV3.Document): OpenAPIV3.OperationObject {
         const { method } = req
         const pathItemObject = this.getPathItemObject(req, openApi)
         // Note: some server implementation use upper cased http verbs, which is why we need to use toLowerCase here

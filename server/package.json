@@ -1,9 +1,9 @@
 {
-  "name": "@hydrokit/atlantis",
+  "name": "@slushy/server",
   "version": "1.0.0",
-  "description": "Atlantis Server",
+  "description": "Slushy Server",
   "main": "dist/index.js",
-  "repository": "https://github.com/aimed/atlantis",
+  "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT"
 }

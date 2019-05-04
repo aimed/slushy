@@ -1,9 +1,9 @@
 {
-  "name": "@hydrokit/atlantis-gen",
+  "name": "@slushy/codegen",
   "version": "1.0.0",
-  "description": "Atlantis CodeGen",
+  "description": "Slushy CodeGen",
   "main": "dist/index.js",
-  "repository": "https://github.com/aimed/atlantis",
+  "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT"
 }

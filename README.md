@@ -1,4 +1,15 @@
-# Atlantis - fully typed and validated NodeJS backend framework 🍦
+🚧 Early prototype ahead 🚧
+
+# Slushy - fully typed and validated APIs ⛵️
+Slushy uses OAS (OpenApi Specification) schemas to generate server boilerplate and validate server inputs and outputs.
+Slushy currently consist of the following parts:
+- [@slushy/codegen](./codegen) Takes an OAS schema and generates typescript type definitions as well as @slushy/server boilerplate.
+- [@slushy/server](./server) An opinionated NodeJS server based on an OAS schema with inputs/outputs validation and out of the box functionality such as api documentation.
+
+To use slushy just follow three simple steps:
+- Define the OAS schema
+- Generate typescript types and server boilerplate
+- Run the server
 
 Current features:
 - Input validation
@@ -6,7 +17,7 @@ Current features:
 - Route generation
 
 ## How does it work
-**First**: Define your OAS (OpenApi) Schema ✒️
+**First**: Define your OAS Schema ✒️
 
 It's just like swagger. The following example defines one route `/pets` that will return an Array of Pets.
 
@@ -47,7 +58,7 @@ components:
 This will generate the following:
 - A `dir/types.ts` file, that contains all objects (e.g. `Pet`). These are types you can use to implement you code.
 - Multiple resource type stubs in `dir/resources`, e.g. `PetResource`. These are controller interface you have to implement.
-- A ResourceDefinition that you have to pass to `Atlantis`, which will bind the OAS paths to your controllers.
+- A ResourceDefinition that you have to pass to `Slushy`, which will bind the OAS paths to your controllers.
 
 <details>
 <summary>Show generated code</summary>
@@ -68,7 +79,7 @@ export type GetPetsResponse = Array<Pet>
 
 // You have to implement this
 export interface PetsResource<TContext = {}> {
-  getPets(params: GetPetsParams, context: AtlantisContext<TContext>): Promise<GetPetsResponse>
+  getPets(params: GetPetsParams, context: SlushyContext<TContext>): Promise<GetPetsResponse>
 }
 ```
 </details>
@@ -78,12 +89,12 @@ export interface PetsResource<TContext = {}> {
 It's easy:
 ```ts
 async function run() {
-    const atlantis = await Atlantis.create({
+    const slushy = await Slushy.create({
         resourceConfiguration: new ResourceConfig({
             PetsResource: new PetsResourceImpl()
         })
     })
-    await atlantis.start(3031)
+    await slushy.start(3031)
 }
 
 run()

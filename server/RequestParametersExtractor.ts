@@ -1,4 +1,4 @@
-import { AtlantisContext } from "./AtlantisContext";
+import { SlushyContext } from "./SlushyContext";
 import { JSONSchema4 } from "json-schema";
 import { OpenAPIV3 } from "openapi-types";
 import { BadRequestError } from "./errors/BadRequestError";
@@ -11,7 +11,7 @@ export class RequestParametersExtractor<TContext = {}> {
     /**
      * Extracts all parameters for the current operation from the request.
      */
-    public async getParameters<TParams>(context: AtlantisContext<TContext>): Promise<TParams> {
+    public async getParameters<TParams>(context: SlushyContext<TContext>): Promise<TParams> {
         const { operationObject, req } = context
 
         const params: { [index: string]: any } = {}

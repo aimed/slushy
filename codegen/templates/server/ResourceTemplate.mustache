@@ -1,4 +1,4 @@
-import { AtlantisContext, AtlantisRouter } from '../../../server'
+import { SlushyContext, SlushyRouter } from '../../../server'
 import { {{#importedTypes}}{{.}},{{/importedTypes}} } from '../types'
 
 {{#paths}}
@@ -13,14 +13,14 @@ export interface {{resourceName}}Resource<TContext = {}> {
 
     {{operationId}}(
         params: {{parameter.name}},
-        context: AtlantisContext<TContext>,
+        context: SlushyContext<TContext>,
     ): Promise<{{response.name}}>
     {{/paths}}
 
 }
 
 export class {{resourceName}}ResourceDefinition {
-    public async bindRoutes(router: AtlantisRouter, resource: {{resourceName}}Resource) {
+    public async bindRoutes(router: SlushyRouter, resource: {{resourceName}}Resource) {
         {{#paths}}
         router.{{method}}<{{parameter.name}}, {{response.name}}>('{{{path}}}', resource.{{operationId}}.bind(resource))
         {{/paths}}

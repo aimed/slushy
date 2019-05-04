@@ -1,15 +1,15 @@
-import { Atlantis } from "../../server";
+import { Slushy } from "../../server";
 import { ResourceConfig } from "../generated/resources/ResourceConfig";
 import { PetsResourceImpl } from "./PetsResourceImpl";
 
 
 async function run() {
-    const atlantis = await Atlantis.create({
+    const slushy = await Slushy.create({
         resourceConfiguration: new ResourceConfig({
             PetsResource: new PetsResourceImpl()
         })
     })
-    await atlantis.start(3031)
+    await slushy.start(3031)
 }
 
 run()

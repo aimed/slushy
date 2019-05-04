@@ -3,23 +3,23 @@
  */
 import express from 'express'
 
-export class AtlantisApplicationFactory {
-    public static create(): AtlantisApplication {
+export class SlushyApplicationFactory {
+    public static create(): SlushyApplication {
         return express()
     }
 }
 
-export class AtlantisRouterImplementationFactory {
-    public static create(): AtlantisRouterImplementation {
+export class SlushyRouterImplementationFactory {
+    public static create(): SlushyRouterImplementation {
         return express.Router()
     }
 }
 
-export type AtlantisRouterImplementation = express.Router
-export type AtlantisApplication = express.Application
-export type AtlantisRequest = express.Request
-export type AtlantisResponse = express.Response
-export type AtlantisRequestHandler = express.RequestHandler
+export type SlushyRouterImplementation = express.Router
+export type SlushyApplication = express.Application
+export type SlushyRequest = express.Request
+export type SlushyResponse = express.Response
+export type SlushyRequestHandler = express.RequestHandler
 
 export class OpenApiBridge {
 
