@@ -4,12 +4,12 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@commitlint/cli": "^7.5.2",
-    "@commitlint/config-conventional": "^7.5.0",
-    "husky": "^2.2.0",
-    "lerna": "^3.4.3",
-    "ts-node": "^8.1.0",
-    "typescript": "^3.4.5"
+    "@commitlint/cli": "7.5.2",
+    "@commitlint/config-conventional": "7.5.0",
+    "husky": "2.2.0",
+    "lerna": "3.13.4",
+    "ts-node": "8.1.0",
+    "typescript": "3.4.5"
   },
   "scripts": {
     "example": "yarn example:gen && yarn example:start",
