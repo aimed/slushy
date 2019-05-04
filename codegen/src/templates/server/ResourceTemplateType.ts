@@ -1,6 +1,6 @@
-import { ResourceTemplatePathType } from "./ResourceTemplatePathType";
+import { ResourceTemplatePathType } from './ResourceTemplatePathType'
 export interface ResourceTemplateType {
-    resourceName: string;
+    resourceName: string
     importedTypes: string[]
-    paths: ResourceTemplatePathType[];
+    paths: ResourceTemplatePathType[]
 }

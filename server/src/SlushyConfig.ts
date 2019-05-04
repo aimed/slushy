@@ -1,5 +1,5 @@
-import { SlushyResourceConfiguration } from "./SlushyResourceConfiguration";
+import { SlushyResourceConfiguration } from './SlushyResourceConfiguration'
 export interface SlushyConfig {
-    resourceConfiguration: SlushyResourceConfiguration;
+    resourceConfiguration: SlushyResourceConfiguration
     hostname?: string
 }

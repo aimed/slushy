@@ -1,8 +1,8 @@
-import { SlushyContext } from "./SlushyContext";
-import { OpenAPIV3 } from "openapi-types";
-import { BadRequestError } from "./errors/BadRequestError";
+import { SlushyContext } from './SlushyContext'
+import { OpenAPIV3 } from 'openapi-types'
+import { BadRequestError } from './errors/BadRequestError'
 import Ajv from 'ajv'
-import { isReferenceObject } from "./isReferenceObject";
+import { isReferenceObject } from './isReferenceObject'
 
 export class RequestParametersExtractor<TContext = {}> {
     private readonly validator = new Ajv({ allErrors: true })
@@ -17,10 +17,11 @@ export class RequestParametersExtractor<TContext = {}> {
 
         // TODO: This can be moved to the compile step
         // To validate the input parameters we dynamically create the schema
-        const paramSchema: OpenAPIV3.SchemaObject & Required<Pick<OpenAPIV3.SchemaObject, 'properties'>> & { required: string[] } = {
+        const paramSchema: OpenAPIV3.SchemaObject &
+            Required<Pick<OpenAPIV3.SchemaObject, 'properties'>> & { required: string[] } = {
             type: 'object',
             properties: {},
-            required: []
+            required: [],
         }
 
         for (const parameter of operationObject.parameters || []) {
@@ -40,7 +41,11 @@ export class RequestParametersExtractor<TContext = {}> {
             }
 
             if (!hasRequestMapping(parameter.in)) {
-                throw new Error(`Invalid parameter in value '${parameter.in}', only ${Object.keys(parameterInRequestProperty).join(', ')} are supported`)
+                throw new Error(
+                    `Invalid parameter in value '${parameter.in}', only ${Object.keys(parameterInRequestProperty).join(
+                        ', '
+                    )} are supported`
+                )
             }
 
             let value = parameterInRequestProperty[parameter.in]
@@ -65,7 +70,12 @@ export class RequestParametersExtractor<TContext = {}> {
 
         // TODO: Support more mime types
         const requestBody = operationObject.requestBody
-        if (requestBody && !isReferenceObject(requestBody) && requestBody.content['application/json'] && requestBody.content['application/json'].schema) {
+        if (
+            requestBody &&
+            !isReferenceObject(requestBody) &&
+            requestBody.content['application/json'] &&
+            requestBody.content['application/json'].schema
+        ) {
             if (requestBody.required) {
                 paramSchema.required.push('requestBody')
             }

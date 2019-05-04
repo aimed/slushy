@@ -1,15 +1,17 @@
-import { SlushyRequest, SlushyResponse, SlushyContext } from ".";
+import { SlushyRequest, SlushyResponse, SlushyContext } from '.'
 
-import { OpenAPIV3 } from "openapi-types";
-import { SlushyProps } from "./SlushyProps";
-import { OpenApiBridge } from "./ServerImpl";
+import { OpenAPIV3 } from 'openapi-types'
+import { SlushyProps } from './SlushyProps'
+import { OpenApiBridge } from './ServerImpl'
 
 export class ContextFactory<TContext = {}> {
-    public constructor(
-        private readonly openApiBridge = new OpenApiBridge()
-    ) { }
+    public constructor(private readonly openApiBridge = new OpenApiBridge()) {}
 
-    public async buildContext(req: SlushyRequest, res: SlushyResponse, props: SlushyProps): Promise<SlushyContext<TContext>> {
+    public async buildContext(
+        req: SlushyRequest,
+        res: SlushyResponse,
+        props: SlushyProps
+    ): Promise<SlushyContext<TContext>> {
         // FIXME: Add TContext
         const context: SlushyContext<TContext> = {
             req,
@@ -23,7 +25,9 @@ export class ContextFactory<TContext = {}> {
     }
 
     protected getPathItemObject(req: SlushyRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {
-        const { route: { path } } = req
+        const {
+            route: { path },
+        } = req
         const swaggerPath = this.openApiBridge.makeOASPath(path)
         const pathItemObject = openApi.paths[swaggerPath]
 
@@ -34,7 +38,10 @@ export class ContextFactory<TContext = {}> {
         const { method } = req
         const pathItemObject = this.getPathItemObject(req, openApi)
         // Note: some server implementation use upper cased http verbs, which is why we need to use toLowerCase here
-        const pathItemObjectMethod = method.toLowerCase() as keyof Pick<OpenAPIV3.PathItemObject, 'get' | 'put' | 'post' | 'patch' | 'options' | 'delete' | 'head'>
+        const pathItemObjectMethod = method.toLowerCase() as keyof Pick<
+            OpenAPIV3.PathItemObject,
+            'get' | 'put' | 'post' | 'patch' | 'options' | 'delete' | 'head'
+        >
 
         return pathItemObject[pathItemObjectMethod]!
     }

@@ -1,18 +1,13 @@
 import SwaggerParser from 'swagger-parser'
-import { ResourceFactory } from './ResourceFactory';
-import { log } from './log';
-import { CodeGenContext } from './CodeGenContext';
-import { TypeFactory } from './TypeFactory';
+import { ResourceFactory } from './ResourceFactory'
+import { log } from './log'
+import { CodeGenContext } from './CodeGenContext'
+import { TypeFactory } from './TypeFactory'
 
 export class OASParser {
     async parseOAS(sourceFile: string, destDir: string) {
-
         log('Validating OpenApi definition')
-        const context = new CodeGenContext(
-            sourceFile,
-            destDir,
-            await SwaggerParser.bundle(sourceFile)
-        )
+        const context = new CodeGenContext(sourceFile, destDir, await SwaggerParser.bundle(sourceFile))
         await context.mkDir(destDir)
 
         const swaggerOutPath = context.joinPath(destDir, 'openapi.json')

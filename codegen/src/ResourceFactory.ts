@@ -1,27 +1,27 @@
-import { OpenAPIV3 } from "openapi-types";
+import { OpenAPIV3 } from 'openapi-types'
 import { groupBy } from 'lodash'
-import { capitalize } from "./utils";
-import { isReferenceObject } from "./isReferenceObject";
-import { ResourceTemplatePathType } from "./templates/server/ResourceTemplatePathType";
-import { ResourceTemplateType } from "./templates/server/ResourceTemplateType";
-import { CodeGenContext } from "./CodeGenContext";
-import { TypeFactory } from "./TypeFactory";
-import { log } from "./log";
+import { capitalize } from './utils'
+import { isReferenceObject } from './isReferenceObject'
+import { ResourceTemplatePathType } from './templates/server/ResourceTemplatePathType'
+import { ResourceTemplateType } from './templates/server/ResourceTemplateType'
+import { CodeGenContext } from './CodeGenContext'
+import { TypeFactory } from './TypeFactory'
+import { log } from './log'
 
 export interface ResourceFactoryContext {
     resources: {
         path: string
         resource: string
-    }[],
-    importedTypes: string[],
+    }[]
+    importedTypes: string[]
 }
 
 export class ResourceFactory {
-    public constructor(private readonly typeFactory = new TypeFactory()) { }
+    public constructor(private readonly typeFactory = new TypeFactory()) {}
 
     context: ResourceFactoryContext = {
         resources: [],
-        importedTypes: []
+        importedTypes: [],
     }
 
     /**
@@ -59,10 +59,13 @@ export class ResourceFactory {
             const resourceDescription: ResourceTemplateType = {
                 resourceName,
                 paths: pathsByResource[resourceName],
-                importedTypes: Array.from(new Set(this.context.importedTypes))
+                importedTypes: Array.from(new Set(this.context.importedTypes)),
             }
             const resourceFileString = await context.renderTemplate('ResourceTemplate.mustache', resourceDescription)
-            await context.writeFile(context.joinPath(destDir, `${resourceName}Resource.ts`), context.prettifyTS(resourceFileString))
+            await context.writeFile(
+                context.joinPath(destDir, `${resourceName}Resource.ts`),
+                context.prettifyTS(resourceFileString)
+            )
             this.context.resources.push({
                 resource: `${resourceName}`,
                 path: `./${resourceName}Resource.ts`,
@@ -75,7 +78,9 @@ export class ResourceFactory {
 
     async createIndexFile(context: CodeGenContext) {
         log('Creating exports')
-        const fileExports = this.context.resources.map(resource => `export * from '${resource.path.replace('.ts', '')}'`)
+        const fileExports = this.context.resources.map(
+            resource => `export * from '${resource.path.replace('.ts', '')}'`
+        )
         fileExports.push(`export * from './ResourceConfig'`)
         await context.writeFile(context.joinPath(this.getOutDir(context), 'index.ts'), fileExports.join('\r\n'))
     }
@@ -83,7 +88,10 @@ export class ResourceFactory {
     async createResourceConfig(context: CodeGenContext) {
         log('Creating ResourceConfig')
         const fileContent = await context.renderTemplate('ResourceConfigTemplate.mustache', this.context)
-        await context.writeFile(context.joinPath(this.getOutDir(context), 'ResourceConfig.ts'), context.prettifyTS(fileContent))
+        await context.writeFile(
+            context.joinPath(this.getOutDir(context), 'ResourceConfig.ts'),
+            context.prettifyTS(fileContent)
+        )
     }
 
     async getPathDescriptions(context: CodeGenContext): Promise<ResourceTemplatePathType[]> {
@@ -120,7 +128,9 @@ export class ResourceFactory {
         return pathDescriptions
     }
 
-    async getPathResponseDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<ResourceTemplatePathType['response']> {
+    async getPathResponseDescription(
+        pathItemObject: OpenAPIV3.OperationObject
+    ): Promise<ResourceTemplatePathType['response']> {
         if (!pathItemObject.responses) {
             throw new Error('Missing responses')
         }
@@ -154,7 +164,9 @@ export class ResourceFactory {
         return { definition, name }
     }
 
-    async getPathParameterDescription(pathItemObject: OpenAPIV3.OperationObject): Promise<ResourceTemplatePathType['parameter']> {
+    async getPathParameterDescription(
+        pathItemObject: OpenAPIV3.OperationObject
+    ): Promise<ResourceTemplatePathType['parameter']> {
         const { parameters = [], operationId, requestBody } = pathItemObject
         const inputTypeSchema = {
             type: 'object' as 'object',
@@ -178,7 +190,7 @@ export class ResourceFactory {
             }
 
             inputTypeSchema.properties[parameter.name] = {
-                ...parameter.schema
+                ...parameter.schema,
             }
         }
 
@@ -188,7 +200,7 @@ export class ResourceFactory {
             }
 
             if (!requestBody.content['application/json'] || Object.keys(requestBody).length !== 0) {
-                throw new Error('The requestBody currently only supports a single \'application/json\' entry')
+                throw new Error("The requestBody currently only supports a single 'application/json' entry")
             }
 
             if (!requestBody.content['application/json'].schema) {

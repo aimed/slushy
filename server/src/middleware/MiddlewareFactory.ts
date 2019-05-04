@@ -1,5 +1,5 @@
-import { SlushyRequest, SlushyResponse } from "../ServerImpl";
-import { SlushyProps } from "../SlushyProps";
+import { SlushyRequest, SlushyResponse } from '../ServerImpl'
+import { SlushyProps } from '../SlushyProps'
 
 export interface MiddlewareFactory {
     // new(): Middleware

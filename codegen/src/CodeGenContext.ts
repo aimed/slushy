@@ -1,4 +1,4 @@
-import { OpenAPIV3 } from "openapi-types";
+import { OpenAPIV3 } from 'openapi-types'
 import { fs } from 'mz'
 import Mustache from 'mustache'
 import * as path from 'path'
@@ -11,8 +11,8 @@ export class CodeGenContext {
         /**
          * A BUNDLED version of the open api definition.
          */
-        public openApi: OpenAPIV3.Document,
-    ) { }
+        public openApi: OpenAPIV3.Document
+    ) {}
 
     private get templatesDir() {
         return this.joinPath(__dirname, 'templates', 'server')
@@ -39,4 +39,3 @@ export class CodeGenContext {
 
     joinPath = path.join
 }
-

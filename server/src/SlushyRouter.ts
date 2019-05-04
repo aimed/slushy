@@ -1,13 +1,21 @@
-import { SlushyProps } from "./SlushyProps";
-import { SlushyRouterImplementationFactory, SlushyRouterImplementation, SlushyRequestHandler, OpenApiBridge } from "./ServerImpl";
-import { BodyParser } from "./middleware/BodyParser";
-import { SlushyError } from "./errors/SlushyError";
-import { SlushyContext } from "./SlushyContext";
-import { RequestParametersExtractor } from "./RequestParametersExtractor";
-import { ContextFactory } from "./ContextFactory";
-import { ApiDoc } from "./middleware/ApiDoc";
+import { SlushyProps } from './SlushyProps'
+import {
+    SlushyRouterImplementationFactory,
+    SlushyRouterImplementation,
+    SlushyRequestHandler,
+    OpenApiBridge,
+} from './ServerImpl'
+import { BodyParser } from './middleware/BodyParser'
+import { SlushyError } from './errors/SlushyError'
+import { SlushyContext } from './SlushyContext'
+import { RequestParametersExtractor } from './RequestParametersExtractor'
+import { ContextFactory } from './ContextFactory'
+import { ApiDoc } from './middleware/ApiDoc'
 
-export type RouteHandler<TParams, TResponse, TContext> = (params: TParams, context: SlushyContext<TContext>) => Promise<TResponse>
+export type RouteHandler<TParams, TResponse, TContext> = (
+    params: TParams,
+    context: SlushyContext<TContext>
+) => Promise<TResponse>
 
 export class SlushyRouter<TContext = {}> {
     public constructor(
@@ -15,7 +23,7 @@ export class SlushyRouter<TContext = {}> {
         public readonly router: SlushyRouterImplementation = SlushyRouterImplementationFactory.create(),
         private readonly requestParameterExtractor = new RequestParametersExtractor(),
         private readonly contextFactory = new ContextFactory<TContext>(),
-        private readonly openApiBridge = new OpenApiBridge(),
+        private readonly openApiBridge = new OpenApiBridge()
     ) {
         // TODO: Move this somewhere else.
         router.use(...new BodyParser().create(this.props))
@@ -54,7 +62,9 @@ export class SlushyRouter<TContext = {}> {
      * Creates a resource handler compatible with the underlying framework.
      * TODO: Move this to bridge.
      */
-    protected slushyHandler<TParams, TResponse>(handler: RouteHandler<TParams, TResponse, TContext>): SlushyRequestHandler {
+    protected slushyHandler<TParams, TResponse>(
+        handler: RouteHandler<TParams, TResponse, TContext>
+    ): SlushyRequestHandler {
         return async (req, res, next) => {
             try {
                 const context = await this.contextFactory.buildContext(req, res, this.props)
@@ -71,5 +81,4 @@ export class SlushyRouter<TContext = {}> {
             }
         }
     }
-
 }

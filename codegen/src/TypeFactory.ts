@@ -1,8 +1,8 @@
-import { CodeGenContext } from "./CodeGenContext";
-import { OpenAPIV3 } from "openapi-types";
-import { capitalize } from "./utils";
-import { log } from "./log";
-import { isReferenceObject } from "./isReferenceObject";
+import { CodeGenContext } from './CodeGenContext'
+import { OpenAPIV3 } from 'openapi-types'
+import { capitalize } from './utils'
+import { log } from './log'
+import { isReferenceObject } from './isReferenceObject'
 
 export class TypeFactory {
     async createTypesFileFromComponentSchemas(context: CodeGenContext) {
@@ -34,7 +34,9 @@ export class TypeFactory {
 
     createType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject, name: string, resolvedTypes: string[] = []) {
         // For references this will result in something like `type A = B`
-        const type = isReferenceObject(schema) ? this.resolveReferenceType(schema, resolvedTypes) : this.getTSObjectType(schema, resolvedTypes)
+        const type = isReferenceObject(schema)
+            ? this.resolveReferenceType(schema, resolvedTypes)
+            : this.getTSObjectType(schema, resolvedTypes)
         // All types are exported as 'type' and not interface, because they might be union types.
         const typeDef = `export type ${name} = ${type}`
         return typeDef
@@ -42,7 +44,9 @@ export class TypeFactory {
 
     resolveReferenceType(schema: OpenAPIV3.ReferenceObject, resolvedTypes: string[] = []): string {
         if (!schema.$ref.startsWith('#/components/schemas/')) {
-            throw new Error('Currently only local refs to \'#/components/schemas/\' are allowed, you might have forgotten to use swagger-parser.bundle')
+            throw new Error(
+                "Currently only local refs to '#/components/schemas/' are allowed, you might have forgotten to use swagger-parser.bundle"
+            )
         }
         const resolved = capitalize(schema.$ref.replace('#/components/schemas/', ''))
         resolvedTypes.push(resolved)
@@ -55,17 +59,23 @@ export class TypeFactory {
         }
 
         switch (schema.type) {
-            case 'object': return this.getTSObjectType(schema, resolvedTypes)
-            case 'boolean': return 'boolean'
-            case 'integer': return 'number'
-            case 'number': return 'number'
-            case 'null': return 'null'
+            case 'object':
+                return this.getTSObjectType(schema, resolvedTypes)
+            case 'boolean':
+                return 'boolean'
+            case 'integer':
+                return 'number'
+            case 'number':
+                return 'number'
+            case 'null':
+                return 'null'
             case 'string':
                 if (schema.enum) {
-                    return schema.enum.map(value => typeof value === 'string' ? `'${value}'` : value).join(' | ')
+                    return schema.enum.map(value => (typeof value === 'string' ? `'${value}'` : value)).join(' | ')
                 }
                 return 'string'
-            case 'array': return `Array<${this.getTSType(schema.items, resolvedTypes)}>`
+            case 'array':
+                return `Array<${this.getTSType(schema.items, resolvedTypes)}>`
             default:
                 log('unexpected schema type', (schema as any).type)
                 return 'any'

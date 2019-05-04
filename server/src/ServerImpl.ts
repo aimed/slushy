@@ -22,7 +22,6 @@ export type SlushyResponse = express.Response
 export type SlushyRequestHandler = express.RequestHandler
 
 export class OpenApiBridge {
-
     public makeRouterPath(path: string): string {
         return path.replace(/\{([a-zA-Z0-9]*)\}/g, (_match, matches) => `:${matches}`)
     }

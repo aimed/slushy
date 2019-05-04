@@ -1,5 +1,5 @@
-import { MiddlewareFactory } from "./MiddlewareFactory";
-import { SlushyProps } from "../SlushyProps";
+import { MiddlewareFactory } from './MiddlewareFactory'
+import { SlushyProps } from '../SlushyProps'
 import openApiUi from 'swagger-ui-express'
 
 export class ApiDoc implements MiddlewareFactory {

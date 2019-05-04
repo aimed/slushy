@@ -1,4 +1,4 @@
-import { SlushyError } from "./SlushyError";
+import { SlushyError } from './SlushyError'
 
 export class BadRequestError extends SlushyError {
     public constructor(message: string) {
