@@ -21,6 +21,7 @@ after_success:
   - git remote add pub https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
   - git fetch pub master # needed?
   - git checkout master # got an error w/o this one
+  - "git commit -a -m \"docs: update readme\""
 
 deploy:
   provider: script
