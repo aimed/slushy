@@ -9,7 +9,7 @@
     "publish": {
       "conventionalCommits": true,
       "yes": true,
-      "message": "chore(release): %s",
+      "message": "chore(release): %s [ci skip]",
       "allowBranch": "master"
     }
   },
