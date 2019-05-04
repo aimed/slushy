@@ -2,7 +2,7 @@
   "name": "@slushy/example",
   "version": "1.0.0",
   "main": "dist/index.js",
-  "repository": "htts://github.com/aimed/slushy",
+  "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT",
   "private": true,
