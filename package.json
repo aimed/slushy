@@ -16,7 +16,8 @@
     "example:gen": "ts-node codegen/src/index.ts gen example/pet.yaml example/src/generated",
     "example:start": "ts-node example/src/index.ts",
     "build": "lerna run build",
-    "commitmsg": "commitlint -e $GIT_PARAMS"
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "bootstrap": "lerna bootstrap"
   },
   "commitlint": {
     "extends": [

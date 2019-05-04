@@ -1,0 +1,8 @@
+language: node
+
+install:
+- yarn install
+- yarn bootstrap
+
+script:
+- yarn build
