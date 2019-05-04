@@ -1,8 +1,8 @@
 import { CodeGenContext } from "./CodeGenContext";
 import { OpenAPIV3 } from "openapi-types";
-import { isReferenceObject } from "../server/isReferenceObject";
 import { capitalize } from "./utils";
 import { log } from "./log";
+import { isReferenceObject } from "./isReferenceObject";
 
 export class TypeFactory {
     async createTypesFileFromComponentSchemas(context: CodeGenContext) {

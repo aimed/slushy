@@ -1,2 +1,6 @@
 node_modules/
 generated/
+yarn-error.log
+.DS_STORE
+dist/
+*.tsbuildinfo

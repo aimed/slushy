@@ -1,5 +1,5 @@
 import { PetsResource, GetPetByIdParams, CreatePetParams, CreatePetResponse, GetPetsResponse, GetPetByIdResponse } from "../generated/resources/PetsResource";
-import { Pet } from "../generated/types/Pet";
+import { Pet } from "../generated/types";
 
 export class PetsResourceImpl implements PetsResource {
     private pets: Pet[] = [

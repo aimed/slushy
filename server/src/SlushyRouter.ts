@@ -14,7 +14,7 @@ export class SlushyRouter<TContext = {}> {
         public readonly props: SlushyProps,
         public readonly router: SlushyRouterImplementation = SlushyRouterImplementationFactory.create(),
         private readonly requestParameterExtractor = new RequestParametersExtractor(),
-        private readonly contextFactory = new ContextFactory(),
+        private readonly contextFactory = new ContextFactory<TContext>(),
         private readonly openApiBridge = new OpenApiBridge(),
     ) {
         // TODO: Move this somewhere else.
@@ -64,9 +64,10 @@ export class SlushyRouter<TContext = {}> {
                 next()
             } catch (error) {
                 if (error instanceof SlushyError) {
-                    return res.status(error.status).send({ message: error.message })
+                    res.status(error.status).send({ message: error.message })
+                } else {
+                    next(error)
                 }
-                next(error)
             }
         }
     }

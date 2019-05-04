@@ -1,5 +1,4 @@
 import SwaggerParser from 'swagger-parser'
-import { OpenAPIV3 } from 'openapi-types'
 import { ResourceFactory } from './ResourceFactory';
 import { log } from './log';
 import { CodeGenContext } from './CodeGenContext';

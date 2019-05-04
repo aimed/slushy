@@ -4,7 +4,7 @@ import { OASParser } from './OASParser'
 import { log } from './log'
 
 commander
-    .version(require('./package.json').version, '-v, --version')
+    .version(require('../package.json').version, '-v, --version')
     .command('gen <openApiFile> <outDir>')
     .action(async function (openApiFile, outDir) {
         const oasParser = new OASParser()

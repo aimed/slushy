@@ -1,5 +1,4 @@
 import { SlushyContext } from "./SlushyContext";
-import { JSONSchema4 } from "json-schema";
 import { OpenAPIV3 } from "openapi-types";
 import { BadRequestError } from "./errors/BadRequestError";
 import Ajv from 'ajv'
@@ -18,7 +17,7 @@ export class RequestParametersExtractor<TContext = {}> {
 
         // TODO: This can be moved to the compile step
         // To validate the input parameters we dynamically create the schema
-        const paramSchema: JSONSchema4 & Required<Pick<JSONSchema4, 'properties'>> & { required: string[] } = {
+        const paramSchema: OpenAPIV3.SchemaObject & Required<Pick<OpenAPIV3.SchemaObject, 'properties'>> & { required: string[] } = {
             type: 'object',
             properties: {},
             required: []
@@ -64,7 +63,7 @@ export class RequestParametersExtractor<TContext = {}> {
             params[parameter.name] = value
         }
 
-        // TODO: Support mode mime types
+        // TODO: Support more mime types
         const requestBody = operationObject.requestBody
         if (requestBody && !isReferenceObject(requestBody) && requestBody.content['application/json'] && requestBody.content['application/json'].schema) {
             if (requestBody.required) {

@@ -12,7 +12,7 @@
                 "--nolazy",
                 "-r",
                 "ts-node/register",
-                "${workspaceRoot}/codegen/index.ts",
+                "${workspaceRoot}/codegen/src/index.ts",
                 "gen",
                 "${workspaceRoot}/example/pet.yaml",
                 "${workspaceRoot}/example/generated"

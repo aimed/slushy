@@ -1,6 +1,6 @@
 🚧 Early prototype ahead 🚧
 
-# Slushy - fully typed and validated APIs ⛵️
+# Slushy - fully typed and validated APIs 🍦🍭
 Slushy uses OAS (OpenApi Specification) schemas to generate server boilerplate and validate server inputs and outputs.
 Slushy currently consist of the following parts:
 - [@slushy/codegen](./codegen) Takes an OAS schema and generates typescript type definitions as well as @slushy/server boilerplate.
