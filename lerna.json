@@ -1,7 +1,6 @@
 {
   "packages": [
     "codegen",
-    "example",
     "server"
   ],
   "version": "0.1.1",
