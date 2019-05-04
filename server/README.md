@@ -1,0 +1,1 @@
+For now please refer to the [GitHub repository](https://github.com/aimed/slushy)
