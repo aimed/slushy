@@ -1,6 +1,6 @@
-import { Slushy } from "../../server/src";
 import { ResourceConfig } from "./generated/resources/ResourceConfig";
 import { PetsResourceImpl } from "./PetsResourceImpl";
+import { Slushy } from "@slushy/server";
 
 
 async function run() {
