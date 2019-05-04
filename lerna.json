@@ -9,7 +9,6 @@
     "publish": {
       "conventionalCommits": true,
       "yes": true,
-      "gitRemote": "upstream",
       "message": "chore(release): %s",
       "allowBranch": "master"
     }
