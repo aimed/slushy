@@ -1,0 +1,13 @@
+language: node
+
+cache: yarn
+
+node_js:
+  - "lts/*"
+
+install:
+- yarn install
+- yarn bootstrap
+
+script:
+- yarn build
