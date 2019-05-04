@@ -1,5 +1,5 @@
 import { Slushy } from "../../server/src";
-import { ResourceConfig } from "../generated/resources/ResourceConfig";
+import { ResourceConfig } from "./generated/resources/ResourceConfig";
 import { PetsResourceImpl } from "./PetsResourceImpl";
 
 
