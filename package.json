@@ -4,6 +4,9 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@commitlint/cli": "^7.5.2",
+    "@commitlint/config-conventional": "^7.5.0",
+    "husky": "^2.2.0",
     "lerna": "^3.4.3",
     "ts-node": "^8.1.0",
     "typescript": "^3.4.5"
@@ -12,6 +15,12 @@
     "example": "yarn example:gen && yarn example:start",
     "example:gen": "ts-node codegen/src/index.ts gen example/pet.yaml example/src/generated",
     "example:start": "ts-node example/src/index.ts",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "commitmsg": "commitlint -e $GIT_PARAMS"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
