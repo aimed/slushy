@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@commitlint/cli@^7.5.2":
+"@commitlint/cli@7.5.2":
   version "7.5.2"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-7.5.2.tgz#2475cd8f7ed3b2f9c2ab96c06bc24d61d23f8716"
   integrity sha512-UQdW/wNb+XeANoYYLyuKEDIfWKSzdhJkPQZ8ie/IjfMNnsP+B23bkX4Ati+6U8zgz0yyngoxWl+3lfExiIL4hQ==
@@ -19,7 +19,7 @@
     resolve-from "4.0.0"
     resolve-global "0.1.0"
 
-"@commitlint/config-conventional@^7.5.0":
+"@commitlint/config-conventional@7.5.0":
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-7.5.0.tgz#3afd4e3e34e5c2f6ec6af03e78ae924fed883ce7"
   integrity sha512-odLgBfQ5xntFAmMfAmDY2C4EWhW+cSTbvbsRS7seb55DCa3IaxxSHHC9eXrR+hN/BdUT5vqAxdX1PkR996sq9Q==
@@ -2327,7 +2327,7 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-husky@^2.2.0:
+husky@2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/husky/-/husky-2.2.0.tgz#4dda4370ba0f145b6594be4a4e4e4d4c82a6f2d5"
   integrity sha512-lG33E7zq6v//H/DQIojPEi1ZL9ebPFt3MxUMD8MR0lrS2ljEPiuUUxlziKIs/o9EafF0chL7bAtLQkcPvXmdnA==
@@ -2782,7 +2782,7 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-lerna@^3.4.3:
+lerna@3.13.4:
   version "3.13.4"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-3.13.4.tgz#03026c11c5643f341fda42e4fb1882e2df35e6cb"
   integrity sha512-qTp22nlpcgVrJGZuD7oHnFbTk72j2USFimc2Pj4kC0/rXmcU2xPtCiyuxLl8y6/6Lj5g9kwEuvKDZtSXujjX/A==
@@ -4661,7 +4661,7 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-node@^8.1.0:
+ts-node@8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.1.0.tgz#8c4b37036abd448577db22a061fd7a67d47e658e"
   integrity sha512-34jpuOrxDuf+O6iW1JpgTRDFynUZ1iEqtYruBqh35gICNjN8x+LpVcPAcwzLPi9VU6mdA3ym+x233nZmZp445A==
@@ -4699,7 +4699,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.4.5:
+typescript@3.4.5:
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
   integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==

@@ -16,7 +16,7 @@
   dependencies:
     any-observable "^0.3.0"
 
-"@types/body-parser@*", "@types/body-parser@^1.17.0":
+"@types/body-parser@*", "@types/body-parser@1.17.0":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@types/body-parser/-/body-parser-1.17.0.tgz#9f5c9d9bd04bb54be32d5eb9fc0d8c974e6cf58c"
   integrity sha512-a2+YeUjPkztKJu5aIF2yArYFQQp8d51wZ7DavSHjFuY1mqVgidGyzEQ41JIVNy82fXj8yPgy2vJmfIywgESW6w==
@@ -39,7 +39,7 @@
     "@types/node" "*"
     "@types/range-parser" "*"
 
-"@types/express@*", "@types/express@^4.16.1":
+"@types/express@*", "@types/express@4.16.1":
   version "4.16.1"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.16.1.tgz#d756bd1a85c34d87eaf44c888bad27ba8a4b7cf0"
   integrity sha512-V0clmJow23WeyblmACoxbHBu2JKlE5TiIme6Lem14FnPW9gsttyHtk6wq7njcdIWH1njAaFgR8gW09lgY98gQg==
@@ -53,14 +53,14 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.1.tgz#dc488842312a7f075149312905b5e3c0b054c79d"
   integrity sha512-FwI9gX75FgVBJ7ywgnq/P7tw+/o1GUbtP0KzbtusLigAOgIgNISRK0ZPl4qertvXSIE8YbsVJueQ90cDt9YYyw==
 
-"@types/mz@^0.0.32":
+"@types/mz@0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/mz/-/mz-0.0.32.tgz#e8248b4e41424c052edc1725dd33650c313a3659"
   integrity sha512-cy3yebKhrHuOcrJGkfwNHhpTXQLgmXSv1BX+4p32j+VUQ6aP2eJ5cL7OvGcAQx75fCTFaAIIAKewvqL+iwSd4g==
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^12.0.0":
+"@types/node@*", "@types/node@12.0.0":
   version "12.0.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.0.tgz#d11813b9c0ff8aaca29f04cbc12817f4c7d656e5"
   integrity sha512-Jrb/x3HT4PTJp6a4avhmJCDEVrPdqLfl3e8GGMbpkGGdwAV5UGlIs4vVEfsHHfylZVOKZWpOqmqFH8CbfOZ6kg==
@@ -78,7 +78,7 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
-"@types/swagger-ui-express@^3.0.0":
+"@types/swagger-ui-express@3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/swagger-ui-express/-/swagger-ui-express-3.0.0.tgz#7c3217cb6d900be1601053d791cfd16725cddd22"
   integrity sha512-NDr7fgTh4govvso8IM8lkzSMuqGfhw7KX5inVohFUMjqAhDJQRfCwTHxzWk9sd/bTLtmSs9ib+A+09tf9QSt4Q==
@@ -1138,7 +1138,7 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
 
-lint-staged@^8.1.6:
+lint-staged@8.1.6:
   version "8.1.6"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-8.1.6.tgz#128a9bc5effbf69a359fb8f7eeb2da71a998daf6"
   integrity sha512-QT13AniHN6swAtTjsrzxOfE4TVCiQ39xESwLmjGVNCMMZ/PK5aopwvbxLrzw+Zf9OxM3cQG6WCx9lceLzETOnQ==
@@ -1454,7 +1454,7 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-openapi-types@^1.3.4:
+openapi-types@1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/openapi-types/-/openapi-types-1.3.4.tgz#e8c65be38d3b7d48fa84aa3d488d17505d3e30cd"
   integrity sha512-h8rADpW3k/wepLdERKF0VKMAPdoFYNQCLGPmc/f8sgQ2dxUy+7sY4WAX2XDUDjhKTjbJVbxxofLkzy7f1/tE4g==
@@ -1546,7 +1546,7 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
-prettier@^1.17.0:
+prettier@1.17.0:
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.17.0.tgz#53b303676eed22cc14a9f0cec09b477b3026c008"
   integrity sha512-sXe5lSt2WQlCbydGETgfm1YBShgOX4HxQkFPvbxkcwgDvGDeqVau8h+12+lmSVlP3rHPz0oavfddSZg/q+Szjw==
@@ -2019,7 +2019,7 @@ type-is@~1.6.16, type-is@~1.6.17:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-typescript@^3.4.5:
+typescript@3.4.5:
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
   integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==
