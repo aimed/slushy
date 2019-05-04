@@ -13,5 +13,8 @@
       "allowBranch": "master"
     }
   },
-  "npmClient": "yarn"
+  "npmClient": "yarn",
+  "ignoreChanges": [
+    "**/*.md"
+  ]
 }
