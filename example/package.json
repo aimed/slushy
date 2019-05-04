@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -23,6 +23,6 @@
     "prettier": "1.17.0"
   },
   "dependencies": {
-    "@slushy/server": "^0.1.4"
+    "@slushy/server": "^0.1.5"
   }
 }
