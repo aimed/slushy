@@ -42,5 +42,8 @@
       "pre-commit": "lint-staged"
     }
   },
-  "gitHead": "c33fff4d0dcf71c4d79281d785c441c5434db9a6"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9c2846f484ef68452bd751a4f3a4c89cffc781be"
 }
