@@ -1,6 +1,5 @@
 import { SlushyProps } from './SlushyProps'
 import {
-    SlushyRouterImplementationFactory,
     SlushyRouterImplementation,
     SlushyRequestHandler,
     OpenApiBridge,
@@ -11,6 +10,7 @@ import { SlushyContext } from './SlushyContext'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
 import { ContextFactory } from './ContextFactory'
 import { ApiDoc } from './middleware/ApiDoc'
+import * as UUID from 'uuid'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -20,7 +20,7 @@ export type RouteHandler<TParams, TResponse, TContext> = (
 export class SlushyRouter<TContext = {}> {
     public constructor(
         public readonly props: SlushyProps,
-        public readonly router: SlushyRouterImplementation = SlushyRouterImplementationFactory.create(),
+        public readonly router: SlushyRouterImplementation,
         private readonly requestParameterExtractor = new RequestParametersExtractor(),
         private readonly contextFactory = new ContextFactory<TContext>(),
         private readonly openApiBridge = new OpenApiBridge()
@@ -66,16 +66,24 @@ export class SlushyRouter<TContext = {}> {
         handler: RouteHandler<TParams, TResponse, TContext>
     ): SlushyRequestHandler {
         return async (req, res, next) => {
+            const requestId: string = UUID.v4()
+            const logger = this.props.loggerFactory.create(requestId)
+            logger.log(`${req.method} ${req.path}`)
+
             try {
-                const context = await this.contextFactory.buildContext(req, res, this.props)
+                const context = await this.contextFactory.buildContext(req, res, requestId, logger, this.props)
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
                 const resourceResponse = await handler(parameters, context)
                 res.send(resourceResponse)
                 next()
             } catch (error) {
                 if (error instanceof SlushyError) {
-                    res.status(error.status).send({ message: error.message })
+                    logger.log(error.message)
+                    res.status(error.status).send()
+                    next()
                 } else {
+                    logger.error(error, 'Unexpected error')
+                    res.status(500).send()
                     next(error)
                 }
             }
