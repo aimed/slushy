@@ -4,7 +4,6 @@
         "codegen",
         "commitlint",
         "lerna",
-        "openapi",
-        "prebuild"
+        "openapi"
     ]
 }
