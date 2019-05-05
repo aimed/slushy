@@ -32,7 +32,11 @@ export class TypeFactory {
         await writeFile(joinPath(destDir, 'types.ts'), typeDefFileContent)
     }
 
-    createType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined, name: string, resolvedTypes: string[] = []) {
+    createType(
+        schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined,
+        name: string,
+        resolvedTypes: string[] = []
+    ) {
         const type = this.getTSType(schema, resolvedTypes)
         // All types are exported as 'type' and not interface, because they might be union types.
         const typeDef = `export type ${name} = ${type}`
@@ -61,16 +65,16 @@ export class TypeFactory {
         }
 
         if (schema.allOf) {
-            return schema.allOf.map(allOfItem => this.getTSType(allOfItem, resolvedTypes)).join(' & ')
+            return schema.allOf.map(allOfItem => this.getTSType(allOfItem, resolvedTypes)).join(' & ') || 'never'
         }
 
         // TODO: This is actually oneOf, but a good approximation
         if (schema.anyOf) {
-            return schema.anyOf.map(anyOfItem => this.getTSType(anyOfItem, resolvedTypes)).join(' | ')
+            return schema.anyOf.map(anyOfItem => this.getTSType(anyOfItem, resolvedTypes)).join(' | ') || 'never'
         }
 
         if (schema.oneOf) {
-            return schema.oneOf.map(oneOfItem => this.getTSType(oneOfItem, resolvedTypes)).join(' | ')
+            return schema.oneOf.map(oneOfItem => this.getTSType(oneOfItem, resolvedTypes)).join(' | ') || 'never'
         }
 
         // TODO: not, readOnly
