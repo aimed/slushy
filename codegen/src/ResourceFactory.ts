@@ -139,7 +139,7 @@ export class ResourceFactory {
             throw new Error('Missing operationId')
         }
 
-        // FIXME: Handle all positive response codes
+        // FIXME: Handle all positive response codes, like 201 and 204
         const response = pathItemObject.responses['200']
         if (!response) {
             throw new Error('Response for status code 200 is not defined')
@@ -150,6 +150,7 @@ export class ResourceFactory {
         }
 
         const { content = {} } = response
+        // TODO: Handle more cases.
         const jsonResponseType = content['application/json']
         if (!jsonResponseType) {
             throw new Error('No content for application/json defined')
@@ -183,6 +184,10 @@ export class ResourceFactory {
 
             if (!parameter.schema) {
                 throw new Error(`No schema defined for parameter ${parameter.name} of operation ${operationId}`)
+            }
+
+            if (parameter.in === 'body') {
+                throw new Error('Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.')
             }
 
             if (parameter.required) {
