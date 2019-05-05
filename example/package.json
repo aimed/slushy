@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -19,7 +19,7 @@
     }
   },
   "devDependencies": {
-    "@slushy/codegen": "^0.1.6",
+    "@slushy/codegen": "^0.1.7",
     "lint-staged": "8.1.6",
     "prettier": "1.17.0",
     "typescript": "^3.4.5"

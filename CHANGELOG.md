@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.7](https://github.com/aimed/slushy/compare/v0.1.6...v0.1.7) (2019-05-05)
+
+
+### Bug Fixes
+
+* add integration test and ship templates ([9eecf95](https://github.com/aimed/slushy/commit/9eecf95))
+* ship templates ([4bf07c3](https://github.com/aimed/slushy/commit/4bf07c3))
+
+
+
+
+
 ## [0.1.6](https://github.com/aimed/atlantis/compare/v0.1.5...v0.1.6) (2019-05-04)
 
 **Note:** Version bump only for package slushy
