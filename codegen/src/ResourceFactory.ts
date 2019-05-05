@@ -17,7 +17,7 @@ export interface ResourceFactoryContext {
 }
 
 export class ResourceFactory {
-    public constructor(private readonly typeFactory = new TypeFactory()) {}
+    public constructor(private readonly typeFactory = new TypeFactory()) { }
 
     context: ResourceFactoryContext = {
         resources: [],
@@ -199,7 +199,7 @@ export class ResourceFactory {
                 throw new Error('$ref requestBody is not supported')
             }
 
-            if (!requestBody.content['application/json'] || Object.keys(requestBody).length !== 0) {
+            if (!requestBody.content['application/json'] || Object.keys(requestBody.content).length !== 1) {
                 throw new Error("The requestBody currently only supports a single 'application/json' entry")
             }
 
