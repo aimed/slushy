@@ -39,7 +39,7 @@ export class TypeFactory {
         return typeDef
     }
 
-    resolveReferenceType(schema: OpenAPIV3.ReferenceObject, resolvedTypes: string[]): string {
+    private resolveReferenceType(schema: OpenAPIV3.ReferenceObject, resolvedTypes: string[]): string {
         // TODO: Replace with resolver function
         if (!schema.$ref.startsWith('#/components/schemas/')) {
             throw new Error(
