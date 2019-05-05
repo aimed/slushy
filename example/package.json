@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -25,7 +25,7 @@
     "typescript": "3.4.5"
   },
   "dependencies": {
-    "@slushy/server": "^0.2.0"
+    "@slushy/server": "^0.2.1"
   },
   "scripts": {
     "generate": "node node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
