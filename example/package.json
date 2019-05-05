@@ -19,10 +19,16 @@
     }
   },
   "devDependencies": {
+    "@slushy/codegen": "^0.1.6",
     "lint-staged": "8.1.6",
-    "prettier": "1.17.0"
+    "prettier": "1.17.0",
+    "typescript": "^3.4.5"
   },
   "dependencies": {
     "@slushy/server": "^0.1.6"
+  },
+  "scripts": {
+    "generate": "node node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
+    "build": "yarn generate && tsc"
   }
 }

@@ -6,6 +6,7 @@ install:
 - yarn install
 - yarn bootstrap
 script:
+- yarn prebuild
 - yarn build
 env:
   matrix:
