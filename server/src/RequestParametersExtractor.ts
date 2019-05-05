@@ -68,6 +68,7 @@ export class RequestParametersExtractor<TContext = {}> {
         }
 
         // TODO: Support more mime types
+        // TODO: Merge requestBody into params instead of it being a separate property
         const requestBody = operationObject.requestBody
         if (
             requestBody &&
