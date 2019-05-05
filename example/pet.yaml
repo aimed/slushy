@@ -21,16 +21,17 @@ paths:
                   $ref: '#/components/schemas/pet'
     post:
       operationId: createPet
-      parameters:
-        - name: pet
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              name:
-                type: string
-            required: ["name"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required: ["name"]
+
       responses:
         '200':
           description: The newly created pet

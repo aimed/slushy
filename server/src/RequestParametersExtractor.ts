@@ -26,8 +26,7 @@ export class RequestParametersExtractor<TContext = {}> {
 
         for (const parameter of operationObject.parameters || []) {
             if (isReferenceObject(parameter)) {
-                // TODO: Not supported right now
-                continue
+                throw new Error('Parameters cannot be defined as $ref, you might have forgotten to resolve the schema')
             }
 
             const parameterInRequestProperty = {
@@ -80,6 +79,7 @@ export class RequestParametersExtractor<TContext = {}> {
                 paramSchema.required.push('requestBody')
             }
             paramSchema.properties.requestBody = requestBody.content['application/json'].schema
+            params.requestBody = req.body
         }
 
         const isValid = await this.validator.validate(paramSchema, params)
