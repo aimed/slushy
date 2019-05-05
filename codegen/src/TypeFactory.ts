@@ -32,7 +32,7 @@ export class TypeFactory {
         await writeFile(joinPath(destDir, 'types.ts'), typeDefFileContent)
     }
 
-    createType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject, name: string, resolvedTypes: string[] = []) {
+    createType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined, name: string, resolvedTypes: string[] = []) {
         // For references this will result in something like `type A = B`
         const type = isReferenceObject(schema)
             ? this.resolveReferenceType(schema, resolvedTypes)
@@ -70,6 +70,8 @@ export class TypeFactory {
             case 'null':
                 return 'null'
             case 'string':
+                // TODO: Extract into separate method
+                // TODO: Handle files etc.
                 if (schema.enum) {
                     return schema.enum.map(value => (typeof value === 'string' ? `'${value}'` : value)).join(' | ')
                 }
@@ -83,7 +85,11 @@ export class TypeFactory {
         // TODO: nullable, constant
     }
 
-    getTSObjectType(schema: OpenAPIV3.SchemaObject, resolvedTypes: string[]): string {
+    getTSObjectType(schema: OpenAPIV3.SchemaObject | undefined, resolvedTypes: string[]): string {
+        if (schema === undefined) {
+            return 'undefined'
+        }
+
         const { type, properties, required = [], additionalProperties, oneOf, anyOf, allOf } = schema
         if (type && type !== 'object') {
             return this.getTSType(schema, resolvedTypes)
