@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -19,13 +19,13 @@
     }
   },
   "devDependencies": {
-    "@slushy/codegen": "^0.1.7",
+    "@slushy/codegen": "^0.2.0",
     "lint-staged": "8.1.6",
     "prettier": "1.17.0",
     "typescript": "3.4.5"
   },
   "dependencies": {
-    "@slushy/server": "^0.1.6"
+    "@slushy/server": "^0.2.0"
   },
   "scripts": {
     "generate": "node node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
