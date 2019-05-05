@@ -19,6 +19,7 @@ after_success:
   - git checkout master # got an error w/o this one
   - git status
   - "git commit -a -m \"docs: update readme [ci skip]\""
+  - git push
 
 deploy:
   provider: script
