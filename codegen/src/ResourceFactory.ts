@@ -149,19 +149,24 @@ export class ResourceFactory {
             throw new Error('References for responses are not allowed')
         }
 
-        const { content = {} } = response
-        // TODO: Handle more cases.
-        const jsonResponseType = content['application/json']
-        if (!jsonResponseType) {
-            throw new Error('No content for application/json defined')
-        }
+        const { content } = response
+        let responseSchema: OpenAPIV3.ReferenceObject | OpenAPIV3.ArraySchemaObject | OpenAPIV3.NonArraySchemaObject | undefined = undefined
+        if (content) {
+            // TODO: Handle more cases.
+            const jsonResponseType = content['application/json']
+            if (!jsonResponseType) {
+                throw new Error('No content for application/json defined')
+            }
 
-        if (!jsonResponseType.schema) {
-            throw new Error('No schema is defined')
+            if (!jsonResponseType.schema) {
+                throw new Error('No schema is defined')
+            }
+
+            responseSchema = jsonResponseType.schema
         }
 
         const name = `${capitalize(pathItemObject.operationId)}Response`
-        const definition = this.typeFactory.createType(jsonResponseType.schema, name, this.context.importedTypes)
+        const definition = this.typeFactory.createType(responseSchema, name, this.context.importedTypes)
         return { definition, name }
     }
 
