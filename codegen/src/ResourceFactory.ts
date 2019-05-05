@@ -150,7 +150,12 @@ export class ResourceFactory {
         }
 
         const { content } = response
-        let responseSchema: OpenAPIV3.ReferenceObject | OpenAPIV3.ArraySchemaObject | OpenAPIV3.NonArraySchemaObject | undefined = undefined
+        let responseSchema:
+            | OpenAPIV3.ReferenceObject
+            | OpenAPIV3.ArraySchemaObject
+            | OpenAPIV3.NonArraySchemaObject
+            | undefined = undefined
+
         if (content) {
             // TODO: Handle more cases.
             const jsonResponseType = content['application/json']
@@ -183,16 +188,17 @@ export class ResourceFactory {
 
         for (const parameter of parameters) {
             if (isReferenceObject(parameter)) {
-                // TODO: Can probably just be set
-                throw new Error('$ref parameter definitions are not supported')
+                throw new Error('Parameter $ref definitions are not supported, maybe you forgot to bundle.')
             }
 
             if (!parameter.schema) {
-                throw new Error(`No schema defined for parameter ${parameter.name} of operation ${operationId}`)
+                throw new Error(`No schema defined for parameter ${parameter.name} of operation ${operationId}.`)
             }
 
             if (parameter.in === 'body') {
-                throw new Error('Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.')
+                throw new Error(
+                    'Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.'
+                )
             }
 
             if (parameter.required) {
@@ -206,19 +212,25 @@ export class ResourceFactory {
 
         if (requestBody) {
             if (isReferenceObject(requestBody)) {
-                throw new Error('$ref requestBody is not supported')
+                throw new Error('RequestBody $ref definitions are not supported, maybe you forgot to bundle.')
             }
 
-            if (!requestBody.content['application/json'] || Object.keys(requestBody.content).length !== 1) {
-                throw new Error("The requestBody currently only supports a single 'application/json' entry")
+            const requestBodySchema: OpenAPIV3.SchemaObject & Required<Pick<OpenAPIV3.NonArraySchemaObject, 'anyOf'>> = {
+                type: "object",
+                anyOf: []
             }
 
-            if (!requestBody.content['application/json'].schema) {
-                throw new Error('The requestBody must contain a schema')
+            for (const requestBodyMimeType of Object.keys(requestBody.content)) {
+                const mediaObject = requestBody.content[requestBodyMimeType]
+                if (!mediaObject.schema) {
+                    // TODO: Maybe it is not?
+                    throw new Error(`Schema is required for MIME type ${requestBodyMimeType}`)
+                }
+                requestBodySchema.anyOf.push(mediaObject.schema)
             }
 
             const requestBodyInputKey = 'requestBody'
-            inputTypeSchema.properties[requestBodyInputKey] = requestBody.content['application/json'].schema
+            inputTypeSchema.properties[requestBodyInputKey] = requestBodySchema
             if (requestBody.required) {
                 inputTypeSchema.required.push(requestBodyInputKey)
             }

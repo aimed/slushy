@@ -23,5 +23,6 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
-  }
+  },
+  "prettier": "./.prettierrc.json"
 }
