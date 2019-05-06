@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/aimed/slushy/compare/v0.2.2...v0.3.0) (2019-05-06)
+
+
+### Features
+
+* support encodings for requestBody ([#16](https://github.com/aimed/slushy/issues/16)) ([7ef55ec](https://github.com/aimed/slushy/commit/7ef55ec))
+
+
+
+
+
 ## [0.2.2](https://github.com/aimed/slushy/compare/v0.2.1...v0.2.2) (2019-05-05)
 
 
