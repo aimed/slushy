@@ -20,15 +20,22 @@
   },
   "devDependencies": {
     "@slushy/codegen": "^0.3.0",
+    "@types/jest": "^24.0.12",
+    "@types/supertest": "^2.0.7",
+    "jest": "^24.8.0",
     "lint-staged": "8.1.6",
     "prettier": "1.17.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.0.2",
     "typescript": "3.4.5"
   },
   "dependencies": {
     "@slushy/server": "^0.3.0"
   },
   "scripts": {
+    "test": "yarn generate && yarn jest",
     "generate": "node node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
-    "build": "yarn generate && tsc"
+    "build": "yarn generate && tsc --noEmit",
+    "start": "ts-node src/index.ts"
   }
 }

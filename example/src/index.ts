@@ -1,15 +1,9 @@
-import { ResourceConfig } from "./generated/resources/ResourceConfig";
-import { PetsResourceImpl } from "./PetsResourceImpl";
-import { Slushy } from "@slushy/server";
-
+import { SlushyFactory } from './SlushyFactory'
 
 async function run() {
-    const slushy = await Slushy.create({
-        resourceConfiguration: new ResourceConfig({
-            PetsResource: new PetsResourceImpl()
-        })
-    })
+    const slushy = await SlushyFactory.create()
     await slushy.start(3031)
+    console.log('Started server')
 }
 
 run()
