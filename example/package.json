@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -30,7 +30,7 @@
     "typescript": "3.4.5"
   },
   "dependencies": {
-    "@slushy/server": "^0.3.0"
+    "@slushy/server": "^0.3.1"
   },
   "scripts": {
     "test": "yarn generate && yarn jest",
