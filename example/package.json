@@ -24,6 +24,7 @@
     "jest": "^24.8.0",
     "lint-staged": "8.1.6",
     "prettier": "1.17.0",
+    "supertest": "^4.0.2",
     "ts-jest": "^24.0.2",
     "typescript": "3.4.5"
   },
