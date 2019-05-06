@@ -17,7 +17,8 @@
     "example:start": "ts-node example/src/index.ts",
     "build": "lerna run build --ignore @slushy/example && lerna run build --scope @slushy/example",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "test": "lerna run test"
   },
   "commitlint": {
     "extends": [

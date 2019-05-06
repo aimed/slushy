@@ -33,7 +33,9 @@
     "@slushy/server": "^0.3.0"
   },
   "scripts": {
+    "test": "yarn generate && yarn jest",
     "generate": "node node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
-    "build": "yarn generate && tsc"
+    "build": "yarn generate && tsc --noEmit",
+    "start": "ts-node src/index.ts"
   }
 }
