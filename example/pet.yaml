@@ -40,6 +40,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/pet'
 
+  /pets/{petId}/picture:
+    post:
+      operationId: uploadPetPicture
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            additionalProperties: false
+      responses:
+        '200':
+          description: Nothing
 
   /pets/{petId}:
     get:

@@ -1,5 +1,6 @@
-import { PetsResource, GetPetByIdParams, CreatePetParams, CreatePetResponse, GetPetsResponse, GetPetByIdResponse } from "./generated/resources/PetsResource";
+import { PetsResource, GetPetByIdParams, CreatePetParams, CreatePetResponse, GetPetsResponse, GetPetByIdResponse, UploadPetPictureParams } from "./generated/resources/PetsResource";
 import { Pet } from "./generated/types";
+import { SlushyContext } from "@slushy/server";
 
 export class PetsResourceImpl implements PetsResource<{}> {
     private pets: Pet[] = [
@@ -22,4 +23,9 @@ export class PetsResourceImpl implements PetsResource<{}> {
         this.pets.push(pet)
         return pet
     }
+
+    public async uploadPetPicture(_params: UploadPetPictureParams, _context: SlushyContext<{}>): Promise<undefined> {
+        return undefined
+    }
+
 }

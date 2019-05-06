@@ -32,7 +32,6 @@ export class RequestParametersExtractor<TContext = {}> {
             const parameterInRequestProperty = {
                 path: req.params[parameter.name],
                 query: req.query[parameter.name],
-                body: req.body, // There can only be a single body parameter, which will then be evaluated.
             }
 
             const hasRequestMapping = (inValue: string): inValue is keyof typeof parameterInRequestProperty => {
@@ -68,6 +67,7 @@ export class RequestParametersExtractor<TContext = {}> {
         }
 
         // TODO: Support more mime types
+        // TODO: Merge requestBody into params instead of it being a separate property
         const requestBody = operationObject.requestBody
         if (
             requestBody &&

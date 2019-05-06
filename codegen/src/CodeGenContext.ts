@@ -12,7 +12,7 @@ export class CodeGenContext {
          * A BUNDLED version of the open api definition.
          */
         public openApi: OpenAPIV3.Document
-    ) { }
+    ) {}
 
     private get templatesDir() {
         return this.joinPath(__dirname, '..', 'templates', 'server')

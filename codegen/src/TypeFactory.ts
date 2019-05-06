@@ -32,17 +32,19 @@ export class TypeFactory {
         await writeFile(joinPath(destDir, 'types.ts'), typeDefFileContent)
     }
 
-    createType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject, name: string, resolvedTypes: string[] = []) {
-        // For references this will result in something like `type A = B`
-        const type = isReferenceObject(schema)
-            ? this.resolveReferenceType(schema, resolvedTypes)
-            : this.getTSObjectType(schema, resolvedTypes)
+    createType(
+        schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined,
+        name: string,
+        resolvedTypes: string[] = []
+    ) {
+        const type = this.getTSType(schema, resolvedTypes)
         // All types are exported as 'type' and not interface, because they might be union types.
         const typeDef = `export type ${name} = ${type}`
         return typeDef
     }
 
-    resolveReferenceType(schema: OpenAPIV3.ReferenceObject, resolvedTypes: string[] = []): string {
+    private resolveReferenceType(schema: OpenAPIV3.ReferenceObject, resolvedTypes: string[]): string {
+        // TODO: Replace with resolver function
         if (!schema.$ref.startsWith('#/components/schemas/')) {
             throw new Error(
                 "Currently only local refs to '#/components/schemas/' are allowed, you might have forgotten to use swagger-parser.bundle"
@@ -53,10 +55,29 @@ export class TypeFactory {
         return resolved
     }
 
-    getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject, resolvedTypes: string[]): string {
-        if (isReferenceObject(schema)) {
-            return this.resolveReferenceType(schema)
+    getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined, resolvedTypes: string[]): string {
+        if (schema === undefined) {
+            return 'undefined'
         }
+
+        if (isReferenceObject(schema)) {
+            return this.resolveReferenceType(schema, resolvedTypes)
+        }
+
+        if (schema.allOf) {
+            return schema.allOf.map(allOfItem => this.getTSType(allOfItem, resolvedTypes)).join(' & ') || 'never'
+        }
+
+        // TODO: This is actually oneOf, but a good approximation
+        if (schema.anyOf) {
+            return schema.anyOf.map(anyOfItem => this.getTSType(anyOfItem, resolvedTypes)).join(' | ') || 'never'
+        }
+
+        if (schema.oneOf) {
+            return schema.oneOf.map(oneOfItem => this.getTSType(oneOfItem, resolvedTypes)).join(' | ') || 'never'
+        }
+
+        // TODO: not, readOnly
 
         switch (schema.type) {
             case 'object':
@@ -70,6 +91,8 @@ export class TypeFactory {
             case 'null':
                 return 'null'
             case 'string':
+                // TODO: Extract into separate method
+                // TODO: Handle files etc.
                 if (schema.enum) {
                     return schema.enum.map(value => (typeof value === 'string' ? `'${value}'` : value)).join(' | ')
                 }
@@ -77,17 +100,14 @@ export class TypeFactory {
             case 'array':
                 return `Array<${this.getTSType(schema.items, resolvedTypes)}>`
             default:
-                log('unexpected schema type', (schema as any).type)
+                log('Unexpected schema', schema)
                 return 'any'
         }
         // TODO: nullable, constant
     }
 
-    getTSObjectType(schema: OpenAPIV3.SchemaObject, resolvedTypes: string[]): string {
-        const { type, properties, required = [], additionalProperties, oneOf, anyOf, allOf } = schema
-        if (type && type !== 'object') {
-            return this.getTSType(schema, resolvedTypes)
-        }
+    private getTSObjectType(schema: OpenAPIV3.SchemaObject, resolvedTypes: string[]): string {
+        const { properties, required = [], additionalProperties } = schema
 
         if (properties) {
             const propertyDefs: string[] = []
@@ -105,21 +125,6 @@ export class TypeFactory {
 
             return `{\r\n${propertyDefs.join('\r\n')}\r\n}`
         }
-
-        if (allOf) {
-            return allOf.map(allOfItem => this.getTSType(allOfItem, resolvedTypes)).join(' & ')
-        }
-
-        // TODO: This is actually oneOf, but a good approximation
-        if (anyOf) {
-            return anyOf.map(anyOfItem => this.getTSType(anyOfItem, resolvedTypes)).join(' | ')
-        }
-
-        if (oneOf) {
-            return oneOf.map(oneOfItem => this.getTSType(oneOfItem, resolvedTypes)).join(' | ')
-        }
-
-        // TODO: not, readOnly
 
         return 'any'
     }
