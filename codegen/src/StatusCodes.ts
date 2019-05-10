@@ -91,7 +91,7 @@ export const StatusCodeRange = {
     '5XX': ServerErrorStatusCode,
 }
 
-export function isStatusCodeRange(maybeRange: string): maybeRange is keyof typeof StatusCodeRange {
+export function isStatusCodeRange(maybeRange: any): maybeRange is keyof typeof StatusCodeRange {
     return maybeRange in StatusCodeRange
 }
 
