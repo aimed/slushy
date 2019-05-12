@@ -99,3 +99,15 @@ export function statusCodesForRange(range: keyof typeof StatusCodeRange): number
     const statusCodes = StatusCodeRange[range]
     return Object.values(statusCodes)
 }
+
+export function isErrorStatusCode(code: string | number | keyof typeof StatusCodeRange) {
+    if (isStatusCodeRange(code)) {
+        return code !== '2XX'
+    }
+
+    if (typeof code === 'string') {
+        code = Number(code)
+    }
+
+    return !(code >= 200 && code < 300)
+}

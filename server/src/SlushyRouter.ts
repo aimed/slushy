@@ -73,8 +73,15 @@ export class SlushyRouter<TContext = {}> {
             try {
                 const context = await this.contextFactory.buildContext(req, res, requestId, logger, this.props)
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
-                const resourceResponse = await handler(parameters, context)
-                res.send(resourceResponse)
+                // FIXME: Remove cast again for type safety.
+                const resourceResponse = await handler(parameters, context) as unknown as { status: number, payload?: any }
+
+                if (resourceResponse.payload) {
+                    res.send(resourceResponse.payload).status(resourceResponse.status)
+                } else {
+                    res.sendStatus(resourceResponse.status)
+                }
+
                 next()
             } catch (error) {
                 if (error instanceof SlushyError) {

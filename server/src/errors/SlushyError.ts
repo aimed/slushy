@@ -1,6 +1,8 @@
 export abstract class SlushyError extends Error {
-    public constructor(message: string = 'InternalServerError', public readonly status: number = 500) {
+    abstract readonly status: number
+
+    public constructor(message: string = 'InternalServerError') {
         super(message)
-        Object.setPrototypeOf(this, SlushyError.prototype)
+        Object.setPrototypeOf(this, new.target.prototype)
     }
 }

@@ -5,8 +5,11 @@ import { isReferenceObject } from './isReferenceObject'
 import { ResourceTemplatePathType } from './templates/server/ResourceTemplatePathType'
 import { ResourceTemplateType } from './templates/server/ResourceTemplateType'
 import { CodeGenContext } from './CodeGenContext'
-import { TypeFactory } from './TypeFactory'
+import { TypeFactory } from './typescript/TypeFactory'
 import { log } from './log'
+import { StatusCodeRange, StatusCode, isStatusCodeRange, statusCodesForRange, isErrorStatusCode } from './StatusCodes';
+import { StatusCodeClassNames } from './StatusCodesClassNames';
+import { ClassBuilder } from './typescript/ClassBuilder';
 
 export interface ResourceFactoryContext {
     resources: {
@@ -14,6 +17,7 @@ export interface ResourceFactoryContext {
         resource: string
     }[]
     importedTypes: string[]
+    exportedClasses: string[]
 }
 
 export class ResourceFactory {
@@ -22,6 +26,7 @@ export class ResourceFactory {
     context: ResourceFactoryContext = {
         resources: [],
         importedTypes: [],
+        exportedClasses: [],
     }
 
     /**
@@ -60,6 +65,7 @@ export class ResourceFactory {
                 resourceName,
                 paths: pathsByResource[resourceName],
                 importedTypes: Array.from(new Set(this.context.importedTypes)),
+                exportedClasses: this.context.exportedClasses,
             }
             const resourceFileString = await context.renderTemplate('ResourceTemplate.mustache', resourceDescription)
             await context.writeFile(
@@ -119,7 +125,7 @@ export class ResourceFactory {
                     resourceName,
                     method: pathVerb,
                     operationId: pathItemObject.operationId,
-                    response: await this.getPathResponseDescription(pathItemObject),
+                    response: await this.getPathResponseDescription(pathItemObject, context),
                     parameter: await this.getPathParameterDescription(pathItemObject),
                 })
             }
@@ -129,7 +135,8 @@ export class ResourceFactory {
     }
 
     async getPathResponseDescription(
-        pathItemObject: OpenAPIV3.OperationObject
+        pathItemObject: OpenAPIV3.OperationObject,
+        context: CodeGenContext,
     ): Promise<ResourceTemplatePathType['response']> {
         if (!pathItemObject.responses) {
             throw new Error('Missing responses')
@@ -139,39 +146,50 @@ export class ResourceFactory {
             throw new Error('Missing operationId')
         }
 
-        // FIXME: Handle all positive response codes, like 201 and 204
-        const response = pathItemObject.responses['200']
-        if (!response) {
-            throw new Error('Response for status code 200 is not defined')
-        }
+        /**
+         * All accepted response class names
+         */
+        const responseClassNames: string[] = []
+        const responseStatusCodes = Object.keys(pathItemObject.responses) as (keyof typeof StatusCodeRange | StatusCode)[]
+        for (const responseStatusCode of responseStatusCodes) {
+            const response = pathItemObject.responses[responseStatusCode]
 
-        if (isReferenceObject(response)) {
-            throw new Error('References for responses are not allowed')
-        }
-
-        const { content } = response
-        let responseSchema:
-            | OpenAPIV3.ReferenceObject
-            | OpenAPIV3.ArraySchemaObject
-            | OpenAPIV3.NonArraySchemaObject
-            | undefined = undefined
-
-        if (content) {
-            // TODO: Handle more cases.
-            const jsonResponseType = content['application/json']
-            if (!jsonResponseType) {
-                throw new Error('No content for application/json defined')
+            if (isReferenceObject(response)) {
+                throw new Error('References for responses are not allowed, you maybe forgot to use .bundle')
             }
 
-            if (!jsonResponseType.schema) {
-                throw new Error('No schema is defined')
+            const responseClassSuffix = StatusCodeClassNames[responseStatusCode]
+            const responseClassName = `${capitalize(pathItemObject.operationId)}${responseClassSuffix}`
+            const responseClassBuilder = new ClassBuilder(responseClassName, context)
+
+            if (isErrorStatusCode(responseStatusCode)) {
+                responseClassBuilder.extends('Error', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)')
+            }
+            if (isStatusCodeRange(responseStatusCode)) {
+                responseClassBuilder.addParameter({ name: 'status', type: this.typeFactory.getTSType({ type: 'string', enum: statusCodesForRange(responseStatusCode) }, this.context.importedTypes) })
+            } else {
+                responseClassBuilder.addProperty({ name: 'status', initialValue: responseStatusCode.toString(), type: this.typeFactory.getTSType({ type: 'string', enum: [Number(responseStatusCode)] }, this.context.importedTypes) })
             }
 
-            responseSchema = jsonResponseType.schema
+            if (response.content) {
+                // TODO: Handle more cases.
+                const jsonResponseType = response.content['application/json'];
+                if (!jsonResponseType) {
+                    throw new Error('No content for application/json defined');
+                }
+
+                if (!jsonResponseType.schema) {
+                    throw new Error('No response schema is defined');
+                }
+                responseClassBuilder.addParameter({ name: 'payload', type: this.typeFactory.getTSType(jsonResponseType.schema, this.context.importedTypes) })
+            }
+            const responseClassDefinition = responseClassBuilder.build()
+            responseClassNames.push(responseClassName)
+            this.context.exportedClasses.push(responseClassDefinition)
         }
 
         const name = `${capitalize(pathItemObject.operationId)}Response`
-        const definition = this.typeFactory.createType(responseSchema, name, this.context.importedTypes)
+        const definition = `export type ${name} = ${responseClassNames.join(' | ')}`
         return { definition, name }
     }
 
@@ -215,9 +233,9 @@ export class ResourceFactory {
                 throw new Error('RequestBody $ref definitions are not supported, maybe you forgot to bundle.')
             }
 
-            const requestBodySchema: OpenAPIV3.SchemaObject & Required<Pick<OpenAPIV3.NonArraySchemaObject, 'anyOf'>> = {
+            const requestBodySchema: OpenAPIV3.SchemaObject & Required<Pick<OpenAPIV3.NonArraySchemaObject, 'oneOf'>> = {
                 type: "object",
-                anyOf: []
+                oneOf: []
             }
 
             for (const requestBodyMimeType of Object.keys(requestBody.content)) {
@@ -226,7 +244,7 @@ export class ResourceFactory {
                     // TODO: Maybe it is not?
                     throw new Error(`Schema is required for MIME type ${requestBodyMimeType}`)
                 }
-                requestBodySchema.anyOf.push(mediaObject.schema)
+                requestBodySchema.oneOf.push(mediaObject.schema)
             }
 
             const requestBodyInputKey = 'requestBody'
@@ -237,7 +255,7 @@ export class ResourceFactory {
         }
 
         const name = capitalize(`${operationId}Params`)
-        const definition = this.typeFactory.createType(inputTypeSchema, name, this.context.importedTypes)
+        const definition = this.typeFactory.create(inputTypeSchema, name, this.context.importedTypes)
         return { name, definition }
     }
 }

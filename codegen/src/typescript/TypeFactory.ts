@@ -1,19 +1,19 @@
-import { CodeGenContext } from './CodeGenContext'
+import { CodeGenContext } from '../CodeGenContext'
 import { OpenAPIV3 } from 'openapi-types'
-import { capitalize } from './utils'
-import { log } from './log'
-import { isReferenceObject } from './isReferenceObject'
+import { capitalize } from '../utils'
+import { log } from '../log'
+import { isReferenceObject } from '../isReferenceObject'
 
 export class TypeFactory {
     async createTypesFileFromComponentSchemas(context: CodeGenContext) {
         const { openApi, writeFile, joinPath, destDir, prettifyTS } = context
         if (!openApi.components) {
-            log('Could not generate types because #/components/ is not defined')
+            log('Not generating types because #/components/ is not defined')
             return
         }
 
         if (!openApi.components.schemas) {
-            log('Could not generate types because #/components/schemas is not defined')
+            log('Not generating types because #/components/schemas is not defined')
             return
         }
 
@@ -32,7 +32,7 @@ export class TypeFactory {
         await writeFile(joinPath(destDir, 'types.ts'), typeDefFileContent)
     }
 
-    createType(
+    create(
         schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined,
         name: string,
         resolvedTypes: string[] = []

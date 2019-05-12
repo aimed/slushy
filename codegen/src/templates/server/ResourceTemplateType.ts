@@ -3,4 +3,5 @@ export interface ResourceTemplateType {
     resourceName: string
     importedTypes: string[]
     paths: ResourceTemplatePathType[]
+    exportedClasses: string[]
 }
