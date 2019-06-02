@@ -1,4 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types'
+import { ModuleResolver } from './ModuleResolver';
 
 /**
  * Typescript source code
@@ -24,6 +25,8 @@ export interface SourceFile {
  * A module is a folder structure that contains typescript files.
  */
 export class ModuleBuilder {
+    public readonly moduleResolver = new ModuleResolver()
+
     public readonly sourceFiles: SourceFile[] = []
 
     public constructor() { }
@@ -55,4 +58,17 @@ i also want to create typescript classes, that might depend on other imports, e.
 - i can continue to use the ref resolver and make a ref to slushy something like $ref: '#/slushy'
 
 i need to safe all refs made and later add them to the import section of the file
+
+// const symbols = new SymbolsRegistry()
+// const file = new TSFile(symbols)
+const module = new TSModuleBuilder()
+const file = module.file('PetResource.ts')
+const types = new TypeBuilder(file)
+
+file.import('Server', '@slushy/server')
+file.import('Pet') // This will lazy resolve
+file.addType('GetPetResponse', types.union())
+file.addType('GetPetSuccess', types.fromSchema({ $ref: '#/components/schemas/Pet' })) // This will import Pet
+file.addType('Pet', {}) // This will now resolve pet
+file.add(tsSymbol) // For classes
 */
