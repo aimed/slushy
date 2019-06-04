@@ -3,9 +3,10 @@ import ts from 'typescript'
 import { capitalize } from "../module/utils";
 import { TSModule } from "../module/TSModule";
 import * as path from 'path'
+import { Generator } from "./Generator";
 
-export class ComponentSchemaTypesGenerator {
-    async createComponentSchemaTypes(document: OpenAPIV3.Document, tsModule: TSModule) {
+export class ComponentSchemaTypesGenerator implements Generator {
+    async generate(document: OpenAPIV3.Document, tsModule: TSModule) {
         if (!document.components) {
             return
         }
