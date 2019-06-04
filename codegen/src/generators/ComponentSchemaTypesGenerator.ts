@@ -1,11 +1,10 @@
 import { OpenAPIV3 } from "openapi-types";
 import ts from 'typescript'
-import { capitalize } from "./utils";
-import { TSModule } from "./TSModule";
+import { capitalize } from "../module/utils";
+import { TSModule } from "../module/TSModule";
 import * as path from 'path'
 
-// TODO: Move to codegen
-export class OASTS {
+export class ComponentSchemaTypesGenerator {
     async createComponentSchemaTypes(document: OpenAPIV3.Document, tsModule: TSModule) {
         if (!document.components) {
             return

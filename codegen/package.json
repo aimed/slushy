@@ -9,6 +9,7 @@
   "bin": "./dist/index.js",
   "dependencies": {
     "commander": "^2.20.0",
+    "fs-extra": "^8.0.1",
     "lodash": "^4.17.11",
     "mustache": "^3.0.1",
     "mz": "^2.7.0",
@@ -20,18 +21,23 @@
     "templates/**/*"
   ],
   "devDependencies": {
+    "@types/fs-extra": "^7.0.0",
+    "@types/jest": "^24.0.13",
     "@types/lodash": "4.14.123",
     "@types/mustache": "0.8.32",
     "@types/mz": "0.0.32",
     "@types/node": "12.0.0",
     "@types/prettier": "1.16.3",
     "@types/swagger-parser": "4.0.3",
+    "jest": "^24.8.0",
     "lint-staged": "8.1.6",
     "openapi-types": "1.3.4",
+    "ts-jest": "^24.0.2",
     "typescript": "3.4.5"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest"
   },
   "prettier": "../.prettierrc.json",
   "lint-staged": {

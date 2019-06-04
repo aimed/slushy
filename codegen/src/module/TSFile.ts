@@ -1,5 +1,5 @@
-import { SymbolRegistry } from "./SymbolRegistry";
-import { SymbolImport } from "./SymbolImport";
+import { IdentifierRegistry } from "./IdentifierRegistry";
+import { IdentifierImport } from "./IdentifierImport";
 import { groupBy } from 'lodash'
 import ts from 'typescript'
 import * as path from 'path'
@@ -8,30 +8,30 @@ import { capitalize, isReferenceObject } from "./utils";
 import * as prettier from 'prettier'
 
 export class TSFile {
-    private readonly imports: Promise<SymbolImport>[] = []
+    private readonly imports: Promise<IdentifierImport>[] = []
 
     private readonly contents: string[] = []
 
     public constructor(
         public readonly path: string,
-        private readonly registry: SymbolRegistry = new SymbolRegistry(),
+        private readonly registry: IdentifierRegistry = new IdentifierRegistry(),
     ) {
     }
 
     /**
      * Imports an identifier.
-     * @param symbol The symbol to import.
+     * @param identifier The symbol to import.
      * @param from A path the import the symbol from. This is helpful for e.g. importing libraries.
      */
-    public import(symbol: string, from?: string): void {
+    public import(identifier: string, from?: string): void {
         if (from != null) {
-            this.imports.push(Promise.resolve({ symbol, path: from }))
+            this.imports.push(Promise.resolve({ identifier, path: from }))
         } else {
-            this.imports.push(this.registry.get(symbol))
+            this.imports.push(this.registry.get(identifier))
         }
     }
 
-    public addNode(node: ts.Node, sourceFile?: ts.SourceFile) {
+    public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
         this.contents.push(node.getText(sourceFile))
 
         // If this is a declaration,
@@ -153,7 +153,7 @@ export class TSFile {
             // path.relative will resolve ('/', '/a/b.ts') to 'a/b.ts', but we need './a/b.ts'.
             const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`
             const importsFromFile = importsByFile[file]
-            const importedIdentifiers = importsFromFile.map(im => im.symbol).join(', ')
+            const importedIdentifiers = importsFromFile.map(im => im.identifier).join(', ')
             importDeclarations.push(`import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`)
         }
 

@@ -2,8 +2,7 @@
   "packages": [
     "codegen",
     "example",
-    "server",
-    "openapi-typescript-generator"
+    "server"
   ],
   "version": "0.3.2",
   "command": {

@@ -1,10 +1,10 @@
-import { SymbolRegistry } from "./SymbolRegistry"
+import { IdentifierRegistry } from "./IdentifierRegistry"
 import { TSFile } from "./TSFile"
 import { FileSystem } from "./FileSystem"
 import * as path from 'path'
 
 export class TSModule {
-    private readonly registry = new SymbolRegistry()
+    private readonly registry = new IdentifierRegistry()
     private readonly files = new Map<string, TSFile>()
 
     public constructor(private readonly fileSystem = new FileSystem()) { }
