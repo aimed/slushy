@@ -1,4 +1,3 @@
-# Slushy 🍦🍭
 An OpenAPI based typescript server code generator. Slushy takes care of the boring parts like typing and route binding for you. All you do is define the schema and implement resources!
 
 You write:
