@@ -5,7 +5,7 @@ import { log } from './log'
 commander
     .version(require('../package.json').version, '-v, --version')
     .command('gen <openApiFile> <outDir>')
-    .action(async (openApiFile, outDir) => {
+    .action((openApiFile, outDir) => {
         const oasParser = new OASParser()
         oasParser
             .parseOAS(openApiFile, outDir)
