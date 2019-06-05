@@ -1,5 +1,5 @@
 export abstract class SlushyError extends Error {
-    abstract readonly status: number
+    public abstract readonly status: number
 
     public constructor(message: string = 'InternalServerError') {
         super(message)
