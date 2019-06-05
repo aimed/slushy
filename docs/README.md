@@ -26,17 +26,21 @@ components:
 
 Slushy generates:
 ```ts
+// JSON Schema types
 export type Pet = { id: number }
 
+// Typed responses
 export class GetPetsSuccess {
     public status: 200
     public constructor(public payload: Array<Pet>) {}
 }
 
+// Typed resources
 export interface PetsResource {
     getPetsById(request: {}): Promise<GetPetsSuccess>
 }
 
+// Typed routers
 export class PetsResourceRouter {
     bind(router: Router, resource: PetsResource) {
         router.get('/pets', resource.getPetsById.bind(resource))
