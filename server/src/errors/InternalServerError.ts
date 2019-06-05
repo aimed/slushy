@@ -4,7 +4,7 @@ export class InternalServerError extends SlushyError {
     public readonly status = 500
 
     public constructor(public readonly internalErrorMessage?: string) {
-        super('InternalServerError')
+        super()
         Object.setPrototypeOf(this, InternalServerError.prototype)
     }
 }
