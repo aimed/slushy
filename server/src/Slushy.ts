@@ -3,15 +3,15 @@ import { SlushyRouter } from './SlushyRouter'
 import { SlushyApplication, SlushyApplicationFactory } from './ServerImpl'
 import { SlushyProps } from './SlushyProps'
 import { SlushyConfig } from './SlushyConfig'
-import { SlushyPlugins } from './SlushyPlugins';
-import { DefaultLoggerFactory } from './LoggerFactory';
+import { SlushyPlugins } from './SlushyPlugins'
+import { DefaultLoggerFactory } from './LoggerFactory'
 
 export class Slushy {
     public constructor(
         public readonly props: Readonly<SlushyProps>,
         public readonly app: SlushyApplication = SlushyApplicationFactory.create(),
         public readonly router: SlushyRouter = new SlushyRouter(props, app)
-    ) { }
+    ) {}
 
     public async start(port: number) {
         return new Promise(resolve => this.app.listen(port, resolve))

@@ -1,6 +1,6 @@
-import { fs } from "mz";
+import { fs } from 'mz'
 import * as path from 'path'
-import { FileSystem } from "./FileSystem";
+import { FileSystem } from './FileSystem'
 
 /**
  * Removes all files and sub directories in [dir].
@@ -38,7 +38,9 @@ describe('FileSystem', () => {
     beforeAll(async () => {
         // Do never remove a directory that already exists.
         if (await fs.exists(TEST_DIR)) {
-            throw new Error(`Directory ${TEST_DIR} exists, but is needed for tests. If this is an artifact of a failed test, please remove it manually.`)
+            throw new Error(
+                `Directory ${TEST_DIR} exists, but is needed for tests. If this is an artifact of a failed test, please remove it manually.`
+            )
         }
 
         isSafeToRemoveTestDir = true

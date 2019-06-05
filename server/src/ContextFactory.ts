@@ -3,10 +3,10 @@ import { SlushyRequest, SlushyResponse, SlushyContext } from '.'
 import { OpenAPIV3 } from 'openapi-types'
 import { SlushyProps } from './SlushyProps'
 import { OpenApiBridge } from './ServerImpl'
-import { Logger } from './LoggerFactory';
+import { Logger } from './LoggerFactory'
 
 export class ContextFactory<TContext = {}> {
-    public constructor(private readonly openApiBridge = new OpenApiBridge()) { }
+    public constructor(private readonly openApiBridge = new OpenApiBridge()) {}
 
     public async buildContext(
         req: SlushyRequest,

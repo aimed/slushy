@@ -7,9 +7,9 @@ import { ResourceTemplateType } from './templates/server/ResourceTemplateType'
 import { CodeGenContext } from './CodeGenContext'
 import { TypeFactory } from './typescript/TypeFactory'
 import { log } from './log'
-import { StatusCodeRange, StatusCode, isStatusCodeRange, statusCodesForRange, isErrorStatusCode } from './StatusCodes';
-import { StatusCodeClassNames } from './StatusCodesClassNames';
-import { ClassBuilder } from './typescript/ClassBuilder';
+import { StatusCodeRange, StatusCode, isStatusCodeRange, statusCodesForRange, isErrorStatusCode } from './StatusCodes'
+import { StatusCodeClassNames } from './StatusCodesClassNames'
+import { ClassBuilder } from './typescript/ClassBuilder'
 
 export interface ResourceFactoryContext {
     resources: {
@@ -21,7 +21,7 @@ export interface ResourceFactoryContext {
 }
 
 export class ResourceFactory {
-    public constructor(private readonly typeFactory = new TypeFactory()) { }
+    public constructor(private readonly typeFactory = new TypeFactory()) {}
 
     context: ResourceFactoryContext = {
         resources: [],
@@ -136,7 +136,7 @@ export class ResourceFactory {
 
     async getPathResponseDescription(
         pathItemObject: OpenAPIV3.OperationObject,
-        context: CodeGenContext,
+        context: CodeGenContext
     ): Promise<ResourceTemplatePathType['response']> {
         if (!pathItemObject.responses) {
             throw new Error('Missing responses')
@@ -150,7 +150,9 @@ export class ResourceFactory {
          * All accepted response class names
          */
         const responseClassNames: string[] = []
-        const responseStatusCodes = Object.keys(pathItemObject.responses) as (keyof typeof StatusCodeRange | StatusCode)[]
+        const responseStatusCodes = Object.keys(pathItemObject.responses) as (
+            | keyof typeof StatusCodeRange
+            | StatusCode)[]
         for (const responseStatusCode of responseStatusCodes) {
             const response = pathItemObject.responses[responseStatusCode]
 
@@ -166,22 +168,38 @@ export class ResourceFactory {
                 responseClassBuilder.extends('Error', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)')
             }
             if (isStatusCodeRange(responseStatusCode)) {
-                responseClassBuilder.addParameter({ name: 'status', type: this.typeFactory.getTSType({ type: 'string', enum: statusCodesForRange(responseStatusCode) }, this.context.importedTypes) })
+                responseClassBuilder.addParameter({
+                    name: 'status',
+                    type: this.typeFactory.getTSType(
+                        { type: 'string', enum: statusCodesForRange(responseStatusCode) },
+                        this.context.importedTypes
+                    ),
+                })
             } else {
-                responseClassBuilder.addProperty({ name: 'status', initialValue: responseStatusCode.toString(), type: this.typeFactory.getTSType({ type: 'string', enum: [Number(responseStatusCode)] }, this.context.importedTypes) })
+                responseClassBuilder.addProperty({
+                    name: 'status',
+                    initialValue: responseStatusCode.toString(),
+                    type: this.typeFactory.getTSType(
+                        { type: 'string', enum: [Number(responseStatusCode)] },
+                        this.context.importedTypes
+                    ),
+                })
             }
 
             if (response.content) {
                 // TODO: Handle more cases.
-                const jsonResponseType = response.content['application/json'];
+                const jsonResponseType = response.content['application/json']
                 if (!jsonResponseType) {
-                    throw new Error('No content for application/json defined');
+                    throw new Error('No content for application/json defined')
                 }
 
                 if (!jsonResponseType.schema) {
-                    throw new Error('No response schema is defined');
+                    throw new Error('No response schema is defined')
                 }
-                responseClassBuilder.addParameter({ name: 'payload', type: this.typeFactory.getTSType(jsonResponseType.schema, this.context.importedTypes) })
+                responseClassBuilder.addParameter({
+                    name: 'payload',
+                    type: this.typeFactory.getTSType(jsonResponseType.schema, this.context.importedTypes),
+                })
             }
             const responseClassDefinition = responseClassBuilder.build()
             responseClassNames.push(responseClassName)
@@ -233,9 +251,10 @@ export class ResourceFactory {
                 throw new Error('RequestBody $ref definitions are not supported, maybe you forgot to bundle.')
             }
 
-            const requestBodySchema: OpenAPIV3.SchemaObject & Required<Pick<OpenAPIV3.NonArraySchemaObject, 'oneOf'>> = {
-                type: "object",
-                oneOf: []
+            const requestBodySchema: OpenAPIV3.SchemaObject &
+                Required<Pick<OpenAPIV3.NonArraySchemaObject, 'oneOf'>> = {
+                type: 'object',
+                oneOf: [],
             }
 
             for (const requestBodyMimeType of Object.keys(requestBody.content)) {

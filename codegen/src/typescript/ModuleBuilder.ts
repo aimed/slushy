@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { ModuleResolver } from './ModuleResolver';
+import { ModuleResolver } from './ModuleResolver'
 
 /**
  * Typescript source code
@@ -29,7 +29,7 @@ export class ModuleBuilder {
 
     public readonly sourceFiles: SourceFile[] = []
 
-    public constructor() { }
+    public constructor() {}
 
     // public addSourceFile(path: string, content: OpenAPIV3.SchemaObject | OpenAPIV3.ReferenceObject | TSText, imports: Import[] = []) {
 

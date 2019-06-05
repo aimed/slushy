@@ -1,4 +1,4 @@
-import { StatusCodeRange } from './StatusCodes';
+import { StatusCodeRange } from './StatusCodes'
 
 export const StatusCodeClassNames: { [index: string]: string } = {
     '1XX': 'Informal',
@@ -11,8 +11,10 @@ export const StatusCodeClassNames: { [index: string]: string } = {
 for (const statusCodeGroup of Object.values(StatusCodeRange)) {
     for (const statusCodeName of Object.keys(statusCodeGroup)) {
         const statusCode = statusCodeGroup[statusCodeName as keyof typeof statusCodeGroup]
-        const statusCodeClassName = statusCodeName.replace(/ /g, '').replace(/'/g, '').replace(/-/g, '')
+        const statusCodeClassName = statusCodeName
+            .replace(/ /g, '')
+            .replace(/'/g, '')
+            .replace(/-/g, '')
         StatusCodeClassNames[statusCode.toString()] = statusCodeClassName
     }
 }
-

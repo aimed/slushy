@@ -1,5 +1,5 @@
-import { OpenAPIV3 } from "openapi-types";
-import { capitalize } from "../utils";
+import { OpenAPIV3 } from 'openapi-types'
+import { capitalize } from '../utils'
 
 export interface ResolvedReference {
     path: string

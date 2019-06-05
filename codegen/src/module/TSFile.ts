@@ -1,22 +1,21 @@
-import { IdentifierRegistry } from "./IdentifierRegistry";
-import { IdentifierImport } from "./IdentifierImport";
+import { IdentifierRegistry } from './IdentifierRegistry'
+import { IdentifierImport } from './IdentifierImport'
 import { groupBy } from 'lodash'
 import ts from 'typescript'
 import * as path from 'path'
-import { OpenAPIV3 } from "openapi-types";
-import { capitalize, isReferenceObject } from "./utils";
+import { OpenAPIV3 } from 'openapi-types'
+import { capitalize, isReferenceObject } from './utils'
 import * as prettier from 'prettier'
 
 export class TSFile {
-    private readonly imports: Promise<IdentifierImport>[] = []
+    private readonly imports: IdentifierImport[] = []
 
     private readonly contents: string[] = []
 
     public constructor(
         public readonly path: string,
-        private readonly registry: IdentifierRegistry = new IdentifierRegistry(),
-    ) {
-    }
+        private readonly registry: IdentifierRegistry = new IdentifierRegistry()
+    ) {}
 
     /**
      * Imports an identifier.
@@ -24,11 +23,7 @@ export class TSFile {
      * @param from A path the import the symbol from. This is helpful for e.g. importing libraries.
      */
     public import(identifier: string, from?: string): void {
-        if (from != null) {
-            this.imports.push(Promise.resolve({ identifier, path: from }))
-        } else {
-            this.imports.push(this.registry.get(identifier))
-        }
+        this.imports.push({ identifier, path: from })
     }
 
     public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
@@ -53,7 +48,6 @@ export class TSFile {
         const identifier = capitalize(schema.$ref.replace('#/components/schemas/', ''))
         return identifier
     }
-
 
     public getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined): string {
         if (schema === undefined) {
@@ -131,21 +125,22 @@ export class TSFile {
 
     public async build(): Promise<string> {
         const imports = await this.resolveImports()
-        const source = [
-            ...imports,
-            '',
-            ...this.contents,
-        ].join('\r')
-        const formatted = prettier.format(source, { parser: 'typescript', semi: false, singleQuote: true, printWidth: 120 })
+        const source = [...imports, '', ...this.contents].join('\r')
+        const formatted = prettier.format(source, {
+            parser: 'typescript',
+            semi: false,
+            singleQuote: true,
+            printWidth: 120,
+        })
         return formatted
     }
 
-    private async resolveImports() {
+    private resolveImports() {
         // FIXME: Behavior for not exported types is currently undefined.
         // Group all imports and create the import statements
-        const importStatements = await Promise.all(this.imports);
-        const importsWithoutSelf = importStatements.filter(imp => imp.path !== this.path);
-        const importsByFile = groupBy(importsWithoutSelf, 'path');
+        const importStatements = this.imports.map(imp => (imp.path ? imp : this.registry.get(imp.identifier)))
+        const importsWithoutSelf = importStatements.filter(imp => imp.path !== this.path)
+        const importsByFile = groupBy(importsWithoutSelf, 'path')
         const importDeclarations: string[] = []
 
         for (const file of Object.keys(importsByFile)) {
@@ -154,7 +149,9 @@ export class TSFile {
             const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`
             const importsFromFile = importsByFile[file]
             const importedIdentifiers = importsFromFile.map(im => im.identifier).join(', ')
-            importDeclarations.push(`import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`)
+            importDeclarations.push(
+                `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`
+            )
         }
 
         return importDeclarations

@@ -1,4 +1,4 @@
-import { capitalize, isReferenceObject } from "./utils";
+import { capitalize, isReferenceObject } from './utils'
 
 describe('utils', () => {
     describe('capitalize', () => {
@@ -16,15 +16,12 @@ describe('utils', () => {
     })
 
     describe('isReferenceObject', () => {
-        it.each([[null], [undefined], [''], {}])(
-            'should not identify (%s)', (input) => {
-                expect(isReferenceObject(input)).toBe(false);
-            }
-        )
+        it.each([[null], [undefined], [''], {}])('should not identify (%s)', input => {
+            expect(isReferenceObject(input)).toBe(false)
+        })
 
         it('should identify an object with a $ref property as an reference object', () => {
             expect(isReferenceObject({ $ref: '#/test' })).toBe(true)
         })
     })
 })
-

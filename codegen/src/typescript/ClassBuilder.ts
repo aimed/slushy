@@ -1,4 +1,4 @@
-import { CodeGenContext } from "../CodeGenContext";
+import { CodeGenContext } from '../CodeGenContext'
 
 export interface Property {
     name: string
@@ -7,11 +7,11 @@ export interface Property {
 }
 
 export class ClassBuilder {
-    private extend?: { className: string, constructorCalls: string[] }
+    private extend?: { className: string; constructorCalls: string[] }
     private readonly parameters: Property[] = []
     private readonly properties: Property[] = []
 
-    public constructor(private readonly className: string, private readonly context: CodeGenContext) { }
+    public constructor(private readonly className: string, private readonly context: CodeGenContext) {}
 
     public addParameter(param: Property) {
         this.parameters.push(param)
@@ -30,9 +30,23 @@ export class ClassBuilder {
     public build() {
         return this.context.prettifyTS(`
             export class ${this.className}${this.extend ? ` extends ${this.extend.className}` : ''} {
-                ${this.properties.map(prop => `public readonly ${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}${prop.initialValue ? ` = ${prop.initialValue}` : ''}`).join('\n')}
+                ${this.properties
+                    .map(
+                        prop =>
+                            `public readonly ${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}${
+                                prop.initialValue ? ` = ${prop.initialValue}` : ''
+                            }`
+                    )
+                    .join('\n')}
                 public constructor(
-                    ${this.parameters.map(param => `public readonly ${param.name}: ${param.type}${param.initialValue ? ` = ${param.initialValue}` : ''}`).join(',\n')}
+                    ${this.parameters
+                        .map(
+                            param =>
+                                `public readonly ${param.name}: ${param.type}${
+                                    param.initialValue ? ` = ${param.initialValue}` : ''
+                                }`
+                        )
+                        .join(',\n')}
                 ) { ${this.extend ? this.extend.constructorCalls.join('\r') : ''}}
             }
         `)
