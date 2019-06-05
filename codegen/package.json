@@ -1,7 +1,7 @@
 {
   "name": "@slushy/codegen",
-  "version": "0.3.2",
-  "description": "Slushy CodeGen.",
+  "version": "0.3.5",
+  "description": "Slushy CodeGen",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/fs-extra": "^7.0.0",
     "@types/jest": "^24.0.13",
-    "@types/lodash": "4.14.123",
+    "@types/lodash": "4.14.129",
     "@types/mustache": "0.8.32",
     "@types/mz": "0.0.32",
     "@types/node": "12.0.0",

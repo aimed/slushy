@@ -1,0 +1,15 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+h1 > a {
+    color: #FF90BB;
+    text-decoration: none;
+    text-transform: capitalize;
+    text-shadow: 1px 1px 0px #CF7094;
+
+    &:hover {
+        text-decoration: none;
+    }
+}
