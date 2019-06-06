@@ -20,6 +20,7 @@ export class ResourcesGenerator implements Generator {
         // TODO: Create ResourceInterface
 
         // throw new Error("Method not implemented.")
+        const resourceRouterNames: string[] = []
 
         const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({ path, pathItemObject, resourceName: this.getResourceNameForPath(path) }))
         const groupedPathsWithResourceName = groupBy(pathsWithResourceName, item => item.resourceName)
@@ -27,20 +28,11 @@ export class ResourcesGenerator implements Generator {
         // For every resource, e.g. /pet create the response type, the parameter type and the resource router.
         for (const [resourceName, resourcePathDescriptions] of Object.entries(groupedPathsWithResourceName)) {
             const tsFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}.ts`))
+            const resourceOperations: ResourceOperation[] = []
 
             // For every path on a resource
             for (const resourcePathDescription of resourcePathDescriptions) {
-                const { pathItemObject } = resourcePathDescription
-                const httpVerbPathOperations = [
-                    'get' as 'get',
-                    'put' as 'put',
-                    'post' as 'post',
-                    'delete' as 'delete',
-                    'options' as 'options',
-                    'head' as 'head',
-                    'patch' as 'patch',
-                    'trace' as 'trace',
-                ]
+                const { path, pathItemObject } = resourcePathDescription
 
                 // For every operation on a resource, e.g. getPet (GET /pets)
                 for (const pathOperationKey of httpVerbPathOperations) {
@@ -54,10 +46,17 @@ export class ResourcesGenerator implements Generator {
 
                     const parameterTypeFactory = new ParameterTypeFactory()
                     const parameterType = parameterTypeFactory.declareParameterType(operationObject, tsFile)
+                    resourceOperations.push({ path, responseType, parameterType, pathItemObject, method: pathOperationKey })
                 }
 
             }
+
+            const resourceRouterFactory = new ResourceRouterFactory()
+            const resourceRouterName = resourceRouterFactory.declareResourceRouter(resourceName, resourceOperations, tsFile)
+            resourceRouterNames.push(resourceRouterName)
         }
+
+        // TODO: Do things with resourceRouterNames -> Generate the ResourcesConfiguration
     }
 
     /**
@@ -73,6 +72,35 @@ export class ResourcesGenerator implements Generator {
             return capitalize('index')
         }
         return capitalize(prefix)
+    }
+}
+
+/**
+ * A list of all http verbs that are supported by the OpenApi path.
+ */
+const httpVerbPathOperations = [
+    'get' as 'get',
+    'put' as 'put',
+    'post' as 'post',
+    'delete' as 'delete',
+    'options' as 'options',
+    'head' as 'head',
+    'patch' as 'patch',
+    'trace' as 'trace',
+]
+
+export interface ResourceOperation {
+    parameterType: string
+    responseType: string
+    path: string
+    method: string
+    pathItemObject: OpenAPIV3.PathItemObject
+}
+
+export class ResourceRouterFactory {
+    declareResourceRouter(resourceName: string, resourceOperations: Array<ResourceOperation>, tsFile: TSFile): string {
+        throw new Error("Method not implemented.")
+        // return the resouce router class name
     }
 }
 
