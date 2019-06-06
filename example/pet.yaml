@@ -6,6 +6,9 @@ info:
 servers:
   - url: http://localhost:3031
 
+security:
+  - bearerAuth: []
+
 paths:
   /pets:
     get:

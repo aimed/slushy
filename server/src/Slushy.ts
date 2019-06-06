@@ -5,16 +5,13 @@ import { SlushyProps } from './SlushyProps'
 import { SlushyConfig } from './SlushyConfig'
 import { SlushyPlugins } from './SlushyPlugins'
 import { DefaultLoggerFactory } from './LoggerFactory'
-import express = require('express');
 
 export class Slushy {
     public constructor(
         public readonly props: Readonly<SlushyProps>,
         public readonly app: SlushyApplication = SlushyApplicationFactory.create(),
-        public router: SlushyRouter = new SlushyRouter(props, express.Router())
-    ) {
-        app.use(router.router)
-    }
+        public router: SlushyRouter = new SlushyRouter(props, app)
+    ) {}
 
     public async start(port: number) {
         return new Promise(resolve => this.app.listen(port, resolve))
