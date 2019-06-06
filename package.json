@@ -4,7 +4,6 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.3.2",
     "husky": "2.2.0",
     "lerna": "3.13.4",
     "ts-node": "8.1.0",
@@ -19,7 +18,5 @@
     "test": "lerna run test"
   },
   "prettier": "./.prettierrc.json",
-  "dependencies": {
-    "jsonwebtoken": "^8.5.1"
-  }
+  "dependencies": {}
 }
