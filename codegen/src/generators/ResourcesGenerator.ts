@@ -41,7 +41,7 @@ export class ResponseTypeFactory {
             const responseClassSuffix = StatusCodeClassNames[responseStatusCode];
             const responseClassName = `${capitalize(pathItemObject.operationId)}${responseClassSuffix}`;
             responseClassNames.push(responseClassName)
-            this.declareStatusCodeResponseClass(responseClassName, response, responseStatusCode, pathItemObject, tsFile);
+            this.declareStatusCodeResponseClass(responseClassName, response, responseStatusCode, tsFile);
         }
 
         const responseTypeName = `${capitalize(pathItemObject.operationId)}Response`
@@ -50,10 +50,11 @@ export class ResponseTypeFactory {
         return responseTypeName
     }
 
-    private declareStatusCodeResponseClass(responseClassName: string, response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject, responseStatusCode: keyof typeof StatusCodeRange | StatusCode, pathItemObject: OpenAPIV3.OperationObject, tsFile: TSFile) {
+    private declareStatusCodeResponseClass(responseClassName: string, response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject, responseStatusCode: keyof typeof StatusCodeRange | StatusCode, tsFile: TSFile) {
         if (isReferenceObject(response)) {
             throw new Error('References for responses are not allowed, you maybe forgot to use .bundle');
         }
+
         const responseClassBuilder = new TSClassBuilder(responseClassName);
         this.extendBaseClass(responseStatusCode, tsFile, responseClassBuilder);
         this.addStatusCode(responseStatusCode, responseClassBuilder, tsFile);
