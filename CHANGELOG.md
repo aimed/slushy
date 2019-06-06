@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/aimed/slushy/compare/v0.7.1...v0.8.0) (2019-06-06)
+
+
+### Features
+
+* stub generator code ([#43](https://github.com/aimed/slushy/issues/43)) ([73f7556](https://github.com/aimed/slushy/commit/73f7556))
+
+
+
+
+
 ## [0.7.1](https://github.com/aimed/slushy/compare/v0.7.0...v0.7.1) (2019-06-06)
 
 **Note:** Version bump only for package slushy
