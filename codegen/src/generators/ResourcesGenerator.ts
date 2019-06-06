@@ -12,6 +12,11 @@ export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
 
     generate(_document: OpenAPIV3.Document, _tsModule: TSModule): Promise<void> {
+        // TODO: This replaces ResourceTemplate
+        // TODO: Create Responses (done)
+        // TODO: Create Parameters ()
+        // TODO: Create ResourceInterface
+
         // const responseTypeFactory = new ResponseTypeFactory()
         throw new Error("Method not implemented.");
     }
