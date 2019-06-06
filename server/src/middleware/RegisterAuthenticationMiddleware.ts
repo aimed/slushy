@@ -9,7 +9,7 @@ export class RegisterAuthenticationMiddleware implements MiddlewareFactory {
             const { paths, security } = props.openApi
             /* Is security is enabled for all endpoints? */
             if (security && security.find((s: any) => s.bearerAuth)) {
-                router.use('/', props.authenticationMiddleware)
+                router.use('/', props.authenticationMiddleware.execute)
             } else {
                 /* Transverse all endpoints and apply the middleware where is necessary */
                 for (const [p, path] of Object.entries(paths)) {
