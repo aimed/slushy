@@ -26,7 +26,7 @@ export class PetsResourceImpl implements PetsResource<{}> {
     public async getPetById(params: GetPetByIdParams): Promise<GetPetByIdResponse> {
         const pet = this.pets.filter(pet => pet.id === params.petId)[0]
         if (!pet) {
-            return new GetPetByIdBadRequest()
+            return new GetPetByIdBadRequest({ message: 'No pet found.' })
         }
         return new GetPetByIdOK(pet)
     }

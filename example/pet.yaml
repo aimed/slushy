@@ -72,6 +72,14 @@ paths:
                 $ref: '#/components/schemas/pet'
         '400':
           description: Pet does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required: ["message"]
 
 components:
   schemas:

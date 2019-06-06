@@ -19,5 +19,11 @@ describe('PetsResource', () => {
             expect(response.status).toBe(200)
             expect(response.body).toBeInstanceOf(Array)
         })
+
+        it('with invalid id should return 400 with a message', async () => {
+            const response = await request(slushy.app).get('/pets/123')
+            expect(response.status).toBe(400)
+            expect(response.body.message).toBe({ message: 'No pet found.' })
+        })
     })
 })

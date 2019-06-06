@@ -195,7 +195,7 @@ export class ResponseTypeFactory {
     private extendBaseClass(responseStatusCode: keyof typeof StatusCodeRange | StatusCode, _tsFile: TSFile, responseClassBuilder: TSClassBuilder) {
         // If the status code indicates an error, generate an actual error class that can be thrown.
         if (isErrorStatusCode(responseStatusCode)) {
-            responseClassBuilder.extends('Error', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)');
+            responseClassBuilder.extends('SlushyError', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)');
         }
     }
 
