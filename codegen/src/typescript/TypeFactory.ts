@@ -4,6 +4,7 @@ import { capitalize } from '../utils'
 import { log } from '../log'
 import { isReferenceObject } from '../isReferenceObject'
 
+// TODO: use TSFile instead!
 export class TypeFactory {
     async createTypesFileFromComponentSchemas(context: CodeGenContext) {
         const { openApi, writeFile, joinPath, destDir, prettifyTS } = context
