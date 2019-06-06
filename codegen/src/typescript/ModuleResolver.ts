@@ -6,6 +6,9 @@ export interface ResolvedReference {
     symbol: string
 }
 
+/**
+ * @deprecated Replaced by TSModule
+ */
 export class ModuleResolver {
     resolve(schema: OpenAPIV3.ReferenceObject): ResolvedReference {
         if (!schema.$ref.startsWith('#/components/schemas/')) {
