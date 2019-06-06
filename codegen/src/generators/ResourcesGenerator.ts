@@ -7,18 +7,62 @@ import { isErrorStatusCode, isStatusCodeRange, StatusCodeRange, StatusCode, stat
 import { capitalize, isReferenceObject } from '../typescript/module/utils';
 import { StatusCodeClassNames } from '../StatusCodesClassNames';
 import { TSClassBuilder } from '../typescript/TSClassBuilder';
+import { groupBy } from 'lodash';
+import * as path from 'path'
 
 export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
 
-    generate(_document: OpenAPIV3.Document, _tsModule: TSModule): Promise<void> {
+    async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
         // TODO: This replaces ResourceTemplate
         // TODO: Create Responses (done)
         // TODO: Create Parameters ()
         // TODO: Create ResourceInterface
 
-        // const responseTypeFactory = new ResponseTypeFactory()
-        throw new Error("Method not implemented.");
+        // throw new Error("Method not implemented.")
+
+        const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({ path, pathItemObject, resourceName: this.getResourceNameForPath(path) }))
+        const groupedPathsWithResourceName = groupBy(pathsWithResourceName, item => item.resourceName)
+
+        // For every resource, e.g. /pet create the response type, the parameter type and the resource router.
+        for (const [resourceName, resourcePathDescriptions] of Object.entries(groupedPathsWithResourceName)) {
+            const tsFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}.ts`))
+
+            // For every operation on a resource
+            for (const resourceOperation of resourcePathDescriptions) {
+                const { pathItemObject } = resourceOperation
+
+                const responseTypeFactory = new ResponseTypeFactory()
+                const responseType = responseTypeFactory.declarePathResponseType(pathItemObject, tsFile)
+
+                const parameterTypeFactory = new ParameterTypeFactory()
+                const parameterType = parameterTypeFactory.declareParameterType(pathItemObject, tsFile)
+            }
+        }
+    }
+
+    /**
+     * For a given path create a resource name.
+     * @example
+     * /         -> Index
+     * /pets     -> Pets
+     * /pets/:id -> Pets
+     */
+    private getResourceNameForPath(path: string): string {
+        const [, prefix] = path.split('/')
+        if (!prefix || prefix.startsWith('{')) {
+            return capitalize('index')
+        }
+        return capitalize(prefix)
+    }
+}
+
+export class ParameterTypeFactory {
+    declareParameterType(
+        _pathItemObject: OpenAPIV3.OperationObject,
+        _tsFile: TSFile,
+    ): string {
+        throw new Error("Method not implemented.")
     }
 }
 
