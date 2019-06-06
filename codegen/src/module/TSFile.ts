@@ -15,7 +15,7 @@ export class TSFile {
     public constructor(
         public readonly path: string,
         private readonly registry: IdentifierRegistry = new IdentifierRegistry()
-    ) {}
+    ) { }
 
     /**
      * Imports an identifier.
@@ -143,12 +143,11 @@ export class TSFile {
         const importsByFile = groupBy(importsWithoutSelf, 'path')
         const importDeclarations: string[] = []
 
-        for (const file of Object.keys(importsByFile)) {
+        for (const [file, importsFromFile] of Object.entries(importsByFile)) {
             const pathRelative = path.relative(path.dirname('/' + this.path), '/' + file)
             // path.relative will resolve ('/', '/a/b.ts') to 'a/b.ts', but we need './a/b.ts'.
             const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`
-            const importsFromFile = importsByFile[file]
-            const importedIdentifiers = importsFromFile.map(im => im.identifier).join(', ')
+            const importedIdentifiers = Array.from(new Set(importsFromFile)).map(im => im.identifier).join(', ')
             importDeclarations.push(
                 `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`
             )
