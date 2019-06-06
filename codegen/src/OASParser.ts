@@ -3,13 +3,16 @@ import { ResourceFactory } from './ResourceFactory'
 import { log } from './log'
 import { CodeGenContext } from './CodeGenContext'
 import { TypeFactory } from './typescript/TypeFactory'
+import { TSModule } from './typescript/module/TSModule';
+import { ComponentSchemaTypesGenerator } from './generators/ComponentSchemaTypesGenerator';
 
 export class OASParser {
     async parseOAS(sourceFile: string, destDir: string) {
         // TODO: Use generators to allow plug ins
         log('Validating OpenApi definition')
         // TODO: Get rid of CodeGenContext and instead use typescript.module?
-        const context = new CodeGenContext(sourceFile, destDir, await SwaggerParser.bundle(sourceFile))
+        const openApi = await SwaggerParser.bundle(sourceFile)
+        const context = new CodeGenContext(sourceFile, destDir, openApi)
         await context.mkDir(destDir)
 
         const swaggerOutPath = context.joinPath(destDir, 'openapi.json')
@@ -18,6 +21,12 @@ export class OASParser {
 
         log('Creating types')
         // TODO: Use ComponentSchemaTypesGenerator
+        const tsModule = new TSModule()
+        const componentSchemaTypesGenerator = new ComponentSchemaTypesGenerator()
+        componentSchemaTypesGenerator.generate(openApi, tsModule)
+        await tsModule.build(destDir)
+
+        // TODO: Remove dependency on types.ts file
         const typeFactory = new TypeFactory()
         await typeFactory.createTypesFileFromComponentSchemas(context)
 
