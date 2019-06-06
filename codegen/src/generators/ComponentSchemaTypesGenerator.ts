@@ -1,7 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types'
 import ts from 'typescript'
-import { capitalize } from '../module/utils'
-import { TSModule } from '../module/TSModule'
+import { capitalize } from '../typescript/module/utils'
+import { TSModule } from '../typescript/module/TSModule'
 import * as path from 'path'
 import { Generator } from './Generator'
 
