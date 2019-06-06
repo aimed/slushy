@@ -17,7 +17,7 @@ export class ResourcesGenerator implements Generator {
         // TODO: This replaces ResourceTemplate
         // TODO: Create Responses (done)
         // TODO: Create Parameters ()
-        // TODO: Create ResourceInterface
+        // TODO: Create ResourceRouter ()
 
         // throw new Error("Method not implemented.")
         const resourceRouterNames: string[] = []
