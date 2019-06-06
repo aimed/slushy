@@ -17,6 +17,7 @@ export class ResourcesGenerator implements Generator {
         // TODO: This replaces ResourceTemplate
         // TODO: Create Responses (done)
         // TODO: Create Parameters ()
+        // TODO: Create Resource ()
         // TODO: Create ResourceRouter ()
 
         // throw new Error("Method not implemented.")
@@ -97,22 +98,54 @@ export interface ResourceOperation {
     pathItemObject: OpenAPIV3.PathItemObject
 }
 
+/**
+ * Creates a resource router (resource definition).
+ * @example
+ * export class PetsResourceRouter {
+ *   bind(router: SlushyRouter, resource: PetsResource) {
+ *      router.get('/pets', resource.getPets)
+ *   }
+ * }
+ */
 export class ResourceRouterFactory {
-    declareResourceRouter(resourceName: string, resourceOperations: Array<ResourceOperation>, tsFile: TSFile): string {
+    declareResourceRouter(_resourceName: string, _resourceOperations: Array<ResourceOperation>, _tsFile: TSFile): string {
         throw new Error("Method not implemented.")
-        // return the resouce router class name
+        // TODO: return the resource router class name
     }
 }
 
+/**
+ * Creates a resource interface.
+ * @example
+ * export interface PetsResource {
+ *  getPetById(params: GetPetByIdParams): Promise<GetPetByIdResponse>
+ * }
+ */
+export class ResourceFactory {
+}
+
+/**
+ * Creates a resource operation parameter.
+ * @example
+ * export type GetPetByIdParams = { petId: string }
+ */
 export class ParameterTypeFactory {
     declareParameterType(
         _operationObject: OpenAPIV3.OperationObject,
         _tsFile: TSFile,
     ): string {
         throw new Error("Method not implemented.")
+        // TODO: return the paramter type name
     }
 }
 
+/**
+ * Creates a resource operation response.
+ * @example
+ * export class GetPetOK { status = 200 }
+ * export class GetPetBadRequest extends SlushyError { status = 400 }
+ * export type GetPetResponse = GetPetOK | GetPetBadRequest
+ */
 export class ResponseTypeFactory {
     declarePathResponseType(
         operationObject: OpenAPIV3.OperationObject,
