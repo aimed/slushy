@@ -6,7 +6,9 @@ import { TypeFactory } from './typescript/TypeFactory'
 
 export class OASParser {
     async parseOAS(sourceFile: string, destDir: string) {
+        // TODO: Use generators to allow plug ins
         log('Validating OpenApi definition')
+        // TODO: Get rid of CodeGenContext and instead use typescript.module? 
         const context = new CodeGenContext(sourceFile, destDir, await SwaggerParser.bundle(sourceFile))
         await context.mkDir(destDir)
 
