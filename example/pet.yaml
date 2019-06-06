@@ -21,6 +21,8 @@ paths:
                   $ref: '#/components/schemas/pet'
     post:
       operationId: createPet
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -96,3 +98,8 @@ components:
           type: string
       required: ['name']
       additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

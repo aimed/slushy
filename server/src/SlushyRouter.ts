@@ -24,6 +24,18 @@ export class SlushyRouter<TContext = {}> {
         // TODO: Move this somewhere else.
         router.use(...new BodyParser().create(this.props))
         router.use('/api-docs', ...new ApiDoc().create(this.props))
+
+        if (props.authenticationMiddleware) {
+            const { paths } = this.props.openApi
+            for (const [p, path] of Object.entries(paths)) {
+                for (const [v, verb] of Object.entries(path)) {
+                    if (verb && verb.security && verb.security.find((s: any) => s.bearerAuth)) {
+                        const r = router as any
+                        r[v](p, props.authenticationMiddleware.execute)
+                    }
+                }
+            }
+        }
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
