@@ -1,6 +1,11 @@
 import { SlushyContext, SlushyRouter } from '@slushy/server'
 import { {{#importedTypes}}{{.}},{{/importedTypes}} } from '../types'
 
+{{#exportedClasses}}
+{{{.}}}
+
+{{/exportedClasses}}
+
 {{#paths}}
 export {{{parameter.definition}}}
 

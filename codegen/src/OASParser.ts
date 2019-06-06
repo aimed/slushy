@@ -2,7 +2,7 @@ import SwaggerParser from 'swagger-parser'
 import { ResourceFactory } from './ResourceFactory'
 import { log } from './log'
 import { CodeGenContext } from './CodeGenContext'
-import { TypeFactory } from './TypeFactory'
+import { TypeFactory } from './typescript/TypeFactory'
 
 export class OASParser {
     async parseOAS(sourceFile: string, destDir: string) {

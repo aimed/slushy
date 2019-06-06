@@ -31,7 +31,6 @@ paths:
                 name:
                   type: string
               required: ["name"]
-
       responses:
         '200':
           description: The newly created pet
@@ -71,6 +70,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/pet'
+        '400':
+          description: Pet does not exist
 
 components:
   schemas:
