@@ -28,15 +28,34 @@ export class ResourcesGenerator implements Generator {
         for (const [resourceName, resourcePathDescriptions] of Object.entries(groupedPathsWithResourceName)) {
             const tsFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}.ts`))
 
-            // For every operation on a resource
-            for (const resourceOperation of resourcePathDescriptions) {
-                const { pathItemObject } = resourceOperation
+            // For every path on a resource
+            for (const resourcePathDescription of resourcePathDescriptions) {
+                const { pathItemObject } = resourcePathDescription
+                const httpVerbPathOperations = [
+                    'get' as 'get',
+                    'put' as 'put',
+                    'post' as 'post',
+                    'delete' as 'delete',
+                    'options' as 'options',
+                    'head' as 'head',
+                    'patch' as 'patch',
+                    'trace' as 'trace',
+                ]
 
-                const responseTypeFactory = new ResponseTypeFactory()
-                const responseType = responseTypeFactory.declarePathResponseType(pathItemObject, tsFile)
+                // For every operation on a resource, e.g. getPet (GET /pets)
+                for (const pathOperationKey of httpVerbPathOperations) {
+                    const operationObject = pathItemObject[pathOperationKey]
+                    if (!operationObject) {
+                        continue
+                    }
 
-                const parameterTypeFactory = new ParameterTypeFactory()
-                const parameterType = parameterTypeFactory.declareParameterType(pathItemObject, tsFile)
+                    const responseTypeFactory = new ResponseTypeFactory()
+                    const responseType = responseTypeFactory.declarePathResponseType(operationObject, tsFile)
+
+                    const parameterTypeFactory = new ParameterTypeFactory()
+                    const parameterType = parameterTypeFactory.declareParameterType(operationObject, tsFile)
+                }
+
             }
         }
     }
@@ -59,7 +78,7 @@ export class ResourcesGenerator implements Generator {
 
 export class ParameterTypeFactory {
     declareParameterType(
-        _pathItemObject: OpenAPIV3.OperationObject,
+        _operationObject: OpenAPIV3.OperationObject,
         _tsFile: TSFile,
     ): string {
         throw new Error("Method not implemented.")
@@ -68,14 +87,14 @@ export class ParameterTypeFactory {
 
 export class ResponseTypeFactory {
     declarePathResponseType(
-        pathItemObject: OpenAPIV3.OperationObject,
+        operationObject: OpenAPIV3.OperationObject,
         tsFile: TSFile,
     ): string {
-        if (!pathItemObject.responses) {
+        if (!operationObject.responses) {
             throw new Error('Missing responses')
         }
 
-        if (!pathItemObject.operationId) {
+        if (!operationObject.operationId) {
             throw new Error('Missing operationId')
         }
 
@@ -85,15 +104,15 @@ export class ResponseTypeFactory {
         const responseClassNames: string[] = []
 
         // Generate one class for every possible response value
-        for (const [responseStatusCodeString, response] of Object.entries(pathItemObject.responses)) {
+        for (const [responseStatusCodeString, response] of Object.entries(operationObject.responses)) {
             const responseStatusCode = responseStatusCodeString as keyof typeof StatusCodeRange | StatusCode
             const responseClassSuffix = StatusCodeClassNames[responseStatusCode];
-            const responseClassName = `${capitalize(pathItemObject.operationId)}${responseClassSuffix}`;
+            const responseClassName = `${capitalize(operationObject.operationId)}${responseClassSuffix}`;
             responseClassNames.push(responseClassName)
             this.declareStatusCodeResponseClass(responseClassName, response, responseStatusCode, tsFile);
         }
 
-        const responseTypeName = `${capitalize(pathItemObject.operationId)}Response`
+        const responseTypeName = `${capitalize(operationObject.operationId)}Response`
         const responseTypeDefinition = `export type ${responseTypeName} = ${responseClassNames.join(' | ')}`
         tsFile.addSourceText(responseTypeDefinition)
         return responseTypeName
