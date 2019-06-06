@@ -19,7 +19,6 @@ export class OASParser {
         await context.writeFile(swaggerOutPath, JSON.stringify(await SwaggerParser.validate(sourceFile), null, 2))
 
         log('Creating types')
-        // TODO: Use ComponentSchemaTypesGenerator
         const tsModule = new TSModule()
         const componentSchemaTypesGenerator = new ComponentSchemaTypesGenerator()
         componentSchemaTypesGenerator.generate(openApi, tsModule)
