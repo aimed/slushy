@@ -16,10 +16,12 @@ export class ComponentSchemaTypesGenerator implements Generator {
         }
 
         const schemas = Object.entries(document.components.schemas)
+        const indexExportFiles: string[] = []
         for (const [name, schemaDefinition] of schemas) {
-            const file = tsModule.file(path.join('types', `${capitalize(name)}.ts`))
+            const typeName = capitalize(name)
+            const file = tsModule.file(path.join('types', `${typeName}.ts`))
             const typeDefinition = file.getTSType(schemaDefinition)
-            const typeDeclarationString = `export type ${capitalize(name)} = ${typeDefinition}`
+            const typeDeclarationString = `export type ${typeName} = ${typeDefinition}`
             const typeDeclarationStatementFile = ts.createSourceFile(
                 'tmp.ts',
                 typeDeclarationString,
@@ -27,6 +29,15 @@ export class ComponentSchemaTypesGenerator implements Generator {
             )
             const typeDeclarationStatement = typeDeclarationStatementFile.statements[0] as ts.DeclarationStatement
             file.addNode(typeDeclarationStatement, typeDeclarationStatementFile)
+            indexExportFiles.push(`./${typeName}`)
         }
+
+        const indexFile = tsModule.file(path.join('types', 'index.ts'))
+        const indexFileFile = ts.createSourceFile(
+            'tmp.ts',
+            indexExportFiles.map(file => `export * from '${file}'`).join('\r'),
+            ts.ScriptTarget.Latest,
+        )
+        indexFile.setContent(indexFileFile)
     }
 }

@@ -2,7 +2,6 @@ import SwaggerParser from 'swagger-parser'
 import { ResourceFactory } from './ResourceFactory'
 import { log } from './log'
 import { CodeGenContext } from './CodeGenContext'
-import { TypeFactory } from './typescript/TypeFactory'
 import { TSModule } from './typescript/module/TSModule';
 import { ComponentSchemaTypesGenerator } from './generators/ComponentSchemaTypesGenerator';
 
@@ -25,10 +24,6 @@ export class OASParser {
         const componentSchemaTypesGenerator = new ComponentSchemaTypesGenerator()
         componentSchemaTypesGenerator.generate(openApi, tsModule)
         await tsModule.build(destDir)
-
-        // TODO: Remove dependency on types.ts file
-        const typeFactory = new TypeFactory()
-        await typeFactory.createTypesFileFromComponentSchemas(context)
 
         log('Creating resources')
         // TODO: Create SlushyResourcesGenerator
