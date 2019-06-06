@@ -34,6 +34,16 @@ export class TSFile {
         }
     }
 
+    /**
+     * Parses the source and adds all nodes to the file.
+     */
+    public addSourceText(sourceText: string) {
+        const sourceFile = ts.createSourceFile('tmp.ts', sourceText, ts.ScriptTarget.Latest)
+        for (const node of sourceFile.statements) {
+            this.addNode(node, sourceFile)
+        }
+    }
+
     public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
         this.contents.push(node.getText(sourceFile))
         this.registerDeclarationStatementIfApplicable(node);

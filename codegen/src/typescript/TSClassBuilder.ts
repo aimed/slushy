@@ -1,22 +1,17 @@
-import { CodeGenContext } from '../CodeGenContext'
-
 export interface Property {
     name: string
     type: string
     initialValue?: string
 }
 
-/**
- * @deprecated Replaced by TSClassBuilder
- */
-export class ClassBuilder {
+export class TSClassBuilder {
     private extend?: { className: string; constructorCalls: string[] }
     private readonly parameters: Property[] = []
     private readonly properties: Property[] = []
 
-    public constructor(private readonly className: string, private readonly context: CodeGenContext) { }
+    public constructor(public readonly className: string) { }
 
-    public addParameter(param: Property) {
+    public addConstructorParameter(param: Property) {
         this.parameters.push(param)
         return this
     }
@@ -32,7 +27,7 @@ export class ClassBuilder {
     }
 
     public build() {
-        return this.context.prettifyTS(`
+        return `
             export class ${this.className}${this.extend ? ` extends ${this.extend.className}` : ''} {
                 ${this.properties
                 .map(
@@ -42,6 +37,7 @@ export class ClassBuilder {
                         }`
                 )
                 .join('\n')}
+
                 public constructor(
                     ${this.parameters
                 .map(
@@ -51,8 +47,10 @@ export class ClassBuilder {
                         }`
                 )
                 .join(',\n')}
-                ) { ${this.extend ? this.extend.constructorCalls.join('\r') : ''}}
+                ) { 
+                    ${this.extend ? this.extend.constructorCalls.join('\r') : ''}
+                }
             }
-        `)
+        `
     }
 }
