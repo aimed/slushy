@@ -10,7 +10,7 @@ import * as prettier from 'prettier'
 export class TSFile {
     private readonly imports: IdentifierImport[] = []
 
-    private readonly contents: string[] = []
+    private contents: string[] = []
 
     public constructor(
         public readonly path: string,
@@ -26,13 +26,23 @@ export class TSFile {
         this.imports.push({ identifier, path: from })
     }
 
+    public setContent(file: ts.SourceFile) {
+        this.contents = file.text.split('\n')
+
+        for (const statement of file.statements) {
+            this.registerDeclarationStatementIfApplicable(statement)
+        }
+    }
+
     public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
         this.contents.push(node.getText(sourceFile))
+        this.registerDeclarationStatementIfApplicable(node);
+    }
 
-        // If this is a declaration,
+    private registerDeclarationStatementIfApplicable(node: ts.Node) {
         if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) {
-            if (node.name && node.name.kind === ts.SyntaxKind.Identifier) {
-                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node))
+            if (node.name && ts.isIdentifier(node.name)) {
+                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node));
             }
         }
     }
