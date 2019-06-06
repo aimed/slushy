@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/aimed/slushy/compare/v0.4.0...v0.5.0) (2019-06-06)
+
+
+### Features
+
+* use ts module ([809e8e1](https://github.com/aimed/slushy/commit/809e8e1))
+
+
+
+
+
 # [0.4.0](https://github.com/aimed/slushy/compare/v0.3.5...v0.4.0) (2019-06-06)
 
 
