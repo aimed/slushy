@@ -3,6 +3,6 @@ import { SlushyAuthenticationMiddleware } from "./SlushyAuthenticationMiddleware
 
 export interface SlushyConfig {
     resourceConfiguration: SlushyResourceConfiguration
-    authenticationMiddleware?: SlushyAuthenticationMiddleware
+    authenticationMiddleware?: SlushyAuthenticationMiddleware<{}, {}, {}>
     hostname?: string
 }

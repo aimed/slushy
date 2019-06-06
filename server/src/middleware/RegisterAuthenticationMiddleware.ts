@@ -6,10 +6,10 @@ export class RegisterAuthenticationMiddleware implements MiddlewareFactory {
     create(props: SlushyProps): Array<(req: SlushyRequest, res: SlushyResponse, next: (error?: Error) => any) => any> {
         const router = express.Router()
         if (props.authenticationMiddleware) {
-            const { paths } = props.openApi
+            const { paths, security } = props.openApi
             /* Is security is enabled for all endpoints? */
-            if (props.openApi.security && props.openApi.security.find((s: any) => s.bearerAuth)) {
-                router.use('/', props.authenticationMiddleware.execute)
+            if (security && security.find((s: any) => s.bearerAuth)) {
+                router.use('/', props.authenticationMiddleware)
             } else {
                 /* Transverse all endpoints and apply the middleware where is necessary */
                 for (const [p, path] of Object.entries(paths)) {

@@ -25,7 +25,6 @@ export class Slushy {
         const openApi = JSON.parse((await fs.readFile(config.resourceConfiguration.getOpenApiPath())).toString())
         const slushy = new Slushy({
             openApi,
-            authenticationMiddleware: config.authenticationMiddleware,
             loggerFactory: new DefaultLoggerFactory(),
             ...config,
         })
