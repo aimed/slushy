@@ -2,8 +2,8 @@ import SwaggerParser from 'swagger-parser'
 import { ResourceFactory } from './ResourceFactory'
 import { log } from './log'
 import { CodeGenContext } from './CodeGenContext'
-import { TSModule } from './typescript/module/TSModule';
-import { ComponentSchemaTypesGenerator } from './generators/ComponentSchemaTypesGenerator';
+import { TSModule } from './typescript/module/TSModule'
+import { ComponentSchemaTypesGenerator } from './generators/ComponentSchemaTypesGenerator'
 
 export class OASParser {
     async parseOAS(sourceFile: string, destDir: string) {

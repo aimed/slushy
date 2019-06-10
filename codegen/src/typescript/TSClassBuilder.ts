@@ -9,7 +9,7 @@ export class TSClassBuilder {
     private readonly parameters: Property[] = []
     private readonly properties: Property[] = []
 
-    public constructor(public readonly className: string) { }
+    public constructor(public readonly className: string) {}
 
     public addConstructorParameter(param: Property) {
         this.parameters.push(param)
@@ -30,23 +30,23 @@ export class TSClassBuilder {
         return `
             export class ${this.className}${this.extend ? ` extends ${this.extend.className}` : ''} {
                 ${this.properties
-                .map(
-                    prop =>
-                        `public readonly ${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}${
-                        prop.initialValue ? ` = ${prop.initialValue}` : ''
-                        }`
-                )
-                .join('\n')}
+                    .map(
+                        prop =>
+                            `public readonly ${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}${
+                                prop.initialValue ? ` = ${prop.initialValue}` : ''
+                            }`
+                    )
+                    .join('\n')}
 
                 public constructor(
                     ${this.parameters
-                .map(
-                    param =>
-                        `public readonly ${param.name}: ${param.type}${
-                        param.initialValue ? ` = ${param.initialValue}` : ''
-                        }`
-                )
-                .join(',\n')}
+                        .map(
+                            param =>
+                                `public readonly ${param.name}: ${param.type}${
+                                    param.initialValue ? ` = ${param.initialValue}` : ''
+                                }`
+                        )
+                        .join(',\n')}
                 ) { 
                     ${this.extend ? this.extend.constructorCalls.join('\r') : ''}
                 }

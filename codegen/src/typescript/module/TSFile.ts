@@ -15,7 +15,7 @@ export class TSFile {
     public constructor(
         public readonly path: string,
         private readonly registry: IdentifierRegistry = new IdentifierRegistry()
-    ) { }
+    ) {}
 
     /**
      * Imports an identifier.
@@ -46,13 +46,13 @@ export class TSFile {
 
     public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
         this.contents.push(node.getText(sourceFile))
-        this.registerDeclarationStatementIfApplicable(node);
+        this.registerDeclarationStatementIfApplicable(node)
     }
 
     private registerDeclarationStatementIfApplicable(node: ts.Node) {
         if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) {
             if (node.name && ts.isIdentifier(node.name)) {
-                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node));
+                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node))
             }
         }
     }
@@ -167,7 +167,9 @@ export class TSFile {
             const pathRelative = path.relative(path.dirname('/' + this.path), '/' + file)
             // path.relative will resolve ('/', '/a/b.ts') to 'a/b.ts', but we need './a/b.ts'.
             const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`
-            const importedIdentifiers = Array.from(new Set(importsFromFile)).map(im => im.identifier).join(', ')
+            const importedIdentifiers = Array.from(new Set(importsFromFile))
+                .map(im => im.identifier)
+                .join(', ')
             importDeclarations.push(
                 `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`
             )
