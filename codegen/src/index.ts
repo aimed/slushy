@@ -6,6 +6,8 @@ commander
     .version(require('../package.json').version, '-v, --version')
     .command('gen <openApiFile> <outDir>')
     .action((openApiFile, outDir) => {
+        // TODO: Replace with generators.
+        //       Example: @slushy/codegen gen ./openapi.yaml ./src/generated ComponentSchemaTypes SlushyResources
         const oasParser = new OASParser()
         oasParser
             .parseOAS(openApiFile, outDir)

@@ -23,6 +23,7 @@ export class TSFile {
      * @param from A path the import the symbol from. This is helpful for e.g. importing libraries.
      */
     public import(identifier: string, from?: string): void {
+        // FIXME: ignore imports for primitive types
         this.imports.push({ identifier, path: from })
     }
 
