@@ -11,11 +11,7 @@ import { ResourceOperation } from './ResourceOperation'
  * }
  */
 export class ResourceRouterFactory {
-    declareResourceRouter(
-        _resourceName: string,
-        _resourceOperations: Array<ResourceOperation>,
-        _tsFile: TSFile
-    ): string {
+    create(_resourceName: string, _resourceOperations: Array<ResourceOperation>, _tsFile: TSFile): string {
         throw new Error('Method not implemented.')
         // TODO: return the resource router class name
     }

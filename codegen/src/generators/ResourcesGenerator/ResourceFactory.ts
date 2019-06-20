@@ -1,22 +1,6 @@
 import { TSFile } from '../../typescript/module/TSFile'
 import { TSInterfaceBuilder } from '../../typescript/TSInterfaceBuilder'
-
-export interface ResourceOperation {
-    /**
-     * @example getPetById
-     */
-    name: string
-
-    /**
-     * @example GetPetByIdParams
-     */
-    parameterType: string
-
-    /**
-     * @example GetPetByIdResponse
-     */
-    returnType: string
-}
+import { ResourceOperation } from './ResourceOperation'
 
 /**
  * Creates a resource description.

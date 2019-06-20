@@ -10,6 +10,7 @@ import { ResponseTypeFactory } from './ResponseTypeFactory'
 import { ResourceRouterFactory } from './ResourceRouterFactory'
 import { ResourceOperation } from './ResourceOperation'
 import { httpVerbPathOperations } from './httpVerbPathOperations'
+import { ResourceFactory } from './ResourceFactory'
 
 export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
@@ -17,11 +18,10 @@ export class ResourcesGenerator implements Generator {
     async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
         // TODO: This replaces ResourceTemplate
         // TODO: Create Responses (done)
-        // TODO: Create Parameters ()
-        // TODO: Create Resource ()
+        // TODO: Create Parameters (done)
+        // TODO: Create Resource (done)
         // TODO: Create ResourceRouter ()
 
-        // throw new Error("Method not implemented.")
         const resourceRouterNames: string[] = []
 
         const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({
@@ -47,27 +47,32 @@ export class ResourcesGenerator implements Generator {
                         continue
                     }
 
+                    if (!operationObject.operationId) {
+                        throw new Error('Missing operationId')
+                    }
+
                     const responseTypeFactory = new ResponseTypeFactory()
                     const responseType = responseTypeFactory.declarePathResponseType(operationObject, tsFile)
 
                     const parameterTypeFactory = new ParameterTypeFactory()
                     const parameterType = parameterTypeFactory.declareParameterType(operationObject, tsFile)
-                    resourceOperations.push({
+                    const resourceOperation: ResourceOperation = {
+                        name: operationObject.operationId,
                         path,
-                        responseType,
+                        returnType: responseType,
                         parameterType,
                         pathItemObject,
                         method: pathOperationKey,
-                    })
+                    }
+                    resourceOperations.push(resourceOperation)
                 }
             }
 
+            const resourceFactory = new ResourceFactory()
+            const resourceDescriptionName = resourceFactory.create(resourceName, resourceOperations, tsFile)
+
             const resourceRouterFactory = new ResourceRouterFactory()
-            const resourceRouterName = resourceRouterFactory.declareResourceRouter(
-                resourceName,
-                resourceOperations,
-                tsFile
-            )
+            const resourceRouterName = resourceRouterFactory.create(resourceDescriptionName, resourceOperations, tsFile)
             resourceRouterNames.push(resourceRouterName)
         }
 
