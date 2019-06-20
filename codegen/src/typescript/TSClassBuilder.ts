@@ -56,15 +56,17 @@ export class TSClassBuilder {
 
                 ${this.methods
                     .map(
-                        ({ name, returnType, parameters }) => `
-                public ${name}(${parameters
+                        ({ async, name, returnType, parameters, body }) => `
+                public ${async ? 'async ' : ''}${name}(${parameters
                             .map(
                                 param =>
                                     `${param.name}: ${param.type}${
                                         param.initialValue ? ` = ${param.initialValue}` : ''
                                     }`
                             )
-                            .join(', ')}): ${returnType}
+                            .join(', ')}): ${returnType} {
+                                ${body || ''}
+                            }
                 `
                     )
                     .join('\n\n')}

@@ -10,7 +10,7 @@ import { ResponseTypeFactory } from './ResponseTypeFactory'
 import { ResourceRouterFactory } from './ResourceRouterFactory'
 import { ResourceOperation } from './ResourceOperation'
 import { httpVerbPathOperations } from './httpVerbPathOperations'
-import { ResourceFactory } from './ResourceFactory'
+import { ResourceDefinitionFactory } from './ResourceDefinitionFactory'
 
 export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
@@ -68,7 +68,7 @@ export class ResourcesGenerator implements Generator {
                 }
             }
 
-            const resourceFactory = new ResourceFactory()
+            const resourceFactory = new ResourceDefinitionFactory()
             const resourceDescriptionName = resourceFactory.create(resourceName, resourceOperations, tsFile)
 
             const resourceRouterFactory = new ResourceRouterFactory()
