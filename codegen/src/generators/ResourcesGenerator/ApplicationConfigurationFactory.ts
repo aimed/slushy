@@ -41,6 +41,7 @@ export class ApplicationConfigurationFactory {
     create(
         applicationResourceDescriptions: ApplicationResourceDescription[],
         openApiConstantIdentifier: string,
+        openApiConstantSourceFile: string,
         tsFile: TSFile
     ) {
         const applicationConfigurationClassBuilder = new TSClassBuilder('ApplicationConfiguration')
@@ -71,7 +72,7 @@ export class ApplicationConfigurationFactory {
         tsFile.import('SlushyRouter', '@slushy/server')
 
         // openApiSchema
-        tsFile.import(openApiConstantIdentifier)
+        tsFile.import(openApiConstantIdentifier, openApiConstantSourceFile)
         applicationConfigurationClassBuilder.addMethod({
             name: 'getOpenApiSchema',
             returnType: 'string',

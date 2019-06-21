@@ -40,6 +40,7 @@ export class ResourceRouterFactory {
             async: true,
             parameters: [{ name: 'router', type: 'SlushyRouter' }, { name: 'resource', type: resourceType }],
             returnType: 'Promise<void>',
+            body: statements.join('\n'),
         })
         tsFile.addSourceText(routerClassBuilder.build())
         return resourceRouterName

@@ -67,8 +67,13 @@ export class ResourcesGenerator implements Generator {
             const resourceFactory = new ResourceDefinitionFactory()
             const resourceType = resourceFactory.create(resourceName, resourceOperations, tsFile)
 
+            const resourceRouterFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}Router.ts`))
             const resourceRouterFactory = new ResourceRouterFactory()
-            const resourceRouterType = resourceRouterFactory.create(resourceType, resourceOperations, tsFile)
+            const resourceRouterType = resourceRouterFactory.create(
+                resourceType,
+                resourceOperations,
+                resourceRouterFile
+            )
             applicationResourceDescriptions.push({
                 resourceRouterType,
                 resourceName,
@@ -84,6 +89,7 @@ export class ResourcesGenerator implements Generator {
         applicationConfigurationFactory.create(
             applicationResourceDescriptions,
             openApiConstantIdentifier,
+            'openApi.ts',
             applicationConfigurationFile
         )
     }
