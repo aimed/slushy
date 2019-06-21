@@ -5,7 +5,7 @@ import { TSInterfaceBuilder } from '../../typescript/TSInterfaceBuilder'
 /**
  * Everything that is required for a working resource.
  */
-export interface ResourceDefinition {
+export interface ApplicationResourceDescription {
     /**
      * @example Pets
      */
@@ -13,11 +13,11 @@ export interface ResourceDefinition {
     /**
      * @example PetsRouter
      */
-    routerImplementation: string
+    resourceRouterType: string
     /**
      * @example PetsResource
      */
-    resourceImplementation: string
+    resourceType: string
 }
 
 /**
@@ -29,7 +29,7 @@ export interface ResourceDefinition {
  *  }) {}
  *
  *  configure(router: SlushyRouter) {
- *      return Promise.all([new PetsResourceRouter().bindRoutes(router, this.config.PetsResource)])
+ *      return Promise.all([await new PetsResourceRouter().bindRoutes(router, this.config.PetsResource)])
  *  }
  *
  *  getOpenApi() {
@@ -39,15 +39,18 @@ export interface ResourceDefinition {
  */
 export class ApplicationConfigurationFactory {
     create(
-        resourceDefinitions: ResourceDefinition[],
-        openApiSchema: { identifier: string; path: string },
+        applicationResourceDescriptions: ApplicationResourceDescription[],
+        openApiConstantIdentifier: string,
         tsFile: TSFile
     ) {
         const applicationConfigurationClassBuilder = new TSClassBuilder('ApplicationConfiguration')
         const applicationConfigurationInterfaceBuilder = new TSInterfaceBuilder('Config')
 
         let bindings: string[] = []
-        for (const { resourceImplementation, routerImplementation } of resourceDefinitions) {
+        for (const {
+            resourceType: resourceImplementation,
+            resourceRouterType: routerImplementation,
+        } of applicationResourceDescriptions) {
             tsFile.import(resourceImplementation)
             tsFile.import(routerImplementation)
             bindings.push(
@@ -68,12 +71,12 @@ export class ApplicationConfigurationFactory {
         tsFile.import('SlushyRouter', '@slushy/server')
 
         // openApiSchema
-        tsFile.import(openApiSchema.identifier, openApiSchema.path)
+        tsFile.import(openApiConstantIdentifier)
         applicationConfigurationClassBuilder.addMethod({
             name: 'getOpenApiSchema',
             returnType: 'string',
             parameters: [],
-            body: `return ${openApiSchema.identifier}`,
+            body: `return ${openApiConstantIdentifier}`,
         })
 
         tsFile.addSourceText(applicationConfigurationClassBuilder.build())

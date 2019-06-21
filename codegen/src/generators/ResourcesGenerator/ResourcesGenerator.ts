@@ -11,18 +11,14 @@ import { ResourceRouterFactory } from './ResourceRouterFactory'
 import { ResourceOperation } from './ResourceOperation'
 import { httpVerbPathOperations } from './httpVerbPathOperations'
 import { ResourceDefinitionFactory } from './ResourceDefinitionFactory'
+import { ApplicationConfigurationFactory, ApplicationResourceDescription } from './ApplicationConfigurationFactory'
+import { OpenApiConstantFactory } from './OpenApiConstantFactory'
 
 export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
 
     async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
-        // TODO: This replaces ResourceTemplate
-        // TODO: Create Responses (done)
-        // TODO: Create Parameters (done)
-        // TODO: Create Resource (done)
-        // TODO: Create ResourceRouter ()
-
-        const resourceRouterNames: string[] = []
+        const applicationResourceDescriptions: ApplicationResourceDescription[] = []
 
         const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({
             path,
@@ -69,14 +65,27 @@ export class ResourcesGenerator implements Generator {
             }
 
             const resourceFactory = new ResourceDefinitionFactory()
-            const resourceDescriptionName = resourceFactory.create(resourceName, resourceOperations, tsFile)
+            const resourceType = resourceFactory.create(resourceName, resourceOperations, tsFile)
 
             const resourceRouterFactory = new ResourceRouterFactory()
-            const resourceRouterName = resourceRouterFactory.create(resourceDescriptionName, resourceOperations, tsFile)
-            resourceRouterNames.push(resourceRouterName)
+            const resourceRouterType = resourceRouterFactory.create(resourceType, resourceOperations, tsFile)
+            applicationResourceDescriptions.push({
+                resourceRouterType,
+                resourceName,
+                resourceType,
+            })
         }
+        const openApiConstantFile = tsModule.file('openApi.ts')
+        const openApiConstantFactory = new OpenApiConstantFactory()
+        const openApiConstantIdentifier = await openApiConstantFactory.create(document, openApiConstantFile)
 
-        // TODO: Do things with resourceRouterNames -> Generate the ApplicationConfiguration
+        const applicationConfigurationFile = tsModule.file('ApplicationConfiguration.ts')
+        const applicationConfigurationFactory = new ApplicationConfigurationFactory()
+        applicationConfigurationFactory.create(
+            applicationResourceDescriptions,
+            openApiConstantIdentifier,
+            applicationConfigurationFile
+        )
     }
 
     /**
