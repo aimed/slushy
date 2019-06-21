@@ -159,12 +159,15 @@ export class TSFile {
     private resolveImports() {
         // FIXME: Behavior for not exported types is currently undefined.
         // Group all imports and create the import statements
-        const importStatements = this.imports.map(imp => (imp.path ? imp : this.registry.get(imp.identifier)))
+        const importStatements = this.imports.map(imp =>
+            imp.path ? imp : { ...this.registry.get(imp.identifier), local: true }
+        )
         const importsWithoutSelf = importStatements.filter(imp => imp.path !== this.path)
         const importsByFile = groupBy(importsWithoutSelf, 'path')
         const importDeclarations: string[] = []
 
         for (const [file, importsFromFile] of Object.entries(importsByFile)) {
+            // FIXME: module imports
             const pathRelative = path.relative(path.dirname('/' + this.path), '/' + file)
             // path.relative will resolve ('/', '/a/b.ts') to 'a/b.ts', but we need './a/b.ts'.
             const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`

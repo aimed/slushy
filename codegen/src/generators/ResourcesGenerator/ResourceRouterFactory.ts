@@ -17,12 +17,16 @@ export class ResourceRouterFactory {
         tsFile.import('SlushyRouter', '@slushy/server')
 
         const statements: string[] = []
-        for (const { path, operationObject, method } of resourceOperations) {
+        for (const { path, operationObject, method, parameterType, returnType } of resourceOperations) {
             if (!operationObject.operationId) {
                 throw new Error('Missing operationId')
             }
 
-            statements.push(`router.${method}('${path}', resource.${operationObject.operationId})`)
+            statements.push(
+                `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${
+                    operationObject.operationId
+                }.bind(resource))`
+            )
         }
 
         const resourceRouterName = `${resourceType}Router`
