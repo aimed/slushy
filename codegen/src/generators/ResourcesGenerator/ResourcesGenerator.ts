@@ -59,6 +59,7 @@ export class ResourcesGenerator implements Generator {
                         parameterType,
                         pathItemObject,
                         method: pathOperationKey,
+                        operationObject,
                     }
                     resourceOperations.push(resourceOperation)
                 }

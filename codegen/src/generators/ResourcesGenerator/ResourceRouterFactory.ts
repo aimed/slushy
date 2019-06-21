@@ -1,6 +1,5 @@
 import { TSFile } from '../../typescript/module/TSFile'
 import { ResourceOperation } from './ResourceOperation'
-import { httpVerbPathOperations } from './httpVerbPathOperations'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 
 /**
@@ -18,19 +17,12 @@ export class ResourceRouterFactory {
         tsFile.import('SlushyRouter', '@slushy/server')
 
         const statements: string[] = []
-        for (const { path, pathItemObject } of resourceOperations) {
-            for (const httpVerb of httpVerbPathOperations) {
-                const operationObject = pathItemObject[httpVerb]
-                if (!operationObject) {
-                    continue
-                }
-
-                if (!operationObject.operationId) {
-                    throw new Error('Missing operationId')
-                }
-
-                statements.push(`router.${httpVerb}('${path}', resource.${operationObject.operationId})`)
+        for (const { path, operationObject, method } of resourceOperations) {
+            if (!operationObject.operationId) {
+                throw new Error('Missing operationId')
             }
+
+            statements.push(`router.${method}('${path}', resource.${operationObject.operationId})`)
         }
 
         const resourceRouterName = `${resourceType}Router`

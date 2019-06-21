@@ -16,4 +16,5 @@ export interface ResourceOperation {
     path: string
     method: string
     pathItemObject: OpenAPIV3.PathItemObject
+    operationObject: OpenAPIV3.OperationObject
 }
