@@ -9,7 +9,7 @@ import { ResourceOperation } from './ResourceOperation'
  *  getPetById(params: GetPetByIdParams): Promise<GetPetByIdResponse>
  * }
  */
-export class ResourceDefinitionFactory {
+export class ResourceFactory {
     /**
      * Creates a resource description.
      * @param resourceName Name of the resource. Example: Pets.

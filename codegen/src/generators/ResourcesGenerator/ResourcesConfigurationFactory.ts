@@ -5,7 +5,7 @@ import { TSInterfaceBuilder } from '../../typescript/TSInterfaceBuilder'
 /**
  * Everything that is required for a working resource.
  */
-export interface ApplicationResourceDescription {
+export interface ResourcesConfigurationDescription {
     /**
      * @example Pets
      */
@@ -23,7 +23,7 @@ export interface ApplicationResourceDescription {
 /**
  * Creates the global application configuration that will be passed to slushy server.
  * @example
- * export class ApplicationConfiguration implements SlushyResourceConfiguration {
+ * export class ResourcesConfiguration implements SlushyResourceConfiguration {
  *  constructor(private readonly config: {
  *      PetsResource: PetsResource,
  *  }) {}
@@ -39,7 +39,7 @@ export interface ApplicationResourceDescription {
  */
 export class ResourcesConfigurationFactory {
     create(
-        applicationResourceDescriptions: ApplicationResourceDescription[],
+        applicationResourceDescriptions: ResourcesConfigurationDescription[],
         openApiConstantIdentifier: string,
         openApiConstantSourceFile: string,
         tsFile: TSFile
