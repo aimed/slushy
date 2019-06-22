@@ -1,5 +1,5 @@
 import commander from 'commander'
-import { TSModule } from './typescript/module/TSModule'
+import { TSModule } from './typescript/TSModule'
 import { ComponentSchemaTypesGenerator } from './generators/ComponentSchemaTypesGenerator'
 import SwaggerParser from 'swagger-parser'
 import { ResourcesGenerator } from './generators/ResourcesGenerator/ResourcesGenerator'

@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { TSFile } from '../../typescript/module/TSFile'
+import { TSFile } from '../../typescript/TSFile'
 import {
     isErrorStatusCode,
     isStatusCodeRange,
@@ -7,7 +7,7 @@ import {
     StatusCode,
     statusCodesForRange,
 } from '../../StatusCodes'
-import { capitalize, isReferenceObject } from '../../typescript/module/utils'
+import { capitalize, isReferenceObject } from '../../typescript/utils'
 import { StatusCodeClassNames } from '../../StatusCodesClassNames'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 

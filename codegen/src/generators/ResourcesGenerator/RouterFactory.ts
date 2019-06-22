@@ -1,4 +1,4 @@
-import { TSFile } from '../../typescript/module/TSFile'
+import { TSFile } from '../../typescript/TSFile'
 import { ResourceOperation } from './ResourceOperation'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 

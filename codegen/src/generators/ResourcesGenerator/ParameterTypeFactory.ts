@@ -1,6 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { TSFile } from '../../typescript/module/TSFile'
-import { capitalize, isReferenceObject } from '../../typescript/module/utils'
+import { TSFile } from '../../typescript/TSFile'
+import { capitalize, isReferenceObject } from '../../typescript/utils'
 /**
  * Creates a resource operation parameter.
  * @example
