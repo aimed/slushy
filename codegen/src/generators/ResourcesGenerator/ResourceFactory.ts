@@ -1,4 +1,4 @@
-import { TSFile } from '../../typescript/module/TSFile'
+import { TSFile } from '../../typescript/TSFile'
 import { TSInterfaceBuilder } from '../../typescript/TSInterfaceBuilder'
 import { ResourceOperation } from './ResourceOperation'
 
@@ -9,7 +9,7 @@ import { ResourceOperation } from './ResourceOperation'
  *  getPetById(params: GetPetByIdParams): Promise<GetPetByIdResponse>
  * }
  */
-export class ResourceDefinitionFactory {
+export class ResourceFactory {
     /**
      * Creates a resource description.
      * @param resourceName Name of the resource. Example: Pets.

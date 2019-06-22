@@ -1,4 +1,4 @@
-import { TSFile } from '../../typescript/module/TSFile'
+import { TSFile } from '../../typescript/TSFile'
 import { ResourceOperation } from './ResourceOperation'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 
@@ -11,7 +11,7 @@ import { TSClassBuilder } from '../../typescript/TSClassBuilder'
  *   }
  * }
  */
-export class ResourceRouterFactory {
+export class RouterFactory {
     create(resourceType: string, resourceOperations: Array<ResourceOperation>, tsFile: TSFile): string {
         tsFile.import(resourceType)
         tsFile.import('SlushyRouter', '@slushy/server', true)

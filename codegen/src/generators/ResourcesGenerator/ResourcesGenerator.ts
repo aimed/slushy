@@ -1,24 +1,24 @@
 import { Generator } from '../Generator'
-import { TSModule } from '../../typescript/module/TSModule'
+import { TSModule } from '../../typescript/TSModule'
 import { OpenAPIV3 } from 'openapi-types'
 import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
-import { capitalize } from '../../typescript/module/utils'
+import { capitalize } from '../../typescript/utils'
 import { groupBy } from 'lodash'
 import * as path from 'path'
 import { ParameterTypeFactory } from './ParameterTypeFactory'
 import { ResponseTypeFactory } from './ResponseTypeFactory'
-import { ResourceRouterFactory } from './ResourceRouterFactory'
+import { RouterFactory } from './RouterFactory'
 import { ResourceOperation } from './ResourceOperation'
 import { httpVerbPathOperations } from './httpVerbPathOperations'
-import { ResourceDefinitionFactory } from './ResourceDefinitionFactory'
-import { ResourcesConfigurationFactory, ApplicationResourceDescription } from './ResourcesConfigurationFactory'
+import { ResourceFactory } from './ResourceFactory'
+import { ResourcesConfigurationFactory, ResourcesConfigurationDescription } from './ResourcesConfigurationFactory'
 import { OpenApiConstantFactory } from './OpenApiConstantFactory'
 
 export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
 
     async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
-        const applicationResourceDescriptions: ApplicationResourceDescription[] = []
+        const applicationResourceDescriptions: ResourcesConfigurationDescription[] = []
 
         const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({
             path,
@@ -66,11 +66,11 @@ export class ResourcesGenerator implements Generator {
                 }
             }
 
-            const resourceFactory = new ResourceDefinitionFactory()
+            const resourceFactory = new ResourceFactory()
             const resourceType = resourceFactory.create(resourceName, resourceOperations, tsFile)
 
             const resourceRouterFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}Router.ts`))
-            const resourceRouterFactory = new ResourceRouterFactory()
+            const resourceRouterFactory = new RouterFactory()
             const resourceRouterType = resourceRouterFactory.create(
                 resourceType,
                 resourceOperations,

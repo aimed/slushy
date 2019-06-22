@@ -1,4 +1,4 @@
-import { TSFile } from '../../typescript/module/TSFile'
+import { TSFile } from '../../typescript/TSFile'
 import { OpenAPIV3 } from 'openapi-types'
 
 export class OpenApiConstantFactory {
