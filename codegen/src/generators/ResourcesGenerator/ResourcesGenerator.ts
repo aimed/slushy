@@ -11,7 +11,7 @@ import { ResourceRouterFactory } from './ResourceRouterFactory'
 import { ResourceOperation } from './ResourceOperation'
 import { httpVerbPathOperations } from './httpVerbPathOperations'
 import { ResourceDefinitionFactory } from './ResourceDefinitionFactory'
-import { ApplicationConfigurationFactory, ApplicationResourceDescription } from './ApplicationConfigurationFactory'
+import { ResourcesConfigurationFactory, ApplicationResourceDescription } from './ResourcesConfigurationFactory'
 import { OpenApiConstantFactory } from './OpenApiConstantFactory'
 
 export class ResourcesGenerator implements Generator {
@@ -29,7 +29,7 @@ export class ResourcesGenerator implements Generator {
 
         // For every resource, e.g. /pet create the response type, the parameter type and the resource router.
         for (const [resourceName, resourcePathDescriptions] of Object.entries(groupedPathsWithResourceName)) {
-            const tsFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}.ts`))
+            const tsFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}Resource.ts`))
             const resourceOperations: ResourceOperation[] = []
 
             // For every path on a resource
@@ -52,6 +52,7 @@ export class ResourcesGenerator implements Generator {
 
                     const parameterTypeFactory = new ParameterTypeFactory()
                     const parameterType = parameterTypeFactory.declareParameterType(operationObject, tsFile)
+
                     const resourceOperation: ResourceOperation = {
                         name: operationObject.operationId,
                         path,
@@ -85,8 +86,8 @@ export class ResourcesGenerator implements Generator {
         const openApiConstantFactory = new OpenApiConstantFactory()
         const openApiConstantIdentifier = await openApiConstantFactory.create(document, openApiConstantFile)
 
-        const applicationConfigurationFile = tsModule.file('ApplicationConfiguration.ts')
-        const applicationConfigurationFactory = new ApplicationConfigurationFactory()
+        const applicationConfigurationFile = tsModule.file('ResourcesConfiguration.ts')
+        const applicationConfigurationFactory = new ResourcesConfigurationFactory()
         applicationConfigurationFactory.create(
             applicationResourceDescriptions,
             openApiConstantIdentifier,

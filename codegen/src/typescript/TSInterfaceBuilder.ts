@@ -5,7 +5,7 @@ export class TSInterfaceBuilder {
     private readonly methods: TSClassMethod[] = []
     private readonly properties: TSClassProperty[] = []
 
-    public constructor(private readonly interfaceName: string) {}
+    public constructor(private readonly interfaceName: string, public readonly generic?: string) {}
 
     public addMethod(method: TSClassMethod) {
         this.methods.push(method)
@@ -19,8 +19,8 @@ export class TSInterfaceBuilder {
 
     public build(): string {
         return `
-            export interface ${this.interfaceName} {
-                ${this.properties.map(prop => `${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}`).join('\n')}
+            export interface ${this.interfaceName}${this.generic ? `<${this.generic}>` : ''} {
+                ${this.properties.map(prop => `${prop.name}: ${prop.type}`).join('\n')}
 
                 ${this.methods
                     .map(

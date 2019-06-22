@@ -18,7 +18,7 @@ export class ResourceDefinitionFactory {
      */
     create(resourceName: string, operations: ResourceOperation[], tsFile: TSFile): string {
         const resourceDescriptionName = `${resourceName}Resource`
-        const interfaceBuilder = new TSInterfaceBuilder(resourceDescriptionName)
+        const interfaceBuilder = new TSInterfaceBuilder(resourceDescriptionName, 'TContext = {}')
 
         for (const operation of operations) {
             tsFile.import(operation.returnType)
@@ -27,7 +27,7 @@ export class ResourceDefinitionFactory {
             interfaceBuilder.addMethod({
                 name: operation.name,
                 returnType: `Promise<${operation.returnType}>`,
-                parameters: [{ name: 'params', type: operation.parameterType }],
+                parameters: [{ name: 'params', type: operation.parameterType }, { name: 'context', type: 'TContext' }],
             })
         }
 

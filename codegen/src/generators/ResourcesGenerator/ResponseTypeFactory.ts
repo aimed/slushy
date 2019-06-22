@@ -53,7 +53,7 @@ export class ResponseTypeFactory {
             throw new Error('References for responses are not allowed, you maybe forgot to use .bundle')
         }
         const responseClassBuilder = new TSClassBuilder(responseClassName)
-        this.extendBaseClass(responseStatusCode, tsFile, responseClassBuilder)
+        this.extendBaseClass(responseStatusCode, responseClassBuilder, tsFile)
         this.addStatusCode(responseStatusCode, responseClassBuilder, tsFile)
         this.addPayload(response, responseClassBuilder, tsFile)
         tsFile.addSourceText(responseClassBuilder.build())
@@ -61,8 +61,8 @@ export class ResponseTypeFactory {
     }
     private extendBaseClass(
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
-        _tsFile: TSFile,
-        responseClassBuilder: TSClassBuilder
+        responseClassBuilder: TSClassBuilder,
+        _tsFile: TSFile
     ) {
         // If the status code indicates an error, generate an actual error class that can be thrown.
         if (isErrorStatusCode(responseStatusCode)) {

@@ -22,9 +22,9 @@ export class TSFile {
      * @param identifier The symbol to import.
      * @param from A path the import the symbol from. This is helpful for e.g. importing libraries.
      */
-    public import(identifier: string, from?: string): void {
+    public import(identifier: string, from?: string, isModule?: boolean): void {
         // FIXME: ignore imports for primitive types
-        this.imports.push({ identifier, path: from })
+        this.imports.push({ identifier, path: from, isModule })
     }
 
     public setContent(file: ts.SourceFile) {
@@ -159,18 +159,24 @@ export class TSFile {
     private resolveImports() {
         // FIXME: Behavior for not exported types is currently undefined.
         // Group all imports and create the import statements
-        const importStatements = this.imports.map(imp =>
-            imp.path ? imp : { ...this.registry.get(imp.identifier), local: true }
-        )
-        const importsWithoutSelf = importStatements.filter(imp => imp.path !== this.path)
-        const importsByFile = groupBy(importsWithoutSelf, 'path')
+        const importStatements = this.imports.map(imp => (imp.path ? imp : this.registry.get(imp.identifier)))
+        const importsByFile = groupBy(importStatements, 'path')
         const importDeclarations: string[] = []
 
         for (const [file, importsFromFile] of Object.entries(importsByFile)) {
+            if (file === this.path) {
+                continue
+            }
+            const metaData = importsFromFile[0]
+
             // FIXME: module imports
             const pathRelative = path.relative(path.dirname('/' + this.path), '/' + file)
             // path.relative will resolve ('/', '/a/b.ts') to 'a/b.ts', but we need './a/b.ts'.
-            const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`
+            const pathRelativeNormalized = (metaData as IdentifierImport).isModule
+                ? file
+                : pathRelative.startsWith('.')
+                ? pathRelative
+                : `./${pathRelative}`
             const importedIdentifiers = Array.from(new Set(importsFromFile))
                 .map(im => im.identifier)
                 .join(', ')

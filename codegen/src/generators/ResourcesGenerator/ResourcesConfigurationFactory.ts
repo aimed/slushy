@@ -37,49 +37,48 @@ export interface ApplicationResourceDescription {
  *  }
  * }
  */
-export class ApplicationConfigurationFactory {
+export class ResourcesConfigurationFactory {
     create(
         applicationResourceDescriptions: ApplicationResourceDescription[],
         openApiConstantIdentifier: string,
         openApiConstantSourceFile: string,
         tsFile: TSFile
     ) {
-        const applicationConfigurationClassBuilder = new TSClassBuilder('ApplicationConfiguration')
-        const applicationConfigurationInterfaceBuilder = new TSInterfaceBuilder('Config')
+        const resourcesConfigurationClassBuilder = new TSClassBuilder('ResourcesConfiguration')
+        const resourcesConfigurationInterfaceBuilder = new TSInterfaceBuilder('Config')
 
         let bindings: string[] = []
-        for (const {
-            resourceType: resourceImplementation,
-            resourceRouterType: routerImplementation,
-        } of applicationResourceDescriptions) {
-            tsFile.import(resourceImplementation)
-            tsFile.import(routerImplementation)
-            bindings.push(
-                `await new ${routerImplementation}().bindRoutes(router, this.config.${resourceImplementation})`
-            )
+        for (const { resourceType, resourceRouterType } of applicationResourceDescriptions) {
+            tsFile.import(resourceType)
+            tsFile.import(resourceRouterType)
+            bindings.push(`await new ${resourceRouterType}().bindRoutes(router, this.config.${resourceType})`)
 
-            applicationConfigurationInterfaceBuilder.addProperty({
-                name: resourceImplementation,
-                type: resourceImplementation,
+            resourcesConfigurationInterfaceBuilder.addProperty({
+                name: resourceType,
+                type: resourceType,
             })
         }
-        applicationConfigurationClassBuilder.addConstructorParameter({ name: 'config', type: 'Config' })
-        applicationConfigurationClassBuilder.addMethod({
+        tsFile.addSourceText(resourcesConfigurationInterfaceBuilder.build())
+
+        resourcesConfigurationClassBuilder.addConstructorParameter({ name: 'config', type: 'Config' })
+        resourcesConfigurationClassBuilder.addMethod({
             name: 'configure',
+            async: true,
             parameters: [{ name: 'router', type: 'SlushyRouter' }],
             returnType: 'Promise<void>',
+            body: bindings.join('\n'),
         })
-        tsFile.import('SlushyRouter', '@slushy/server')
+        tsFile.import('SlushyRouter', '@slushy/server', true)
 
         // openApiSchema
         tsFile.import(openApiConstantIdentifier, openApiConstantSourceFile)
-        applicationConfigurationClassBuilder.addMethod({
+        resourcesConfigurationClassBuilder.addMethod({
             name: 'getOpenApiSchema',
             returnType: 'string',
             parameters: [],
             body: `return ${openApiConstantIdentifier}`,
         })
 
-        tsFile.addSourceText(applicationConfigurationClassBuilder.build())
+        tsFile.addSourceText(resourcesConfigurationClassBuilder.build())
     }
 }

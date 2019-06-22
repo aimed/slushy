@@ -14,7 +14,7 @@ import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 export class ResourceRouterFactory {
     create(resourceType: string, resourceOperations: Array<ResourceOperation>, tsFile: TSFile): string {
         tsFile.import(resourceType)
-        tsFile.import('SlushyRouter', '@slushy/server')
+        tsFile.import('SlushyRouter', '@slushy/server', true)
 
         const statements: string[] = []
         for (const { path, operationObject, method, parameterType, returnType } of resourceOperations) {
@@ -22,6 +22,8 @@ export class ResourceRouterFactory {
                 throw new Error('Missing operationId')
             }
 
+            tsFile.import(parameterType)
+            tsFile.import(returnType)
             statements.push(
                 `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${
                     operationObject.operationId
