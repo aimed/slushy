@@ -15,15 +15,16 @@ export class TSFile {
     public constructor(
         public readonly path: string,
         private readonly registry: IdentifierRegistry = new IdentifierRegistry()
-    ) { }
+    ) {}
 
     /**
      * Imports an identifier.
      * @param identifier The symbol to import.
      * @param from A path the import the symbol from. This is helpful for e.g. importing libraries.
      */
-    public import(identifier: string, from?: string): void {
-        this.imports.push({ identifier, path: from })
+    public import(identifier: string, from?: string, isModule?: boolean): void {
+        // FIXME: ignore imports for primitive types
+        this.imports.push({ identifier, path: from, isModule })
     }
 
     public setContent(file: ts.SourceFile) {
@@ -46,13 +47,13 @@ export class TSFile {
 
     public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
         this.contents.push(node.getText(sourceFile))
-        this.registerDeclarationStatementIfApplicable(node);
+        this.registerDeclarationStatementIfApplicable(node)
     }
 
     private registerDeclarationStatementIfApplicable(node: ts.Node) {
         if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) {
             if (node.name && ts.isIdentifier(node.name)) {
-                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node));
+                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node))
             }
         }
     }
@@ -159,15 +160,26 @@ export class TSFile {
         // FIXME: Behavior for not exported types is currently undefined.
         // Group all imports and create the import statements
         const importStatements = this.imports.map(imp => (imp.path ? imp : this.registry.get(imp.identifier)))
-        const importsWithoutSelf = importStatements.filter(imp => imp.path !== this.path)
-        const importsByFile = groupBy(importsWithoutSelf, 'path')
+        const importsByFile = groupBy(importStatements, 'path')
         const importDeclarations: string[] = []
 
         for (const [file, importsFromFile] of Object.entries(importsByFile)) {
+            if (file === this.path) {
+                continue
+            }
+            const metaData = importsFromFile[0]
+
+            // FIXME: module imports
             const pathRelative = path.relative(path.dirname('/' + this.path), '/' + file)
             // path.relative will resolve ('/', '/a/b.ts') to 'a/b.ts', but we need './a/b.ts'.
-            const pathRelativeNormalized = pathRelative.startsWith('.') ? pathRelative : `./${pathRelative}`
-            const importedIdentifiers = Array.from(new Set(importsFromFile)).map(im => im.identifier).join(', ')
+            const pathRelativeNormalized = (metaData as IdentifierImport).isModule
+                ? file
+                : pathRelative.startsWith('.')
+                ? pathRelative
+                : `./${pathRelative}`
+            const importedIdentifiers = Array.from(new Set(importsFromFile))
+                .map(im => im.identifier)
+                .join(', ')
             importDeclarations.push(
                 `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`
             )

@@ -1,10 +1,11 @@
-import { fs } from 'mz'
+// import { fs } from 'mz'
 import { SlushyRouter } from './SlushyRouter'
 import { SlushyApplication, SlushyApplicationFactory } from './ServerImpl'
 import { SlushyProps } from './SlushyProps'
 import { SlushyConfig } from './SlushyConfig'
 import { SlushyPlugins } from './SlushyPlugins'
 import { DefaultLoggerFactory } from './LoggerFactory'
+import { OpenAPIV3 } from 'openapi-types'
 
 export class Slushy {
     public constructor(
@@ -22,7 +23,7 @@ export class Slushy {
     }
 
     public static async create(config: SlushyConfig & Partial<SlushyPlugins>) {
-        const openApi = JSON.parse((await fs.readFile(config.resourceConfiguration.getOpenApiPath())).toString())
+        const openApi = JSON.parse(config.resourceConfiguration.getOpenApiSchema()) as OpenAPIV3.Document
         const slushy = new Slushy({
             openApi,
             loggerFactory: new DefaultLoggerFactory(),
