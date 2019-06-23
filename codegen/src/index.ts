@@ -7,14 +7,14 @@ import { Generators } from './generators/Generators'
 commander
     .version(require('../package.json').version, '-v, --version')
     .command('gen <openApiFile> <outDir> [...generators]')
-    .action(async (api, outDir, generatorNames = [Generators.ResourcesGenerator.name]) => {
+    .action(async (api, outDir, generatorNames = Generators.ResourcesGenerator.name) => {
         try {
             const document = await SwaggerParser.bundle(api)
             const tsModule = new TSModule()
 
-            const generators: GeneratorConstructor[] = generatorNames.map(
-                (generatorName: keyof typeof Generators) => Generators[generatorName]
-            )
+            const generators: GeneratorConstructor[] = generatorNames
+                .split(',')
+                .map((generatorName: keyof typeof Generators) => Generators[generatorName])
             if (!generators.every(Boolean)) {
                 throw new Error(`Invalid generator, only allowed values are: ${Object.keys(Generators).join(', ')}`)
             }
