@@ -4,7 +4,7 @@ import { BadRequestError } from './errors/BadRequestError'
 import Ajv from 'ajv'
 import { isReferenceObject } from './isReferenceObject'
 
-export class RequestParametersExtractor<TContext = {}> {
+export class RequestParametersExtractor<TContext> {
     private readonly validator = new Ajv({ allErrors: true })
 
     /**

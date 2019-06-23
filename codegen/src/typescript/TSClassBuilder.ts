@@ -1,23 +1,26 @@
-export interface Property {
-    name: string
-    type: string
-    initialValue?: string
-}
+import { TSClassMethod } from './TSClassMethod'
+import { TSClassProperty } from './TSClassProperty'
 
 export class TSClassBuilder {
     private extend?: { className: string; constructorCalls: string[] }
-    private readonly parameters: Property[] = []
-    private readonly properties: Property[] = []
+    private readonly parameters: TSClassProperty[] = []
+    private readonly properties: TSClassProperty[] = []
+    private readonly methods: TSClassMethod[] = []
 
-    public constructor(public readonly className: string) { }
+    public constructor(public readonly className: string, private readonly generics?: string) {}
 
-    public addConstructorParameter(param: Property) {
+    public addConstructorParameter(param: TSClassProperty) {
         this.parameters.push(param)
         return this
     }
 
-    public addProperty(prop: Property) {
+    public addProperty(prop: TSClassProperty) {
         this.properties.push(prop)
+        return this
+    }
+
+    public addMethod(method: TSClassMethod) {
+        this.methods.push(method)
         return this
     }
 
@@ -28,28 +31,47 @@ export class TSClassBuilder {
 
     public build() {
         return `
-            export class ${this.className}${this.extend ? ` extends ${this.extend.className}` : ''} {
+            export class ${this.className}${this.generics ? `<${this.generics}>` : ''}${
+            this.extend ? ` extends ${this.extend.className}` : ''
+        } {
                 ${this.properties
-                .map(
-                    prop =>
-                        `public readonly ${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}${
-                        prop.initialValue ? ` = ${prop.initialValue}` : ''
-                        }`
-                )
-                .join('\n')}
+                    .map(
+                        prop =>
+                            `public readonly ${prop.name}${prop.initialValue ? '' : '?'}: ${prop.type}${
+                                prop.initialValue ? ` = ${prop.initialValue}` : ''
+                            }`
+                    )
+                    .join('\n')}
 
                 public constructor(
                     ${this.parameters
-                .map(
-                    param =>
-                        `public readonly ${param.name}: ${param.type}${
-                        param.initialValue ? ` = ${param.initialValue}` : ''
-                        }`
-                )
-                .join(',\n')}
+                        .map(
+                            param =>
+                                `public readonly ${param.name}: ${param.type}${
+                                    param.initialValue ? ` = ${param.initialValue}` : ''
+                                }`
+                        )
+                        .join(',\n')}
                 ) { 
                     ${this.extend ? this.extend.constructorCalls.join('\r') : ''}
                 }
+
+                ${this.methods
+                    .map(
+                        ({ async, name, returnType, parameters, body }) => `
+                public ${async ? 'async ' : ''}${name}(${parameters
+                            .map(
+                                param =>
+                                    `${param.name}: ${param.type}${
+                                        param.initialValue ? ` = ${param.initialValue}` : ''
+                                    }`
+                            )
+                            .join(', ')}): ${returnType} {
+                                ${body || ''}
+                            }
+                `
+                    )
+                    .join('\n\n')}
             }
         `
     }

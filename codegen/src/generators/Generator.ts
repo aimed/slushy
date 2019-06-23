@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { TSModule } from '../typescript/module/TSModule'
+import { TSModule } from '../typescript/TSModule'
 
 export interface Generator {
     dependsOn: Array<new () => Generator>
