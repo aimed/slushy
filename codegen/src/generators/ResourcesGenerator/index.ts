@@ -1,0 +1,1 @@
+export { ResourcesGenerator } from './ResourcesGenerator'

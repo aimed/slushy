@@ -1,7 +1,6 @@
 import { Generator } from '../Generator'
 import { TSModule } from '../../typescript/TSModule'
 import { OpenAPIV3 } from 'openapi-types'
-import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
 import { capitalize } from '../../typescript/utils'
 import { groupBy } from 'lodash'
 import * as path from 'path'
@@ -13,6 +12,7 @@ import { httpVerbPathOperations } from './httpVerbPathOperations'
 import { ResourceFactory } from './ResourceFactory'
 import { ResourcesConfigurationFactory, ResourcesConfigurationDescription } from './ResourcesConfigurationFactory'
 import { OpenApiConstantFactory } from './OpenApiConstantFactory'
+import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
 
 export class ResourcesGenerator implements Generator {
     dependsOn = [ComponentSchemaTypesGenerator]
