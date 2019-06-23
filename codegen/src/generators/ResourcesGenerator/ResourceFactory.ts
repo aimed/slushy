@@ -18,7 +18,8 @@ export class ResourceFactory {
      */
     create(resourceName: string, operations: ResourceOperation[], tsFile: TSFile): string {
         const resourceDescriptionName = `${resourceName}Resource`
-        const interfaceBuilder = new TSInterfaceBuilder(resourceDescriptionName, 'TContext = {}')
+        const interfaceBuilder = new TSInterfaceBuilder(resourceDescriptionName, 'TContext')
+        tsFile.import('SlushyContext', '@slushy/server', true)
 
         for (const operation of operations) {
             tsFile.import(operation.returnType)
@@ -27,7 +28,10 @@ export class ResourceFactory {
             interfaceBuilder.addMethod({
                 name: operation.name,
                 returnType: `Promise<${operation.returnType}>`,
-                parameters: [{ name: 'params', type: operation.parameterType }, { name: 'context', type: 'TContext' }],
+                parameters: [
+                    { name: 'params', type: operation.parameterType },
+                    { name: 'context', type: 'SlushyContext<TContext>' },
+                ],
             })
         }
 

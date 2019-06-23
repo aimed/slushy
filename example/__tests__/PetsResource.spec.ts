@@ -1,9 +1,10 @@
 import request from 'supertest'
 import { SlushyFactory } from '../src/SlushyFactory'
 import { Slushy } from '@slushy/server'
+import { Context } from './Context'
 
 describe('PetsResource', () => {
-    let slushy: Slushy
+    let slushy: Slushy<Context>
 
     beforeEach(async () => {
         slushy = await SlushyFactory.create({

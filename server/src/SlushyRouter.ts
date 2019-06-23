@@ -13,9 +13,9 @@ export type RouteHandler<TParams, TResponse, TContext> = (
     context: SlushyContext<TContext>
 ) => Promise<TResponse>
 
-export class SlushyRouter<TContext = {}> {
+export class SlushyRouter<TContext> {
     public constructor(
-        public readonly props: SlushyProps,
+        public readonly props: SlushyProps<TContext>,
         public readonly router: SlushyRouterImplementation,
         private readonly requestParameterExtractor = new RequestParametersExtractor(),
         private readonly contextFactory = new ContextFactory<TContext>(),
