@@ -1,7 +1,6 @@
 import { SlushyRequest, SlushyResponse, SlushyContext } from '.'
 
 import { OpenAPIV3 } from 'openapi-types'
-import { SlushyProps } from './SlushyProps'
 import { OpenApiBridge } from './ServerImpl'
 import { Logger } from './LoggerFactory'
 
@@ -13,19 +12,22 @@ export class ContextFactory<TContext> {
         res: SlushyResponse,
         requestId: string,
         logger: Logger,
-        props: SlushyProps<TContext>
+        openApi: OpenAPIV3.Document,
+        contextFactory: (ctx: SlushyContext<undefined>) => Promise<TContext>
     ): Promise<SlushyContext<TContext>> {
-        // FIXME: Add TContext
-        const partialContext: SlushyContext<TContext> = {
+        const partialContext = {
             req,
             res,
             requestId,
             logger,
-            props,
-            pathItemObject: this.getPathItemObject(req, props.openApi),
-            operationObject: this.getOperationObject(req, props.openApi),
+            pathItemObject: this.getPathItemObject(req, openApi),
+            operationObject: this.getOperationObject(req, openApi),
         }
-        return props.contextFactory ? props.contextFactory(partialContext as SlushyContext<any>) : partialContext
+        const context = await contextFactory(partialContext as SlushyContext<any>)
+        return {
+            ...partialContext,
+            context,
+        }
     }
 
     protected getPathItemObject(req: SlushyRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {

@@ -9,7 +9,11 @@ describe('PetsResource', () => {
     beforeEach(async () => {
         slushy = await SlushyFactory.create({
             loggerFactory: {
-                create: () => console,
+                create: () => ({
+                    log: jest.fn(),
+                    info: jest.fn(),
+                    error: jest.fn(),
+                }),
             },
         })
     })
@@ -19,6 +23,12 @@ describe('PetsResource', () => {
             const response = await request(slushy.app).get('/pets')
             expect(response.status).toBe(200)
             expect(response.body).toBeInstanceOf(Array)
+        })
+
+        it('with invalid id should return 400 with a message', async () => {
+            const response = await request(slushy.app).get('/pets/123')
+            expect(response.status).toBe(400)
+            expect(response.body).toEqual({ message: 'No pet found.' })
         })
     })
 })

@@ -62,11 +62,12 @@ export class ResponseTypeFactory {
     private extendBaseClass(
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
         responseClassBuilder: TSClassBuilder,
-        _tsFile: TSFile
+        tsFile: TSFile
     ) {
         // If the status code indicates an error, generate an actual error class that can be thrown.
+        tsFile.import('SlushyError', '@slushy/server', true)
         if (isErrorStatusCode(responseStatusCode)) {
-            responseClassBuilder.extends('Error', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)')
+            responseClassBuilder.extends('SlushyError', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)')
         }
     }
     private addPayload(response: OpenAPIV3.ResponseObject, responseClassBuilder: TSClassBuilder, tsFile: TSFile) {
