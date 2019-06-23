@@ -7,7 +7,7 @@ export class TSClassBuilder {
     private readonly properties: TSClassProperty[] = []
     private readonly methods: TSClassMethod[] = []
 
-    public constructor(public readonly className: string) {}
+    public constructor(public readonly className: string, private readonly generics?: string) {}
 
     public addConstructorParameter(param: TSClassProperty) {
         this.parameters.push(param)
@@ -31,7 +31,9 @@ export class TSClassBuilder {
 
     public build() {
         return `
-            export class ${this.className}${this.extend ? ` extends ${this.extend.className}` : ''} {
+            export class ${this.className}${this.generics ? `<${this.generics}>` : ''}${
+            this.extend ? ` extends ${this.extend.className}` : ''
+        } {
                 ${this.properties
                     .map(
                         prop =>

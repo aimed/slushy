@@ -5,7 +5,7 @@ import { SlushyProps } from './SlushyProps'
 import { OpenApiBridge } from './ServerImpl'
 import { Logger } from './LoggerFactory'
 
-export class ContextFactory<TContext = {}> {
+export class ContextFactory<TContext> {
     public constructor(private readonly openApiBridge = new OpenApiBridge()) {}
 
     public async buildContext(
@@ -13,10 +13,10 @@ export class ContextFactory<TContext = {}> {
         res: SlushyResponse,
         requestId: string,
         logger: Logger,
-        props: SlushyProps
+        props: SlushyProps<TContext>
     ): Promise<SlushyContext<TContext>> {
         // FIXME: Add TContext
-        const context: SlushyContext<TContext> = {
+        const partialContext: SlushyContext<TContext> = {
             req,
             res,
             requestId,
@@ -25,8 +25,7 @@ export class ContextFactory<TContext = {}> {
             pathItemObject: this.getPathItemObject(req, props.openApi),
             operationObject: this.getOperationObject(req, props.openApi),
         }
-
-        return context
+        return props.contextFactory ? props.contextFactory(partialContext as SlushyContext<any>) : partialContext
     }
 
     protected getPathItemObject(req: SlushyRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {
