@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.1](https://github.com/aimed/slushy/compare/v0.9.0...v0.9.1) (2019-06-23)
+
+
+### Bug Fixes
+
+* correctly process thrown errors ([#44](https://github.com/aimed/slushy/issues/44)) ([46864d6](https://github.com/aimed/slushy/commit/46864d6))
+
+
+
+
+
 # [0.9.0](https://github.com/aimed/slushy/compare/v0.8.3...v0.9.0) (2019-06-23)
 
 
