@@ -51,7 +51,7 @@ export class ResourcesConfigurationFactory {
         for (const { resourceType, resourceRouterType } of applicationResourceDescriptions) {
             tsFile.import(resourceType)
             tsFile.import(resourceRouterType)
-            bindings.push(`await new ${resourceRouterType}().bindRoutes(router, this.config.${resourceType})`)
+            bindings.push(`await new ${resourceRouterType}<TContext>().bindRoutes(router, this.config.${resourceType})`)
 
             resourcesConfigurationInterfaceBuilder.addProperty({
                 name: resourceType,
