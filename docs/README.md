@@ -77,7 +77,8 @@ yarn @slushy/codegen gen ./openApi.yaml ./src/generated
 The command line tool takes the following arguments: `@slushy/codegen gen <Open Api File> <Generated Code Dir> [Code generators]`.
 
 Currently the following code generators are supported:
-|Generator name|Description|
-|--------------|-----------|
-|ResourcesGenerator|(Default) Generates Slushy resources and all required types.|
-|ComponentSchemaTypesGenerator|Generates all types for the #/components/schemas section of the OpenApi file.|
+
+| Generator name                | Description                                                                   |
+| ----------------------------- | ----------------------------------------------------------------------------- |
+| ResourcesGenerator            | (Default) Generates Slushy resources and all required types.                  |
+| ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file. |
