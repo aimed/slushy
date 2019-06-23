@@ -177,9 +177,7 @@ export class TSFile {
                 : pathRelative.startsWith('.')
                 ? pathRelative
                 : `./${pathRelative}`
-            const importedIdentifiers = Array.from(new Set(importsFromFile))
-                .map(im => im.identifier)
-                .join(', ')
+            const importedIdentifiers = Array.from(new Set(importsFromFile.map(im => im.identifier))).join(', ')
             importDeclarations.push(
                 `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`
             )

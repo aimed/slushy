@@ -44,27 +44,27 @@ export class ResourcesConfigurationFactory {
         openApiConstantSourceFile: string,
         tsFile: TSFile
     ) {
-        const resourcesConfigurationClassBuilder = new TSClassBuilder('ResourcesConfiguration')
-        const resourcesConfigurationInterfaceBuilder = new TSInterfaceBuilder('Config')
+        const resourcesConfigurationClassBuilder = new TSClassBuilder('ResourcesConfiguration', 'TContext')
+        const resourcesConfigurationInterfaceBuilder = new TSInterfaceBuilder('Config', 'TContext')
 
         let bindings: string[] = []
         for (const { resourceType, resourceRouterType } of applicationResourceDescriptions) {
             tsFile.import(resourceType)
             tsFile.import(resourceRouterType)
-            bindings.push(`await new ${resourceRouterType}().bindRoutes(router, this.config.${resourceType})`)
+            bindings.push(`await new ${resourceRouterType}<TContext>().bindRoutes(router, this.config.${resourceType})`)
 
             resourcesConfigurationInterfaceBuilder.addProperty({
                 name: resourceType,
-                type: resourceType,
+                type: `${resourceType}<TContext>`,
             })
         }
         tsFile.addSourceText(resourcesConfigurationInterfaceBuilder.build())
 
-        resourcesConfigurationClassBuilder.addConstructorParameter({ name: 'config', type: 'Config' })
+        resourcesConfigurationClassBuilder.addConstructorParameter({ name: 'config', type: 'Config<TContext>' })
         resourcesConfigurationClassBuilder.addMethod({
             name: 'configure',
             async: true,
-            parameters: [{ name: 'router', type: 'SlushyRouter' }],
+            parameters: [{ name: 'router', type: 'SlushyRouter<TContext>' }],
             returnType: 'Promise<void>',
             body: bindings.join('\n'),
         })

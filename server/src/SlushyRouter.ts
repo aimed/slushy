@@ -13,9 +13,9 @@ export type RouteHandler<TParams, TResponse, TContext> = (
     context: SlushyContext<TContext>
 ) => Promise<TResponse>
 
-export class SlushyRouter<TContext = {}> {
+export class SlushyRouter<TContext> {
     public constructor(
-        public readonly props: SlushyProps,
+        public readonly props: SlushyProps<TContext>,
         public readonly router: SlushyRouterImplementation,
         private readonly requestParameterExtractor = new RequestParametersExtractor(),
         private readonly contextFactory = new ContextFactory<TContext>(),
@@ -62,12 +62,20 @@ export class SlushyRouter<TContext = {}> {
         handler: RouteHandler<TParams, TResponse, TContext>
     ): SlushyRequestHandler {
         return async (req, res, next) => {
+            const { loggerFactory, openApi, contextFactory } = this.props
             const requestId: string = UUID.v4()
-            const logger = this.props.loggerFactory.create(requestId)
+            const logger = loggerFactory.create(requestId)
             logger.log(`${req.method} ${req.path}`)
 
             try {
-                const context = await this.contextFactory.buildContext(req, res, requestId, logger, this.props)
+                const context = await this.contextFactory.buildContext(
+                    req,
+                    res,
+                    requestId,
+                    logger,
+                    openApi,
+                    contextFactory
+                )
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
                 // FIXME: Remove cast again for type safety.
                 const resourceResponse = ((await handler(parameters, context)) as unknown) as {
@@ -84,8 +92,8 @@ export class SlushyRouter<TContext = {}> {
                 next()
             } catch (error) {
                 if (error instanceof SlushyError) {
-                    logger.log(error.message)
-                    res.status(error.status).send()
+                    logger.log(error.payload)
+                    res.status(error.status).send(error.payload)
                     next()
                 } else {
                     logger.error(error, 'Unexpected error')

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.1](https://github.com/aimed/slushy/compare/v0.9.0...v0.9.1) (2019-06-23)
+
+
+### Bug Fixes
+
+* correctly process thrown errors ([#44](https://github.com/aimed/slushy/issues/44)) ([46864d6](https://github.com/aimed/slushy/commit/46864d6))
+
+
+
+
+
+# [0.9.0](https://github.com/aimed/slushy/compare/v0.8.3...v0.9.0) (2019-06-23)
+
+
+### Features
+
+* add context ([#56](https://github.com/aimed/slushy/issues/56)) ([8aad61e](https://github.com/aimed/slushy/commit/8aad61e))
+
+
+
+
+
 ## [0.8.3](https://github.com/aimed/slushy/compare/v0.8.2...v0.8.3) (2019-06-22)
 
 **Note:** Version bump only for package @slushy/codegen

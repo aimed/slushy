@@ -15,8 +15,9 @@ import {
 } from './generated/resources/PetsResource'
 import { Pet } from './generated/types'
 import { SlushyContext } from '@slushy/server'
+import { Context } from './Context'
 
-export class PetsResourceImpl implements PetsResource<{}> {
+export class PetsResourceImpl implements PetsResource<Context> {
     private pets: Pet[] = [{ id: 1, name: 'Pet 1' }]
 
     public async getPets(): Promise<GetPetsResponse> {
@@ -26,7 +27,7 @@ export class PetsResourceImpl implements PetsResource<{}> {
     public async getPetById(params: GetPetByIdParams): Promise<GetPetByIdResponse> {
         const pet = this.pets.filter(pet => pet.id === params.petId)[0]
         if (!pet) {
-            return new GetPetByIdBadRequest()
+            throw new GetPetByIdBadRequest({ message: 'No pet found.' })
         }
         return new GetPetByIdOK(pet)
     }
@@ -41,7 +42,10 @@ export class PetsResourceImpl implements PetsResource<{}> {
         return new CreatePetOK(pet)
     }
 
-    public async uploadPetPicture(_params: UploadPetPictureParams, _context: SlushyContext<{}>): Promise<UploadPetPictureResponse> {
+    public async uploadPetPicture(
+        _params: UploadPetPictureParams,
+        _context: SlushyContext<Context>
+    ): Promise<UploadPetPictureResponse> {
         return new UploadPetPictureOK()
     }
 }

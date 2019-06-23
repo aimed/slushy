@@ -32,11 +32,14 @@ export class RouterFactory {
         }
 
         const resourceRouterName = `${resourceType}Router`
-        const routerClassBuilder = new TSClassBuilder(resourceRouterName)
+        const routerClassBuilder = new TSClassBuilder(resourceRouterName, 'TContext')
         routerClassBuilder.addMethod({
             name: 'bindRoutes',
             async: true,
-            parameters: [{ name: 'router', type: 'SlushyRouter' }, { name: 'resource', type: resourceType }],
+            parameters: [
+                { name: 'router', type: 'SlushyRouter<TContext>' },
+                { name: 'resource', type: `${resourceType}<TContext>` },
+            ],
             returnType: 'Promise<void>',
             body: statements.join('\n'),
         })
