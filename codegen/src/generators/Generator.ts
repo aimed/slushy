@@ -16,6 +16,7 @@ export function getRequiredGenerators(generators: Array<GeneratorConstructor>) {
     let CurrentGenerator: GeneratorConstructor | undefined = generators.splice(0, 1)[0]
     while (CurrentGenerator) {
         if (requiredGenerators.has(CurrentGenerator)) {
+            CurrentGenerator = generators.splice(0, 1)[0]
             continue
         }
 
