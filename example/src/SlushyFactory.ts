@@ -8,7 +8,7 @@ export class SlushyFactory {
         config: Partial<SlushyConfig<Context>> & Partial<SlushyPlugins> = {}
     ): Promise<Slushy<Context>> {
         const slushy = await Slushy.create<Context>({
-            contextFactory: ctx => ctx,
+            contextFactory: ctx => ({ ...ctx, context: {} }),
             ...config,
             resourceConfiguration: new ResourcesConfiguration({
                 PetsResource: new PetsResourceImpl(),
