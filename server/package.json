@@ -15,6 +15,7 @@
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "mz": "^2.7.0",
+    "openapi-request-coercer": "^2.3.0",
     "swagger-ui-express": "^4.0.2",
     "uuid": "^3.3.2"
   },
