@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/aimed/slushy/compare/v0.9.6...v0.10.0) (2019-06-30)
+
+
+### Features
+
+* enable request type coercion ([#84](https://github.com/aimed/slushy/issues/84)) ([cc00aae](https://github.com/aimed/slushy/commit/cc00aae))
+
+
+
+
+
 ## [0.9.6](https://github.com/aimed/slushy/compare/v0.9.5...v0.9.6) (2019-06-29)
 
 **Note:** Version bump only for package slushy
