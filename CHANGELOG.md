@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/aimed/slushy/compare/v0.10.0...v0.11.0) (2019-06-30)
+
+
+### Features
+
+* set default values ([#86](https://github.com/aimed/slushy/issues/86)) ([dd3d0e6](https://github.com/aimed/slushy/commit/dd3d0e6))
+
+
+
+
+
 # [0.10.0](https://github.com/aimed/slushy/compare/v0.9.6...v0.10.0) (2019-06-30)
 
 
