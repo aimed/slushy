@@ -15,7 +15,9 @@ export class Slushy<TContext> {
     ) {}
 
     public async start(port: number) {
-        return new Promise(resolve => this.app.listen(port, resolve))
+        return new Promise((resolve, reject) =>
+            this.app.listen(port, (error: Error) => (error ? resolve() : reject(error)))
+        )
     }
 
     public async initialise() {
