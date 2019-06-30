@@ -7,6 +7,7 @@ import { RequestParametersExtractor } from './RequestParametersExtractor'
 import { ContextFactory } from './ContextFactory'
 import { ApiDoc } from './middleware/ApiDoc'
 import * as UUID from 'uuid'
+import { RequestCoercer } from './RequestCoercer'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -19,6 +20,7 @@ export class SlushyRouter<TContext> {
         public readonly router: SlushyRouterImplementation,
         private readonly requestParameterExtractor = new RequestParametersExtractor(),
         private readonly contextFactory = new ContextFactory<TContext>(),
+        private readonly requestCoercer = new RequestCoercer<TContext>(),
         private readonly openApiBridge = new OpenApiBridge()
     ) {
         // TODO: Move this somewhere else.
@@ -76,6 +78,7 @@ export class SlushyRouter<TContext> {
                     openApi,
                     contextFactory
                 )
+                this.requestCoercer.coerce(context)
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
                 // FIXME: Remove cast again for type safety.
                 const resourceResponse = ((await handler(parameters, context)) as unknown) as {
