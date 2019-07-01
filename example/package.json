@@ -27,7 +27,7 @@
     "prettier": "1.18.2",
     "supertest": "4.0.2",
     "ts-jest": "24.0.2",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "dependencies": {
     "@slushy/server": "^0.11.0"
