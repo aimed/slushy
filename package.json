@@ -7,7 +7,7 @@
     "husky": "2.7.0",
     "lerna": "3.15.0",
     "ts-node": "8.3.0",
-    "typescript": "3.4.5"
+    "typescript": "3.5.2"
   },
   "scripts": {
     "example": "yarn example:gen && yarn example:start",
