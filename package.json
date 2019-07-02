@@ -24,6 +24,10 @@
         "**/*.{ts,json}": [
             "prettier --write",
             "git add"
+        ],
+        "docs/**/*.md": [
+            "prettier --write",
+            "git add"
         ]
     },
     "husky": {
