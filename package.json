@@ -20,7 +20,7 @@
     },
     "prettier": "./.prettierrc.json",
     "lint-staged": {
-        "src/**/*.ts": [
+        "{server|example|codegen}/src/**/*.{ts|json}": [
             "prettier --write",
             "git add"
         ]
