@@ -1,10 +1,3 @@
 {
-    "cSpell.words": [
-        "APIV",
-        "Taeschner",
-        "codegen",
-        "commitlint",
-        "lerna",
-        "openapi"
-    ]
+    "cSpell.words": ["APIV", "Taeschner", "codegen", "commitlint", "lerna", "openapi"]
 }

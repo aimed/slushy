@@ -1,20 +1,14 @@
 {
-  "packages": [
-    "codegen",
-    "example",
-    "server"
-  ],
-  "version": "0.11.0",
-  "command": {
-    "publish": {
-      "conventionalCommits": true,
-      "yes": true,
-      "message": "chore(release): %s [ci skip]",
-      "allowBranch": "master"
-    }
-  },
-  "npmClient": "yarn",
-  "ignoreChanges": [
-    "**/*.md"
-  ]
+    "packages": ["codegen", "example", "server"],
+    "version": "0.11.0",
+    "command": {
+        "publish": {
+            "conventionalCommits": true,
+            "yes": true,
+            "message": "chore(release): %s [ci skip]",
+            "allowBranch": "master"
+        }
+    },
+    "npmClient": "yarn",
+    "ignoreChanges": ["**/*.md"]
 }

@@ -25,9 +25,7 @@ export class RouterFactory {
             tsFile.import(parameterType)
             tsFile.import(returnType)
             statements.push(
-                `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${
-                    operationObject.operationId
-                }.bind(resource))`
+                `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${operationObject.operationId}.bind(resource))`
             )
         }
 

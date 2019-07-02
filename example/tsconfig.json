@@ -1,13 +1,11 @@
 {
-  "compilerOptions": {
-    "outDir": "./dist", /* Redirect output structure to the directory. */
-    "rootDirs": [
-      "./src",
-      "./__tests__"
-    ], /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
-    "lib": [
-      "dom"
-    ]
-  },
-  "extends": "../tsconfig.json"
+    "compilerOptions": {
+        "outDir": "./dist" /* Redirect output structure to the directory. */,
+        "rootDirs": [
+            "./src",
+            "./__tests__"
+        ] /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
+        "lib": ["dom"]
+    },
+    "extends": "../tsconfig.json"
 }
