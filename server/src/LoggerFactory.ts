@@ -11,6 +11,7 @@ export interface Logger {
     info(...params: any[]): any
     error(...params: any[]): any
 }
+export abstract class Logger {}
 
 export class DefaultLoggerFactory implements LoggerFactory {
     create(context: string) {

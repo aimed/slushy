@@ -9,6 +9,32 @@ import { ApiDoc } from './middleware/ApiDoc'
 import * as UUID from 'uuid'
 import { RequestCoercer } from './RequestCoercer'
 import { RequestDefaultSetter } from './RequestDefaultSetter'
+import * as httpContext from 'express-http-context'
+import { Logger } from './LoggerFactory'
+
+export type Constructor<T> = Function & { prototype: T }
+
+/**
+ * WARNING: Experimental!
+ * The [RequestContext] uses cls under the hood. That is why it might not work with some libraries (e.g. async).
+ * More info:
+ * - https://github.com/skonves/express-http-context
+ * - https://github.com/Jeff-Lewis/cls-hooked
+ */
+export const RequestContext = {
+    set<T>(type: Constructor<T>, value: T) {
+        httpContext.set(type.name, value)
+    },
+    get<T>(type: Constructor<T>): T {
+        const instance = httpContext.get(type.name)
+        if (!instance) {
+            throw new Error(`${type.name} was not bound to the RequestContext.`)
+        }
+        return instance
+    },
+}
+
+export abstract class RequestId extends String {}
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -28,6 +54,8 @@ export class SlushyRouter<TContext> {
         // TODO: Move this somewhere else.
         router.use(...new BodyParser().create(this.props))
         router.use('/api-docs', ...new ApiDoc().create(this.props))
+        // This needs to run after all body parser middlewares.
+        router.use(httpContext.middleware)
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
@@ -67,8 +95,13 @@ export class SlushyRouter<TContext> {
     ): SlushyRequestHandler {
         return async (req, res, next) => {
             const { loggerFactory, openApi, contextFactory } = this.props
+
             const requestId: string = UUID.v4()
+            RequestContext.set(RequestId, requestId)
+
             const logger = loggerFactory.create(requestId)
+            RequestContext.set(Logger, logger)
+
             logger.log(`${req.method} ${req.path}`)
 
             try {

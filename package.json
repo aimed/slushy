@@ -1,21 +1,33 @@
 {
-  "name": "slushy",
-  "version": "1.0.0",
-  "license": "MIT",
-  "private": true,
-  "devDependencies": {
-    "husky": "2.7.0",
-    "lerna": "3.15.0",
-    "ts-node": "8.3.0",
-    "typescript": "3.4.5"
-  },
-  "scripts": {
-    "example": "yarn example:gen && yarn example:start",
-    "example:gen": "ts-node codegen/src/index.ts gen example/pet.yaml example/src/generated",
-    "example:start": "ts-node example/src/index.ts",
-    "build": "lerna run build --ignore @slushy/example && lerna run build --scope @slushy/example",
-    "bootstrap": "lerna bootstrap",
-    "test": "lerna run test"
-  },
-  "prettier": "./.prettierrc.json"
+    "name": "slushy",
+    "version": "1.0.0",
+    "license": "MIT",
+    "private": true,
+    "devDependencies": {
+        "husky": "2.7.0",
+        "lerna": "3.15.0",
+        "lint-staged": "^9.0.1",
+        "ts-node": "8.3.0",
+        "typescript": "3.4.5"
+    },
+    "scripts": {
+        "example": "yarn example:gen && yarn example:start",
+        "example:gen": "ts-node codegen/src/index.ts gen example/pet.yaml example/src/generated",
+        "example:start": "ts-node example/src/index.ts",
+        "build": "lerna run build --ignore @slushy/example && lerna run build --scope @slushy/example",
+        "bootstrap": "lerna bootstrap",
+        "test": "lerna run test"
+    },
+    "prettier": "./.prettierrc.json",
+    "lint-staged": {
+        "src/**/*.ts": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    }
 }

@@ -6,4 +6,7 @@ async function run() {
     console.log('Started server')
 }
 
-run()
+run().catch(error => {
+    console.error(error)
+    process.exit(1)
+})
