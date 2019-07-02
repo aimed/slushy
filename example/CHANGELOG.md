@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/aimed/slushy/compare/v0.11.0...v0.12.0) (2019-07-02)
+
+
+### Features
+
+* RequestContext support, fix: slushy.start() ([#94](https://github.com/aimed/slushy/issues/94)) ([6d6e92a](https://github.com/aimed/slushy/commit/6d6e92a))
+
+
+
+
+
 # [0.11.0](https://github.com/aimed/slushy/compare/v0.10.0...v0.11.0) (2019-06-30)
 
 **Note:** Version bump only for package @slushy/example
