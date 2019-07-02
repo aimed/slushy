@@ -19,39 +19,27 @@
             ],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
-            "protocol": "inspector",
+            "protocol": "inspector"
         },
         {
             "name": "Example",
             "type": "node",
             "request": "launch",
-            "args": [
-                "${workspaceRoot}/example/src/index.ts"
-            ],
-            "runtimeArgs": [
-                "--nolazy",
-                "-r",
-                "ts-node/register"
-            ],
+            "args": ["${workspaceRoot}/example/src/index.ts"],
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
-            "protocol": "inspector",
+            "protocol": "inspector"
         },
         {
             "name": "Current TS File",
             "type": "node",
             "request": "launch",
-            "args": [
-                "${relativeFile}"
-            ],
-            "runtimeArgs": [
-                "--nolazy",
-                "-r",
-                "ts-node/register"
-            ],
+            "args": ["${relativeFile}"],
+            "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
             "sourceMaps": true,
             "cwd": "${workspaceRoot}",
-            "protocol": "inspector",
+            "protocol": "inspector"
         }
     ]
 }

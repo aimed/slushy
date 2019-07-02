@@ -82,3 +82,34 @@ Currently the following code generators are supported:
 | ----------------------------- | ----------------------------------------------------------------------------- |
 | ResourcesGenerator            | (Default) Generates Slushy resources and all required types.                  |
 | ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file. |
+
+## Experimental APIs
+
+### Request Context
+
+Slushy currently supports a [RequestContext] through the continuation local storage and async hooks APIs. That is why it might not work with some libraries (e.g. async).
+For more info see https://github.com/skonves/express-http-context and https://github.com/Jeff-Lewis/cls-hooked.
+
+The [RequestContext] is a per request global state object that can be used to share objects. Out of the box the [RequestContext] provides the [Logger] as well as the [RequestId]. You can retrieve these as described below:
+
+```ts
+const logger = RequestContext.get(Logger)
+const requestId = RequestContext.get(RequestId)
+```
+
+You can also attach custom objects to the RequestContext:
+
+```ts
+// In your authentication code (AuthorizationMiddleware.ts):
+authorize() {
+    const user = new User()
+    RequestContext.set(User, user)
+}
+
+// Later in your application:
+doSomething() {
+    const user = RequestContext.get(User)
+}
+```
+
+Note that currently the identifier always is a class and the value an instance of that class. The [RequestContext] will throw if no instance has been bound to a given identifier.
