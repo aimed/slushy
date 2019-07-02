@@ -9,7 +9,7 @@
         "lint-staged": "^9.0.1",
         "prettier": "^1.18.2",
         "ts-node": "8.3.0",
-        "typescript": "3.4.5"
+        "typescript": "3.5.2"
     },
     "scripts": {
         "example": "yarn example:gen && yarn example:start",
