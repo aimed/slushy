@@ -6,6 +6,8 @@ import {
     StatusCodeRange,
     StatusCode,
     statusCodesForRange,
+    StatusCodeDefault,
+    isStatusCodeDefault,
 } from '../../StatusCodes'
 import { capitalize, isReferenceObject } from '../../typescript/utils'
 import { StatusCodeClassNames } from '../../StatusCodesClassNames'
@@ -33,7 +35,9 @@ export class ResponseTypeFactory {
         // Generate one class for every possible response value
         for (const [responseStatusCodeString, response] of Object.entries(operationObject.responses)) {
             const responseStatusCode = responseStatusCodeString as keyof typeof StatusCodeRange | StatusCode
-            const responseClassSuffix = StatusCodeClassNames[responseStatusCode]
+            const responseClassSuffix = isStatusCodeDefault(responseStatusCode)
+                ? 'Default'
+                : StatusCodeClassNames[responseStatusCode]
             const responseClassName = `${capitalize(operationObject.operationId)}${responseClassSuffix}`
             responseClassNames.push(responseClassName)
             this.declareStatusCodeResponseClass(responseClassName, response, responseStatusCode, tsFile)
@@ -87,7 +91,7 @@ export class ResponseTypeFactory {
         }
     }
     private addStatusCode(
-        responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
+        responseStatusCode: keyof typeof StatusCodeRange | StatusCode | typeof StatusCodeDefault,
         responseClassBuilder: TSClassBuilder,
         tsFile: TSFile
     ) {
@@ -100,6 +104,18 @@ export class ResponseTypeFactory {
             })
             return
         }
+
+        if (isStatusCodeDefault(responseStatusCode)) {
+            responseClassBuilder.addConstructorParameter({
+                name: 'status',
+                type: tsFile.getTSType({
+                    type: 'number',
+                    // enum: Object.values(StatusCodeRange).flatMap(range => Object.values(range)),
+                }),
+            })
+            return
+        }
+
         responseClassBuilder.addProperty({
             name: 'status',
             initialValue: responseStatusCode.toString(),

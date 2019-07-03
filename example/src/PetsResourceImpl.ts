@@ -12,6 +12,8 @@ import {
     UploadPetPictureOK,
     GetPetsOK,
     GetPetByIdBadRequest,
+    DefaultResponsesParams,
+    DefaultResponsesDefault,
 } from './generated/resources/PetsResource'
 import { Pet } from './generated/types'
 import { SlushyContext } from '@slushy/server'
@@ -47,5 +49,12 @@ export class PetsResourceImpl implements PetsResource<Context> {
         _context: SlushyContext<Context>
     ): Promise<UploadPetPictureResponse> {
         return new UploadPetPictureOK()
+    }
+
+    public async defaultResponses(
+        _params: DefaultResponsesParams,
+        _context: SlushyContext<Context>
+    ): Promise<DefaultResponsesDefault> {
+        throw new DefaultResponsesDefault(401, { errors: [{ message: 'This is a generic error' }] })
     }
 }

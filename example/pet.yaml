@@ -39,6 +39,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/pet'
 
+  /pets/default-responses:
+    get:
+      operationId: defaultResponses
+      responses:
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/serverError'
+
   /pets/{petId}/picture:
     post:
       operationId: uploadPetPicture
@@ -81,6 +92,7 @@ paths:
                     type: string
                 required: ["message"]
 
+
 components:
   schemas:
     pet:
@@ -104,3 +116,15 @@ components:
           type: string
       required: ['name']
       additionalProperties: false
+    serverError:
+      type: object
+      required: ['errors']
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            required: ['message']
+            properties:
+              message:
+                type: string
