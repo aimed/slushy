@@ -36,7 +36,7 @@ describe('PetsResource', () => {
         it('should throw a default error', async () => {
             const response = await request(slushy.app).get('/pets/default-responses')
             expect(response.status).toBe(401)
-            expect(response.body).toEqual({ errors: { message: expect.any(String) } })
+            expect(response.body).toEqual({ errors: [{ message: expect.any(String) }] })
         })
     })
 })
