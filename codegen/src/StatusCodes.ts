@@ -91,6 +91,12 @@ export const StatusCodeRange = {
     '5XX': ServerErrorStatusCode,
 }
 
+export const StatusCodeDefault = 'default'
+
+export function isStatusCodeDefault(maybe: any): maybe is typeof StatusCodeDefault {
+    return maybe === StatusCodeDefault
+}
+
 export function isStatusCodeRange(maybeRange: any): maybeRange is keyof typeof StatusCodeRange {
     return maybeRange in StatusCodeRange
 }
