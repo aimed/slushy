@@ -93,7 +93,7 @@ export class SlushyRouter<TContext> {
     protected slushyHandler<TParams, TResponse>(
         handler: RouteHandler<TParams, TResponse, TContext>
     ): SlushyRequestHandler {
-        return async (req, res, next) => {
+        return async (req, res, _next) => {
             const { loggerFactory, openApi, contextFactory } = this.props
 
             const requestId: string = UUID.v4()
@@ -127,17 +127,13 @@ export class SlushyRouter<TContext> {
                 } else {
                     res.sendStatus(resourceResponse.status)
                 }
-
-                next()
             } catch (error) {
                 if (error instanceof SlushyError) {
                     logger.log(error.payload)
                     res.status(error.status).send(error.payload)
-                    next()
                 } else {
                     logger.error(error, 'Unexpected error')
                     res.status(500).send()
-                    next(error)
                 }
             }
         }
