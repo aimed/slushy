@@ -30,7 +30,7 @@ paths:
               properties:
                 name:
                   type: string
-              required: ["name"]
+              required: ['name']
       responses:
         '200':
           description: The newly created pet
@@ -97,7 +97,7 @@ paths:
                 properties:
                   message:
                     type: string
-                required: ["message"]
+                required: ['message']
 
 
 components:
