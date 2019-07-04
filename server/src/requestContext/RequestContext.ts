@@ -21,4 +21,7 @@ export const RequestContext = {
         }
         return instance
     },
+    tryGet<T>(type: Constructor<T>): T | undefined {
+        return httpContext.get(type.name)
+    },
 }
