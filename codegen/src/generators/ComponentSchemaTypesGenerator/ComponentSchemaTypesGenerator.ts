@@ -20,10 +20,10 @@ export class ComponentSchemaTypesGenerator implements Generator {
         const indexExportFiles: string[] = []
         for (const [name, schemaDefinition] of schemas) {
             const typeName = capitalize(name)
-            const file = tsModule.file(path.join('types', `${typeName}.ts`))
-            const typeDefinition = file.getTSType(schemaDefinition)
+            const tsFile = tsModule.file(path.join('types', `${typeName}.ts`))
+            const typeDefinition = tsFile.getTSType(schemaDefinition)
             const typeDeclarationString = `export type ${typeName} = ${typeDefinition}`
-            file.addSourceText(typeDeclarationString)
+            tsFile.addSourceText(typeDeclarationString)
             indexExportFiles.push(`./${typeName}`)
         }
 
