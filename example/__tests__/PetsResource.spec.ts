@@ -2,19 +2,14 @@ import request from 'supertest'
 import { SlushyFactory } from '../src/SlushyFactory'
 import { Slushy } from '@slushy/server'
 import { Context } from './Context'
+import { testLoggerFactory } from './testLoggerFactory'
 
 describe('PetsResource', () => {
     let slushy: Slushy<Context>
 
     beforeEach(async () => {
         slushy = await SlushyFactory.create({
-            loggerFactory: {
-                create: () => ({
-                    log: jest.fn(),
-                    info: jest.fn(),
-                    error: jest.fn(),
-                }),
-            },
+            loggerFactory: testLoggerFactory,
         })
     })
 

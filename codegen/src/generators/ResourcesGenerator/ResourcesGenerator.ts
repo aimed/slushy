@@ -13,9 +13,10 @@ import { ResourceFactory } from './ResourceFactory'
 import { ResourcesConfigurationFactory, ResourcesConfigurationDescription } from './ResourcesConfigurationFactory'
 import { OpenApiConstantFactory } from './OpenApiConstantFactory'
 import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
+import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
 
 export class ResourcesGenerator implements Generator {
-    dependsOn = [ComponentSchemaTypesGenerator]
+    dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator]
 
     async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
         const applicationResourceDescriptions: ResourcesConfigurationDescription[] = []

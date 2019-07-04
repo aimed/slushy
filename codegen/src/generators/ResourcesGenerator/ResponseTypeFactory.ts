@@ -47,15 +47,13 @@ export class ResponseTypeFactory {
         tsFile.addSourceText(responseTypeDefinition)
         return responseTypeName
     }
+
     private declareStatusCodeResponseClass(
         responseClassName: string,
         response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject,
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
         tsFile: TSFile
     ) {
-        if (isReferenceObject(response)) {
-            throw new Error('References for responses are not allowed, you maybe forgot to use .bundle')
-        }
         const responseClassBuilder = new TSClassBuilder(responseClassName)
         this.extendBaseClass(responseStatusCode, responseClassBuilder, tsFile)
         this.addStatusCode(responseStatusCode, responseClassBuilder, tsFile)
@@ -63,6 +61,7 @@ export class ResponseTypeFactory {
         tsFile.addSourceText(responseClassBuilder.build())
         return responseClassName
     }
+
     private extendBaseClass(
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
         responseClassBuilder: TSClassBuilder,
@@ -74,22 +73,45 @@ export class ResponseTypeFactory {
             responseClassBuilder.extends('SlushyError', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)')
         }
     }
-    private addPayload(response: OpenAPIV3.ResponseObject, responseClassBuilder: TSClassBuilder, tsFile: TSFile) {
-        if (response.content) {
-            // TODO: Handle more cases.
-            const jsonResponseType = response.content['application/json']
-            if (!jsonResponseType) {
-                throw new Error('No content for application/json defined')
+
+    private addPayload(
+        response: OpenAPIV3.ResponseObject | OpenAPIV3.ReferenceObject,
+        responseClassBuilder: TSClassBuilder,
+        tsFile: TSFile
+    ) {
+        if (isReferenceObject(response)) {
+            if (!response.$ref.startsWith('#/components/responses/')) {
+                throw new Error('A status code reference must point to #/components/responses/')
             }
-            if (!jsonResponseType.schema) {
-                throw new Error('No response schema is defined')
-            }
+            const responseType = `${response.$ref.replace('#/components/responses/', '')}Response`
+            tsFile.import(responseType)
             responseClassBuilder.addConstructorParameter({
                 name: 'payload',
-                type: tsFile.getTSType(jsonResponseType.schema),
+                type: responseType,
             })
+            return
         }
+
+        if (!response.content) {
+            return
+        }
+
+        // TODO: Handle more cases.
+        const jsonResponseType = response.content['application/json']
+        if (!jsonResponseType) {
+            throw new Error('No content for application/json defined')
+        }
+
+        if (!jsonResponseType.schema) {
+            throw new Error('No response schema is defined')
+        }
+
+        responseClassBuilder.addConstructorParameter({
+            name: 'payload',
+            type: tsFile.getTSType(jsonResponseType.schema),
+        })
     }
+
     private addStatusCode(
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode | typeof StatusCodeDefault,
         responseClassBuilder: TSClassBuilder,

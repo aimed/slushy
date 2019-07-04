@@ -18,7 +18,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/pet'
+                  $ref: '#/components/schemas/Pet'
     post:
       operationId: createPet
       requestBody:
@@ -37,7 +37,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pet'
+                $ref: '#/components/schemas/Pet'
+  /features/component-responses:
+    get:
+      operationId: featureComponentResponses
+      responses:
+        '400':
+          $ref: '#/components/responses/Unauthorized'
+
 
   /pets/default-responses:
     get:
@@ -48,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/serverError'
+                $ref: '#/components/schemas/ServerError'
 
   /pets/{petId}/picture:
     post:
@@ -80,7 +87,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/pet'
+                $ref: '#/components/schemas/Pet'
         '400':
           description: Pet does not exist
           content:
@@ -95,7 +102,7 @@ paths:
 
 components:
   schemas:
-    pet:
+    Pet:
       type: object
       properties:
         id:
@@ -106,17 +113,17 @@ components:
           type: string
           enum: ['dalmatian', 'dachshund']
         food:
-          $ref: '#/components/schemas/food'
+          $ref: '#/components/schemas/Food'
       required: ['id', 'name']
       additionalProperties: false
-    food:
+    Food:
       type: object
       properties:
         name:
           type: string
       required: ['name']
       additionalProperties: false
-    serverError:
+    ServerError:
       type: object
       required: ['errors']
       properties:
@@ -128,3 +135,11 @@ components:
             properties:
               message:
                 type: string
+
+  responses:
+    Unauthorized:
+      description: You are not authorized to perform this action
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServerError'
