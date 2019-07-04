@@ -83,6 +83,7 @@ export class ResponseTypeFactory {
             if (!response.$ref.startsWith('#/components/responses/')) {
                 throw new Error('A status code reference must point to #/components/responses/')
             }
+
             const responseType = `${response.$ref.replace('#/components/responses/', '')}Response`
             tsFile.import(responseType)
             responseClassBuilder.addConstructorParameter({

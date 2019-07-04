@@ -7,6 +7,28 @@ servers:
   - url: http://localhost:3031
 
 paths:
+  /features/component-responses:
+    get:
+      operationId: featureComponentResponses
+      responses:
+        '400':
+          $ref: '#/components/responses/Unauthorized'
+  /features/file-upload:
+    post:
+      operationId: featureFileUpload
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 'Nothing'
+
   /pets:
     get:
       operationId: getPets
@@ -38,13 +60,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Pet'
-  /features/component-responses:
-    get:
-      operationId: featureComponentResponses
-      responses:
-        '400':
-          $ref: '#/components/responses/Unauthorized'
-
 
   /pets/default-responses:
     get:
