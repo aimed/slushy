@@ -1,4 +1,4 @@
-import { RequestContextMiddleware, RequestContext } from './RequestContext'
+import { RequestContext } from './requestContext/RequestContext'
 import { SlushyProps } from './SlushyProps'
 import { SlushyRouterImplementation, SlushyRequestHandler, OpenApiBridge } from './ServerImpl'
 import { BodyParser } from './middleware/BodyParser'
@@ -12,6 +12,7 @@ import { RequestCoercer } from './RequestCoercer'
 import { RequestDefaultSetter } from './RequestDefaultSetter'
 import { Logger } from './LoggerFactory'
 import { RequestId } from './RequestId'
+import { RequestContextMiddleware } from './middleware/RequestContextMiddleware'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -32,7 +33,7 @@ export class SlushyRouter<TContext> {
         router.use(...new BodyParser().create(this.props))
         router.use('/api-docs', ...new ApiDoc().create(this.props))
         // This needs to run after all body parser middlewares.
-        router.use(RequestContextMiddleware)
+        router.use(new RequestContextMiddleware().create(this.props))
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
