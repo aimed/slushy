@@ -5,7 +5,7 @@ import Ajv from 'ajv'
 import { isReferenceObject } from './isReferenceObject'
 
 export class RequestParametersExtractor<TContext> {
-    private readonly validator = new Ajv({ allErrors: true })
+    private readonly validator = new Ajv({ allErrors: true, unknownFormats: ['byte', 'binary'] })
 
     /**
      * Extracts all parameters for the current operation from the request.
@@ -67,7 +67,6 @@ export class RequestParametersExtractor<TContext> {
         }
 
         // TODO: Support more mime types
-        // TODO: Merge requestBody into params instead of it being a separate property
         const requestBody = operationObject.requestBody
         if (
             requestBody &&

@@ -20,6 +20,7 @@ export type SlushyApplication = express.Application
 export type SlushyRequest = express.Request
 export type SlushyResponse = express.Response
 export type SlushyRequestHandler = express.RequestHandler
+export type SlushyErrorRequestHandler = express.ErrorRequestHandler
 
 export class OpenApiBridge {
     public makeRouterPath(path: string): string {

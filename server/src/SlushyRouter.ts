@@ -13,6 +13,7 @@ import { RequestDefaultSetter } from './RequestDefaultSetter'
 import { Logger } from './LoggerFactory'
 import { RequestId } from './RequestId'
 import { RequestContextMiddleware } from './middleware/RequestContextMiddleware'
+import { FileUploadMiddleware } from './middleware/FileUploadMiddleware'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -41,7 +42,12 @@ export class SlushyRouter<TContext> {
     }
 
     public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.post(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        const middlewares = new FileUploadMiddleware(this.props).create(path, 'post')
+        this.router.post(this.openApiBridge.makeRouterPath(path), ...middlewares, this.slushyHandler(handler))
+    }
+
+    public put<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
+        this.router.put(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
     }
 
     public delete<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
@@ -50,10 +56,6 @@ export class SlushyRouter<TContext> {
 
     public options<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         this.router.options(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
-    }
-
-    public put<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.put(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
     }
 
     public patch<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
@@ -93,6 +95,7 @@ export class SlushyRouter<TContext> {
                 )
                 this.requestDefaultSetter.setDefaults(context)
                 this.requestCoercer.coerce(context)
+
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
                 // FIXME: Remove cast again for type safety.
                 const resourceResponse = ((await handler(parameters, context)) as unknown) as {
@@ -106,6 +109,7 @@ export class SlushyRouter<TContext> {
                     res.sendStatus(resourceResponse.status)
                 }
             } catch (error) {
+                // TODO: Move some things to slushy request extension that extends the express request, e.g. operationObject, pathObject, requestId, logger, the context itself?
                 if (error instanceof SlushyError) {
                     logger.log(error.payload)
                     res.status(error.status).send(error.payload)

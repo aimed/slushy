@@ -83,6 +83,19 @@ Currently the following code generators are supported:
 | ResourcesGenerator            | (Default) Generates Slushy resources and all required types.                  |
 | ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file. |
 
+## Experimental Features
+
+### File uploads
+
+For the OpenApi documentation regarding file uploads see https://swagger.io/docs/specification/describing-request-body/multipart-requests/.
+You can (and should) enforce limits on the files that are uploaded. The limits can be configured using the `x-multer-limits` property on the [OperationObject]. For possible configuration values please consult the [multer documentation](https://github.com/expressjs/multer#limits).
+
+**Limitations:**
+
+-   File uploads are only possible via multipart/form-data.
+-   The requestBody MUST be an object and all files MUST be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
+-   All files are currently read into a Buffer.
+
 ## Experimental APIs
 
 ### Request Context
