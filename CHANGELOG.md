@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/aimed/slushy/compare/v0.13.0...v0.14.0) (2019-07-04)
+
+
+### Features
+
+* generate component responses ([#103](https://github.com/aimed/slushy/issues/103)) ([ca0ece6](https://github.com/aimed/slushy/commit/ca0ece6)), closes [#65](https://github.com/aimed/slushy/issues/65)
+
+
+
+
+
 # [0.13.0](https://github.com/aimed/slushy/compare/v0.12.2...v0.13.0) (2019-07-03)
 
 
