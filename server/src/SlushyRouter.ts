@@ -1,3 +1,4 @@
+import { RequestContextMiddleware, RequestContext } from './RequestContext'
 import { SlushyProps } from './SlushyProps'
 import { SlushyRouterImplementation, SlushyRequestHandler, OpenApiBridge } from './ServerImpl'
 import { BodyParser } from './middleware/BodyParser'
@@ -9,32 +10,8 @@ import { ApiDoc } from './middleware/ApiDoc'
 import * as UUID from 'uuid'
 import { RequestCoercer } from './RequestCoercer'
 import { RequestDefaultSetter } from './RequestDefaultSetter'
-import * as httpContext from 'express-http-context'
 import { Logger } from './LoggerFactory'
-
-export type Constructor<T> = Function & { prototype: T }
-
-/**
- * WARNING: Experimental!
- * The [RequestContext] uses cls under the hood. That is why it might not work with some libraries (e.g. async).
- * More info:
- * - https://github.com/skonves/express-http-context
- * - https://github.com/Jeff-Lewis/cls-hooked
- */
-export const RequestContext = {
-    set<T>(type: Constructor<T>, value: T) {
-        httpContext.set(type.name, value)
-    },
-    get<T>(type: Constructor<T>): T {
-        const instance = httpContext.get(type.name)
-        if (!instance) {
-            throw new Error(`${type.name} was not bound to the RequestContext.`)
-        }
-        return instance
-    },
-}
-
-export abstract class RequestId extends String {}
+import { RequestId } from './RequestId'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -55,7 +32,7 @@ export class SlushyRouter<TContext> {
         router.use(...new BodyParser().create(this.props))
         router.use('/api-docs', ...new ApiDoc().create(this.props))
         // This needs to run after all body parser middlewares.
-        router.use(httpContext.middleware)
+        router.use(RequestContextMiddleware)
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
