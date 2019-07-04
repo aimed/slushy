@@ -18,10 +18,10 @@ export class FileUploadMiddleware {
         }
         const requestBody = this.getRequestBody(path, operation)
         const middlewares: SlushyRequestHandler[] = []
+        const fields: multerFactory.Field[] = []
         if (requestBody && requestContentType === 'multipart/form-data') {
             const multerLimits = operationObject['x-multer-limits']
             const multer = multerFactory({ storage: multerFactory.memoryStorage(), limits: multerLimits })
-            const fields: multerFactory.Field[] = []
             const schema = requestBody.content['multipart/form-data'].schema
 
             if (!schema) {
@@ -60,6 +60,21 @@ export class FileUploadMiddleware {
 
             middlewares.push(multer.fields(fields))
         }
+
+        // FIXME: This must run after the validation step.
+        // FIXME: Set all file values to an empty string for validation.
+        middlewares.push((req, _res, next) => {
+            if (req.body && typeof req.body === 'object') {
+                for (const { name } of fields) {
+                    if (Array.isArray(req.files)) {
+                        continue
+                    }
+                    const [file] = req.files[name]
+                    req.body[name] = file
+                }
+            }
+            next()
+        })
 
         return middlewares
     }

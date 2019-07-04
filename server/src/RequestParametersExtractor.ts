@@ -66,18 +66,19 @@ export class RequestParametersExtractor<TContext> {
             params[parameter.name] = value
         }
 
-        // TODO: Support more mime types
         const requestBody = operationObject.requestBody
-        if (
+        const contentSchema =
             requestBody &&
             !isReferenceObject(requestBody) &&
-            requestBody.content['application/json'] &&
-            requestBody.content['application/json'].schema
-        ) {
+            requestBody.content &&
+            requestBody.content[req.is('*/*') || '']
+
+        // FIXME: Disable validation for files
+        if (requestBody && !isReferenceObject(requestBody) && contentSchema && contentSchema.schema) {
             if (requestBody.required) {
                 paramSchema.required.push('requestBody')
             }
-            paramSchema.properties.requestBody = requestBody.content['application/json'].schema
+            paramSchema.properties.requestBody = contentSchema.schema
             params.requestBody = req.body
         }
 

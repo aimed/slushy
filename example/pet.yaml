@@ -17,17 +17,19 @@ paths:
     post:
       operationId: featureFileUpload
       requestBody:
+        required: true
         content:
           multipart/form-data:
             schema:
               type: object
+              required: ['file']
               properties:
                 file:
                   type: string
                   format: binary
       responses:
         '200':
-          description: 'Nothing'
+          description: Nothing
 
   /pets:
     get:

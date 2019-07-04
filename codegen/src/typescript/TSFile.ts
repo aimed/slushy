@@ -112,6 +112,12 @@ export class TSFile {
                 if (schema.enum) {
                     return schema.enum.map(value => (typeof value === 'string' ? `'${value}'` : value)).join(' | ')
                 }
+
+                if (schema.format === 'binary' || schema.format === 'byte') {
+                    // FIXME: Return actual file object thats returned by slushy
+                    return 'any'
+                }
+
                 return 'string'
             case 'array':
                 return `Array<${this.getTSType(schema.items)}>`

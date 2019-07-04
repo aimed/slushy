@@ -22,9 +22,10 @@ export class FeaturesResourceImpl implements FeaturesResource<Context> {
         _params: FeatureFileUploadParams,
         _context: SlushyContext<Context>
     ): Promise<FeatureFileUploadResponse> {
-        console.log(_context)
-
-        // FIXME: this should not be server error
+        // @ts-ignore
+        const files = _params
+        // @ts-ignore
+        const files2 = _context
         return new FeatureFileUploadOK()
     }
 }

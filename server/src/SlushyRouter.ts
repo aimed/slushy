@@ -28,13 +28,16 @@ export class SlushyRouter<TContext> {
         private readonly contextFactory = new ContextFactory<TContext>(),
         private readonly requestCoercer = new RequestCoercer<TContext>(),
         private readonly requestDefaultSetter = new RequestDefaultSetter<TContext>(),
-        private readonly openApiBridge = new OpenApiBridge()
+        private readonly openApiBridge = new OpenApiBridge(),
+        private readonly bodyParser = new BodyParser(),
+        private readonly apiDoc = new ApiDoc(),
+        private readonly requestContextMiddleware = new RequestContextMiddleware()
     ) {
         // TODO: Move this somewhere else.
-        router.use(...new BodyParser().create(this.props))
-        router.use('/api-docs', ...new ApiDoc().create(this.props))
+        router.use(...this.bodyParser.create(this.props))
+        router.use('/api-docs', ...this.apiDoc.create(this.props))
         // This needs to run after all body parser middlewares.
-        router.use(new RequestContextMiddleware().create(this.props))
+        router.use(...this.requestContextMiddleware.create(this.props))
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
