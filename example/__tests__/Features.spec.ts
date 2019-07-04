@@ -1,8 +1,8 @@
 import request from 'supertest'
-import { SlushyFactory } from './SlushyFactory'
 import { testLoggerFactory } from './testLoggerFactory'
 import { Slushy } from '@slushy/server'
 import { Context } from './Context'
+import { SlushyFactory } from '../src/SlushyFactory'
 
 describe('Features', () => {
     let slushy: Slushy<Context>
@@ -15,7 +15,7 @@ describe('Features', () => {
 
     it('should create response type for #/components/responses/', async () => {
         const response = await request(slushy.app).get('/features/component-responses')
-        expect(response.status).toBe(401)
-        expect(response.body).toContainEqual({ errors: [{ message: expect.any(String) }] })
+        expect(response.status).toBe(400)
+        expect(response.body).toEqual({ errors: [{ message: expect.any(String) }] })
     })
 })
