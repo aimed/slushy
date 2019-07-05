@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { testLoggerFactory } from './testLoggerFactory'
 import { Slushy } from '@slushy/server'
-import { Context } from './Context'
+import { Context } from '../src/Context'
 import { SlushyFactory } from '../src/SlushyFactory'
 
 describe('Http', () => {

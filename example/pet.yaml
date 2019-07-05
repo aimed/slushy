@@ -12,27 +12,47 @@ paths:
       operationId: get
       responses:
         '200':
-          description: 200
+          description: Test http operation
     put:
       operationId: put
       responses:
         '200':
-          description: 200
+          description: Test http operation
     post:
       operationId: post
       responses:
         '200':
-          description: 200
+          description: Test http operation
     delete:
       operationId: delete
       responses:
         '200':
-          description: 200
+          description: Test http operation
     patch:
       operationId: patch
       responses:
         '200':
-          description: 200
+          description: Test http operation
+
+  /validation/query:
+    get:
+      operationId: validationQuery
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Test query parameter validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: 
+                    type: string
 
   /features/component-responses:
     get:
