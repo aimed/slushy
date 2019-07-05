@@ -1,6 +1,6 @@
 import OpenAPIDefaultSetter from 'openapi-default-setter'
 import { SlushyContext } from './SlushyContext'
-import { isReferenceObject } from './isReferenceObject'
+import { isReferenceObject } from './helpers/isReferenceObject'
 import { OpenAPIV3 } from 'openapi-types'
 
 export class RequestDefaultSetter<TContext> {

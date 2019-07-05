@@ -2,7 +2,7 @@ import { SlushyContext } from './SlushyContext'
 import { OpenAPIV3 } from 'openapi-types'
 import { BadRequestError } from './errors/BadRequestError'
 import Ajv from 'ajv'
-import { isReferenceObject } from './isReferenceObject'
+import { isReferenceObject } from './helpers/isReferenceObject'
 
 export class RequestParametersExtractor<TContext> {
     private readonly validator = new Ajv({
@@ -20,7 +20,6 @@ export class RequestParametersExtractor<TContext> {
 
         const params: { [index: string]: any } = {}
 
-        // TODO: This can be moved to the compile step
         // To validate the input parameters we dynamically create the schema
         const paramSchema: OpenAPIV3.SchemaObject &
             Required<Pick<OpenAPIV3.SchemaObject, 'properties'>> & { required: string[] } = {
