@@ -26,7 +26,7 @@ describe('Features', () => {
 
     describe('File uploads', () => {
         describe('Server', () => {
-            it('should create response type for #/components/responses/', async () => {
+            it('should accept an uploaded file', async () => {
                 const response = await request(slushy.app)
                     .post('/features/file-upload')
                     .attach('file', __filename)
