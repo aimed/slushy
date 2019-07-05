@@ -12,13 +12,13 @@ import { SlushyContext } from './SlushyContext'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
 import { ContextFactory } from './ContextFactory'
 import { ApiDocMiddlewareFactory } from './middleware/ApiDocMiddlewareFactory'
-import { RequestDefaultSetter } from './RequestDefaultSetter'
 import { Logger } from './LoggerFactory'
 import { RequestId } from './RequestId'
 import { RequestContextMiddlewareFactory } from './middleware/RequestContextMiddlewareFactory'
 import { FileUploadMiddlewareFactory } from './middleware/FileUploadMiddlewareFactory'
 import { RequestValidatorMiddlewareFactory } from './middleware/RequestValidatorMiddlewareFactory'
 import { FileToBodyAssignmentMiddlewareFactory } from './middleware/FileToBodyAssignmentMiddlewareFactory'
+import { RequestDefaultValueSetterMiddlewareFactory } from './middleware/RequestDefaultValueSetterMiddlewareFactory'
 import {
     RequestExtensionMiddlewareFactory,
     RequestIdSymbol,
@@ -34,7 +34,6 @@ export type RouteHandler<TParams, TResponse, TContext> = (
 export class SlushyRouter<TContext> {
     private readonly requestParameterExtractor = new RequestParametersExtractor()
     private readonly contextFactory = new ContextFactory<TContext>()
-    private readonly requestDefaultSetter = new RequestDefaultSetter<TContext>()
     private readonly openApiBridge = new OpenApiBridge()
     private readonly bodyParserMiddlewareFactory = new BodyParserMiddlewareFactory()
     private readonly requestValidatorMiddlewareFactory = new RequestValidatorMiddlewareFactory()
@@ -44,6 +43,7 @@ export class SlushyRouter<TContext> {
     private readonly fileToBodyAssignmentMiddlewareFactory = new FileToBodyAssignmentMiddlewareFactory()
     private readonly requestExtensionsMiddlewareFactory = new RequestExtensionMiddlewareFactory()
     private readonly requestCoersionMiddlewareFactory = new RequestCoercionMiddlewareFactory()
+    private readonly requestDefaultValueSetterMiddlewareFactory = new RequestDefaultValueSetterMiddlewareFactory()
 
     public constructor(
         public readonly props: SlushyProps<TContext>,
@@ -90,6 +90,7 @@ export class SlushyRouter<TContext> {
 
     public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         const middlewares = [
+            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'get'),
             ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'get'),
             ...this.fileUploadMiddlewareFactory.create(this.props, path, 'post'),
             ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'post'),
@@ -105,6 +106,7 @@ export class SlushyRouter<TContext> {
 
     public put<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         const middlewares = [
+            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'put'),
             ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'put'),
             ...this.fileUploadMiddlewareFactory.create(this.props, path, 'put'),
             ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'put'),
@@ -120,6 +122,7 @@ export class SlushyRouter<TContext> {
 
     public delete<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         const middlewares = [
+            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'delete'),
             ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'delete'),
             ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'delete'),
         ]
@@ -133,6 +136,7 @@ export class SlushyRouter<TContext> {
 
     public options<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         const middlewares = [
+            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'options'),
             ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'options'),
             ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'options'),
         ]
@@ -147,6 +151,7 @@ export class SlushyRouter<TContext> {
 
     public patch<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         const middlewares = [
+            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'patch'),
             ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'patch'),
             ...this.fileUploadMiddlewareFactory.create(this.props, path, 'patch'),
             ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'patch'),
@@ -162,6 +167,7 @@ export class SlushyRouter<TContext> {
 
     public head<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
         const middlewares = [
+            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'head'),
             ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'head'),
             ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'head'),
         ]
@@ -199,7 +205,6 @@ export class SlushyRouter<TContext> {
                     openApi,
                     contextFactory
                 )
-                this.requestDefaultSetter.setDefaults(context)
 
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
                 // FIXME: Remove cast again for type safety.
