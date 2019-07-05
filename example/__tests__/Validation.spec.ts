@@ -33,12 +33,12 @@ describe('Validation', () => {
             expect(response.body).toEqual({ path: 1 })
         })
 
-        it('should not accept a request a required parameter is not set', async () => {
+        it('should not accept a request if a required parameter is not set', async () => {
             const response = await request(slushy.app).get('/validation/path')
             expect(response.status).toBe(404)
         })
 
-        it('should not accept a request a required parameter is of the wrong type', async () => {
+        it('should not accept a request if a parameter is of the wrong type', async () => {
             const response = await request(slushy.app).get('/validation/path/string')
             expect(response.status).toBe(400)
         })
