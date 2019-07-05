@@ -68,8 +68,8 @@ export class ResponseTypeFactory {
         tsFile: TSFile
     ) {
         // If the status code indicates an error, generate an actual error class that can be thrown.
-        tsFile.import('SlushyError', '@slushy/server', true)
         if (isErrorStatusCode(responseStatusCode)) {
+            tsFile.import('SlushyError', '@slushy/server', true)
             responseClassBuilder.extends('SlushyError', 'super()', 'Object.setPrototypeOf(this, new.target.prototype)')
         }
     }
