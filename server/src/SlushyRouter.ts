@@ -71,7 +71,13 @@ export class SlushyRouter<TContext> {
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.get(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
+        const middlewares = this.requestValidatorMiddlewareFactory.create(this.props, path, 'get')
+        this.router.get(
+            this.openApiBridge.makeRouterPath(path),
+            ...middlewares,
+            this.slushyHandler(handler),
+            this.errorHandler
+        )
     }
 
     public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
@@ -104,11 +110,24 @@ export class SlushyRouter<TContext> {
     }
 
     public delete<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.delete(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
+        const middlewares = this.requestValidatorMiddlewareFactory.create(this.props, path, 'delete')
+        this.router.delete(
+            this.openApiBridge.makeRouterPath(path),
+            ...middlewares,
+            this.slushyHandler(handler),
+            this.errorHandler
+        )
     }
 
     public options<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.options(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
+        const middlewares = this.requestValidatorMiddlewareFactory.create(this.props, path, 'options')
+
+        this.router.options(
+            this.openApiBridge.makeRouterPath(path),
+            ...middlewares,
+            this.slushyHandler(handler),
+            this.errorHandler
+        )
     }
 
     public patch<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
@@ -126,7 +145,13 @@ export class SlushyRouter<TContext> {
     }
 
     public head<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.head(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
+        const middlewares = this.requestValidatorMiddlewareFactory.create(this.props, path, 'head')
+        this.router.head(
+            this.openApiBridge.makeRouterPath(path),
+            ...middlewares,
+            this.slushyHandler(handler),
+            this.errorHandler
+        )
     }
 
     /**
