@@ -22,10 +22,6 @@ export class FeaturesResourceImpl implements FeaturesResource<Context> {
         _params: FeatureFileUploadParams,
         _context: SlushyContext<Context>
     ): Promise<FeatureFileUploadResponse> {
-        // @ts-ignore
-        const files = _params
-        // @ts-ignore
-        const files2 = _context
         return new FeatureFileUploadOK()
     }
 }
