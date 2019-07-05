@@ -7,6 +7,33 @@ servers:
   - url: http://localhost:3031
 
 paths:
+  /http:
+    get:
+      operationId: get
+      responses:
+        '200':
+          description: 200
+    put:
+      operationId: put
+      responses:
+        '200':
+          description: 200
+    post:
+      operationId: post
+      responses:
+        '200':
+          description: 200
+    delete:
+      operationId: delete
+      responses:
+        '200':
+          description: 200
+    patch:
+      operationId: patch
+      responses:
+        '200':
+          description: 200
+
   /features/component-responses:
     get:
       operationId: featureComponentResponses

@@ -4,6 +4,7 @@ import { ResourcesConfiguration } from './generated/ResourcesConfiguration'
 import { Context } from './Context'
 import { FeaturesResourceImpl } from './FeaturesResourceImpl'
 import { RequestValidationError } from '@slushy/server/dist/middleware/RequestValidatorMiddlewareFactory'
+import { HttpResourceImpl } from './HttpResourceImpl'
 
 export class SlushyFactory {
     public static async create(
@@ -21,6 +22,7 @@ export class SlushyFactory {
             resourceConfiguration: new ResourcesConfiguration({
                 PetsResource: new PetsResourceImpl(),
                 FeaturesResource: new FeaturesResourceImpl(),
+                HttpResource: new HttpResourceImpl(),
             }),
         })
         return slushy
