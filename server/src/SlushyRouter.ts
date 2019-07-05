@@ -12,7 +12,6 @@ import { SlushyContext } from './SlushyContext'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
 import { ContextFactory } from './ContextFactory'
 import { ApiDocMiddlewareFactory } from './middleware/ApiDocMiddlewareFactory'
-import * as UUID from 'uuid'
 import { RequestCoercer } from './RequestCoercer'
 import { RequestDefaultSetter } from './RequestDefaultSetter'
 import { Logger } from './LoggerFactory'
@@ -21,6 +20,11 @@ import { RequestContextMiddlewareFactory } from './middleware/RequestContextMidd
 import { FileUploadMiddlewareFactory } from './middleware/FileUploadMiddlewareFactory'
 import { RequestValidatorMiddlewareFactory } from './middleware/RequestValidatorMiddlewareFactory'
 import { FileToBodyAssignmentMiddlewareFactory } from './middleware/FileToBodyAssignmentMiddlewareFactory'
+import {
+    RequestExtensionMiddlewareFactory,
+    RequestIdSymbol,
+    LoggerSymbol,
+} from './middleware/RequestExtensionMiddlewareFactory'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -39,26 +43,29 @@ export class SlushyRouter<TContext> {
     private readonly requestContextMiddleware = new RequestContextMiddlewareFactory()
     private readonly fileUploadMiddlewareFactory = new FileUploadMiddlewareFactory()
     private readonly fileToBodyAssignmentMiddlewareFactory = new FileToBodyAssignmentMiddlewareFactory()
+    private readonly requestExtensionsMiddlewareFactory = new RequestExtensionMiddlewareFactory()
 
     public constructor(
         public readonly props: SlushyProps<TContext>,
         public readonly router: SlushyRouterImplementation
     ) {
+        // Extend the request with logger and the requestId
+        router.use(...this.requestExtensionsMiddlewareFactory.create(this.props))
+
         router.use(...this.bodyParserMiddlewareFactory.create(this.props))
         router.use('/api-docs', ...this.apiDocMiddlewareFactory.create(this.props))
         // This needs to run after all body parser middlewares.
         router.use(...this.requestContextMiddleware.create(this.props))
     }
 
-    private errorHandler: SlushyErrorRequestHandler = (error, _req, res, _next) => {
+    private errorHandler: SlushyErrorRequestHandler = (error, req, res, _next) => {
         // FIXME: Attach logger to request
+        const logger = req[LoggerSymbol] || console
         if (error instanceof SlushyError) {
-            // logger.log(error.payload)
-            console.log(error.payload)
+            logger.log(error.payload)
             res.status(error.status).send(error.payload)
         } else {
-            // logger.error(error, 'Unexpected error')
-            console.error('Unexpected error', error)
+            logger.error('Unexpected error', error)
             res.status(500).send()
         }
     }
@@ -130,14 +137,13 @@ export class SlushyRouter<TContext> {
         handler: RouteHandler<TParams, TResponse, TContext>
     ): SlushyRequestHandler {
         return async (req, res, _next) => {
-            const { loggerFactory, openApi, contextFactory } = this.props
+            const { openApi, contextFactory } = this.props
 
-            const requestId: string = UUID.v4()
+            const requestId = req[RequestIdSymbol]
             RequestContext.set(RequestId, requestId)
 
-            const logger = loggerFactory.create(requestId)
+            const logger = req[LoggerSymbol]
             RequestContext.set(Logger, logger)
-
             logger.log(`${req.method} ${req.path}`)
 
             try {
