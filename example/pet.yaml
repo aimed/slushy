@@ -30,6 +30,13 @@ paths:
       responses:
         '200':
           description: Nothing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
 
   /pets:
     get:

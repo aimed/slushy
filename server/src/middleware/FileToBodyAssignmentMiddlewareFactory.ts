@@ -54,6 +54,11 @@ export class FileToBodyAssignmentMiddlewareFactory implements MiddlewareFactory 
                         if (Array.isArray(req.files)) {
                             continue
                         }
+
+                        if (!req.files[name]) {
+                            continue
+                        }
+
                         const [file] = req.files[name]
                         req.body[name] = file
                     }

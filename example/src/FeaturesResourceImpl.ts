@@ -19,9 +19,9 @@ export class FeaturesResourceImpl implements FeaturesResource<Context> {
     }
 
     async featureFileUpload(
-        _params: FeatureFileUploadParams,
+        params: FeatureFileUploadParams,
         _context: SlushyContext<Context>
     ): Promise<FeatureFileUploadResponse> {
-        return new FeatureFileUploadOK()
+        return new FeatureFileUploadOK({ content: params.requestBody.file.buffer.toString() })
     }
 }

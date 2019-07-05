@@ -66,7 +66,9 @@ export class FileUploadMiddlewareFactory implements MiddlewareFactory {
             if (req.body && typeof req.body === 'object') {
                 // To pass validation, all files must be set to a string
                 for (const { name } of fields) {
-                    req.body[name] = '$$FILE$$'
+                    if (!Array.isArray(req.files) && req.files[name] != null) {
+                        req.body[name] = '$$FILE$$'
+                    }
                 }
             }
             next()
