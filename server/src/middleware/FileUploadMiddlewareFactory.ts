@@ -6,17 +6,16 @@ import { isReferenceObject } from '../isReferenceObject'
 import { SlushyProps } from '../SlushyProps'
 import { SlushyRequestHandler } from '../ServerImpl'
 import multerFactory from 'multer'
+import { MiddlewareFactory } from './MiddlewareFactory'
 
-export class FileUploadMiddleware {
-    constructor(private readonly props: SlushyProps<any>) {}
-
-    create(path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
-        const requestContentType = this.getRequestContentType(path, operation)
+export class FileUploadMiddlewareFactory implements MiddlewareFactory {
+    create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
+        const requestContentType = this.getRequestContentType(props, path, operation)
         // Adapted from https://github.com/byu-oit/openapi-enforcer-multer/blob/master/index.js
-        const operationObject = this.getOperationObject(path, operation) as OpenAPIV3.OperationObject & {
+        const operationObject = this.getOperationObject(props, path, operation) as OpenAPIV3.OperationObject & {
             'x-multer-limits'?: any
         }
-        const requestBody = this.getRequestBody(path, operation)
+        const requestBody = this.getRequestBody(props, path, operation)
         const middlewares: SlushyRequestHandler[] = []
         const fields: multerFactory.Field[] = []
         if (requestBody && requestContentType === 'multipart/form-data') {
@@ -79,16 +78,20 @@ export class FileUploadMiddleware {
         return middlewares
     }
 
-    private getPathItemObject(path: string): OpenAPIV3.PathItemObject {
-        const pathItemObject = this.props.openApi.paths[path]
+    private getPathItemObject(props: SlushyProps<any>, path: string): OpenAPIV3.PathItemObject {
+        const pathItemObject = props.openApi.paths[path]
         if (!pathItemObject) {
             throw new Error(`No PathItemObject for path ${path} exists in the OpenApi Schema`)
         }
         return pathItemObject
     }
 
-    private getOperationObject(path: string, operation: PathHttpOperation): OpenAPIV3.OperationObject {
-        const pathItemObject = this.getPathItemObject(path)
+    private getOperationObject(
+        props: SlushyProps<any>,
+        path: string,
+        operation: PathHttpOperation
+    ): OpenAPIV3.OperationObject {
+        const pathItemObject = this.getPathItemObject(props, path)
         const operationObject = pathItemObject[operation]
         if (!operationObject) {
             throw new Error(`No OperationObject for path ${operation} exists on ${path}`)
@@ -96,8 +99,12 @@ export class FileUploadMiddleware {
         return operationObject
     }
 
-    private getRequestBody(path: string, operation: PathHttpOperation): OpenAPIV3.RequestBodyObject | undefined {
-        const operationObject = this.getOperationObject(path, operation)
+    private getRequestBody(
+        props: SlushyProps<any>,
+        path: string,
+        operation: PathHttpOperation
+    ): OpenAPIV3.RequestBodyObject | undefined {
+        const operationObject = this.getOperationObject(props, path, operation)
         if (!operationObject.requestBody) {
             return undefined
         }
@@ -111,8 +118,12 @@ export class FileUploadMiddleware {
         return operationObject.requestBody
     }
 
-    private getRequestContentType(path: string, operation: PathHttpOperation): string | undefined {
-        const requestBody = this.getRequestBody(path, operation)
+    private getRequestContentType(
+        props: SlushyProps<any>,
+        path: string,
+        operation: PathHttpOperation
+    ): string | undefined {
+        const requestBody = this.getRequestBody(props, path, operation)
         if (!requestBody) {
             return undefined
         }

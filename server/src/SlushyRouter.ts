@@ -1,19 +1,19 @@
 import { RequestContext } from './requestContext/RequestContext'
 import { SlushyProps } from './SlushyProps'
 import { SlushyRouterImplementation, SlushyRequestHandler, OpenApiBridge } from './ServerImpl'
-import { BodyParser } from './middleware/BodyParser'
+import { BodyParserMiddlewareFactory } from './middleware/BodyParserMiddlewareFactory'
 import { SlushyError } from './errors/SlushyError'
 import { SlushyContext } from './SlushyContext'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
 import { ContextFactory } from './ContextFactory'
-import { ApiDoc } from './middleware/ApiDoc'
+import { ApiDocMiddlewareFactory } from './middleware/ApiDocMiddlewareFactory'
 import * as UUID from 'uuid'
 import { RequestCoercer } from './RequestCoercer'
 import { RequestDefaultSetter } from './RequestDefaultSetter'
 import { Logger } from './LoggerFactory'
 import { RequestId } from './RequestId'
-import { RequestContextMiddleware } from './middleware/RequestContextMiddleware'
-import { FileUploadMiddleware } from './middleware/FileUploadMiddleware'
+import { RequestContextMiddlewareFactory } from './middleware/RequestContextMiddlewareFactory'
+import { FileUploadMiddlewareFactory } from './middleware/FileUploadMiddlewareFactory'
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
@@ -29,13 +29,14 @@ export class SlushyRouter<TContext> {
         private readonly requestCoercer = new RequestCoercer<TContext>(),
         private readonly requestDefaultSetter = new RequestDefaultSetter<TContext>(),
         private readonly openApiBridge = new OpenApiBridge(),
-        private readonly bodyParser = new BodyParser(),
-        private readonly apiDoc = new ApiDoc(),
-        private readonly requestContextMiddleware = new RequestContextMiddleware()
+        private readonly bodyParserMiddlewareFactory = new BodyParserMiddlewareFactory(),
+        private readonly apiDocMiddlewareFactory = new ApiDocMiddlewareFactory(),
+        private readonly requestContextMiddleware = new RequestContextMiddlewareFactory(),
+        private readonly fileUploadMiddlewareFactory = new FileUploadMiddlewareFactory()
     ) {
         // TODO: Move this somewhere else.
-        router.use(...this.bodyParser.create(this.props))
-        router.use('/api-docs', ...this.apiDoc.create(this.props))
+        router.use(...this.bodyParserMiddlewareFactory.create(this.props))
+        router.use('/api-docs', ...this.apiDocMiddlewareFactory.create(this.props))
         // This needs to run after all body parser middlewares.
         router.use(...this.requestContextMiddleware.create(this.props))
     }
@@ -45,7 +46,8 @@ export class SlushyRouter<TContext> {
     }
 
     public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = new FileUploadMiddleware(this.props).create(path, 'post')
+        // FIXME: Do this for others verbs as well
+        const middlewares = this.fileUploadMiddlewareFactory.create(this.props, path, 'post')
         this.router.post(this.openApiBridge.makeRouterPath(path), ...middlewares, this.slushyHandler(handler))
     }
 

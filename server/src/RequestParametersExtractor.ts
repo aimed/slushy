@@ -5,7 +5,12 @@ import Ajv from 'ajv'
 import { isReferenceObject } from './isReferenceObject'
 
 export class RequestParametersExtractor<TContext> {
-    private readonly validator = new Ajv({ allErrors: true, unknownFormats: ['byte', 'binary'] })
+    private readonly validator = new Ajv({
+        allErrors: true,
+        unknownFormats: 'ignore',
+    })
+
+    constructor() {}
 
     /**
      * Extracts all parameters for the current operation from the request.
