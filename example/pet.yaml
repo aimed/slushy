@@ -54,6 +54,26 @@ paths:
                   query: 
                     type: string
 
+  /validation/path/{path}:
+    get:
+      operationId: validationPath
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Test path parameter validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  path: 
+                    type: number
+
   /features/component-responses:
     get:
       operationId: featureComponentResponses

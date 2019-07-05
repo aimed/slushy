@@ -25,4 +25,22 @@ describe('Validation', () => {
             expect(response.status).toBe(400)
         })
     })
+
+    describe('path', () => {
+        it('should accept a request if the parameter is correct', async () => {
+            const response = await request(slushy.app).get('/validation/path/1')
+            expect(response.status).toBe(200)
+            expect(response.body).toEqual({ path: 1 })
+        })
+
+        it('should not accept a request a required parameter is not set', async () => {
+            const response = await request(slushy.app).get('/validation/path')
+            expect(response.status).toBe(404)
+        })
+
+        it('should not accept a request a required parameter is of the wrong type', async () => {
+            const response = await request(slushy.app).get('/validation/path/string')
+            expect(response.status).toBe(400)
+        })
+    })
 })
