@@ -64,7 +64,7 @@ export class SlushyRouter<TContext> {
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.get(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        this.router.get(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
     }
 
     public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
@@ -83,23 +83,43 @@ export class SlushyRouter<TContext> {
     }
 
     public put<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.put(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        const middlewares = [
+            ...this.fileUploadMiddlewareFactory.create(this.props, path, 'put'),
+            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'put'),
+            ...this.fileToBodyAssignmentMiddlewareFactory.create(this.props, path, 'put'),
+        ]
+        this.router.put(
+            this.openApiBridge.makeRouterPath(path),
+            ...middlewares,
+            this.slushyHandler(handler),
+            this.errorHandler
+        )
     }
 
     public delete<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.delete(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        this.router.delete(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
     }
 
     public options<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.options(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        this.router.options(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
     }
 
     public patch<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.patch(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        const middlewares = [
+            ...this.fileUploadMiddlewareFactory.create(this.props, path, 'patch'),
+            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'patch'),
+            ...this.fileToBodyAssignmentMiddlewareFactory.create(this.props, path, 'patch'),
+        ]
+        this.router.patch(
+            this.openApiBridge.makeRouterPath(path),
+            ...middlewares,
+            this.slushyHandler(handler),
+            this.errorHandler
+        )
     }
 
     public head<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        this.router.head(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler))
+        this.router.head(this.openApiBridge.makeRouterPath(path), this.slushyHandler(handler), this.errorHandler)
     }
 
     /**
