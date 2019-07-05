@@ -32,7 +32,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
             throw new Error('RequestValidatorMiddlewareFactory requires operation')
         }
 
-        const operationObject = getOperationObject(props, path, operation)
+        const operationObject = getOperationObject(props.openApi, path, operation)
         const { parameters = [], requestBody } = operationObject
 
         if (isReferenceObject(requestBody)) {

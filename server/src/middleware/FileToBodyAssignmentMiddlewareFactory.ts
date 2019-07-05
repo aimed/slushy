@@ -10,8 +10,8 @@ import { getRequestContentType, getRequestBody } from '../helpers/schema'
 export class FileToBodyAssignmentMiddlewareFactory implements MiddlewareFactory {
     create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
         const fields: multerFactory.Field[] = []
-        const requestBody = getRequestBody(props, path, operation)
-        const requestContentType = getRequestContentType(props, path, operation)
+        const requestBody = getRequestBody(props.openApi, path, operation)
+        const requestContentType = getRequestContentType(props.openApi, path, operation)
 
         if (requestBody && requestContentType === 'multipart/form-data') {
             const schema = requestBody.content['multipart/form-data'].schema

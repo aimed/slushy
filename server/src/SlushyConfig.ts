@@ -7,4 +7,6 @@ export interface SlushyConfig<TContext> {
     hostname?: string
     contextFactory: (partialContext: SlushyContext<undefined>) => Promise<TContext>
     getRequestId?: (req: SlushyRequest) => string
+    // TODO: Should the error be passed to the resource handler?
+    transformError?: (error: unknown, req: SlushyRequest) => any
 }

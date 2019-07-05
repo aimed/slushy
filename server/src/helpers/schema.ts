@@ -1,10 +1,9 @@
-import { SlushyProps } from '../SlushyProps'
 import { PathHttpOperation } from '../types/PathHttpOperation'
 import { OpenAPIV3 } from 'openapi-types'
 import { isReferenceObject } from './isReferenceObject'
 
-export function getPathItemObject(props: SlushyProps<any>, path: string): OpenAPIV3.PathItemObject {
-    const pathItemObject = props.openApi.paths[path]
+export function getPathItemObject(document: OpenAPIV3.Document, path: string): OpenAPIV3.PathItemObject {
+    const pathItemObject = document.paths[path]
     if (!pathItemObject) {
         throw new Error(`No PathItemObject for path ${path} exists in the OpenApi Schema`)
     }
@@ -12,11 +11,11 @@ export function getPathItemObject(props: SlushyProps<any>, path: string): OpenAP
 }
 
 export function getOperationObject(
-    props: SlushyProps<any>,
+    document: OpenAPIV3.Document,
     path: string,
     operation: PathHttpOperation
 ): OpenAPIV3.OperationObject {
-    const pathItemObject = getPathItemObject(props, path)
+    const pathItemObject = getPathItemObject(document, path)
     const operationObject = pathItemObject[operation]
     if (!operationObject) {
         throw new Error(`No OperationObject for path ${operation} exists on ${path}`)
@@ -25,11 +24,11 @@ export function getOperationObject(
 }
 
 export function getRequestBody(
-    props: SlushyProps<any>,
+    document: OpenAPIV3.Document,
     path: string,
     operation: PathHttpOperation
 ): OpenAPIV3.RequestBodyObject | undefined {
-    const operationObject = getOperationObject(props, path, operation)
+    const operationObject = getOperationObject(document, path, operation)
     if (!operationObject.requestBody) {
         return undefined
     }
@@ -44,11 +43,11 @@ export function getRequestBody(
 }
 
 export function getRequestContentType(
-    props: SlushyProps<any>,
+    document: OpenAPIV3.Document,
     path: string,
     operation: PathHttpOperation
 ): string | undefined {
-    const requestBody = getRequestBody(props, path, operation)
+    const requestBody = getRequestBody(document, path, operation)
     if (!requestBody) {
         return undefined
     }

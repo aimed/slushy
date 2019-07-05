@@ -11,13 +11,13 @@ import { getRequestContentType, getOperationObject, getRequestBody } from '../he
 
 export class FileUploadMiddlewareFactory implements MiddlewareFactory {
     create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
-        const requestContentType = getRequestContentType(props, path, operation)
+        const requestContentType = getRequestContentType(props.openApi, path, operation)
         // Adapted from https://github.com/byu-oit/openapi-enforcer-multer/blob/master/index.js
-        const operationObject = getOperationObject(props, path, operation) as OpenAPIV3.OperationObject & {
+        const operationObject = getOperationObject(props.openApi, path, operation) as OpenAPIV3.OperationObject & {
             'x-multer-limits'?: any
         }
 
-        const requestBody = getRequestBody(props, path, operation)
+        const requestBody = getRequestBody(props.openApi, path, operation)
         const middlewares: SlushyRequestHandler[] = []
         const fields: multerFactory.Field[] = []
         if (requestBody && requestContentType === 'multipart/form-data') {

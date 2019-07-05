@@ -1,0 +1,38 @@
+import { MiddlewareFactory } from './MiddlewareFactory'
+import { SlushyProps } from '../SlushyProps'
+import OpenApiRequestCoercer from 'openapi-request-coercer'
+import { SlushyRequestHandler } from '../ServerImpl'
+import { getOperationObject } from '../helpers/schema'
+import { PathHttpOperation } from '../types/PathHttpOperation'
+import { OpenAPIV3 } from 'openapi-types'
+
+export class RequestCoercionMiddlewareFactory implements MiddlewareFactory {
+    create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): Array<SlushyRequestHandler> {
+        if (!path) {
+            throw new Error('RequestCoercionMiddlewareFactory requires path')
+        }
+
+        if (!operation) {
+            throw new Error('RequestCoercionMiddlewareFactory requires operation')
+        }
+
+        let operationObject: OpenAPIV3.OperationObject
+        try {
+            operationObject = getOperationObject(props.openApi, path, operation)
+        } catch (error) {
+            return []
+        }
+
+        const coercer = new OpenApiRequestCoercer({
+            enableObjectCoercion: true,
+            parameters: operationObject.parameters || [],
+        })
+
+        return [
+            (req, _res, next) => {
+                coercer.coerce(req)
+                next()
+            },
+        ]
+    }
+}
