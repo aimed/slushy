@@ -3,6 +3,9 @@ import {
     FeatureComponentResponsesParams,
     FeatureComponentResponsesResponse,
     FeatureComponentResponsesBadRequest,
+    FeatureFileUploadParams,
+    FeatureFileUploadResponse,
+    FeatureFileUploadOK,
 } from './generated/resources/FeaturesResource'
 import { Context } from './Context'
 import { SlushyContext } from '@slushy/server'
@@ -13,5 +16,12 @@ export class FeaturesResourceImpl implements FeaturesResource<Context> {
         _context: SlushyContext<Context>
     ): Promise<FeatureComponentResponsesResponse> {
         throw new FeatureComponentResponsesBadRequest({ errors: [{ message: '' }] })
+    }
+
+    async featureFileUpload(
+        params: FeatureFileUploadParams,
+        _context: SlushyContext<Context>
+    ): Promise<FeatureFileUploadResponse> {
+        return new FeatureFileUploadOK({ content: params.requestBody.file.buffer.toString() })
     }
 }

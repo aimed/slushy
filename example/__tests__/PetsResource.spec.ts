@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { SlushyFactory } from '../src/SlushyFactory'
 import { Slushy } from '@slushy/server'
-import { Context } from './Context'
+import { Context } from '../src/Context'
 import { testLoggerFactory } from './testLoggerFactory'
 
 describe('PetsResource', () => {

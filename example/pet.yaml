@@ -7,6 +7,104 @@ servers:
   - url: http://localhost:3031
 
 paths:
+  /http:
+    get:
+      operationId: get
+      responses:
+        '200':
+          description: Test http operation
+    put:
+      operationId: put
+      responses:
+        '200':
+          description: Test http operation
+    post:
+      operationId: post
+      responses:
+        '200':
+          description: Test http operation
+    delete:
+      operationId: delete
+      responses:
+        '200':
+          description: Test http operation
+    patch:
+      operationId: patch
+      responses:
+        '200':
+          description: Test http operation
+
+  /validation/query:
+    get:
+      operationId: validationQuery
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Test query parameter validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: 
+                    type: string
+
+  /validation/path/{path}:
+    get:
+      operationId: validationPath
+      parameters:
+        - name: path
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Test path parameter validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  path: 
+                    type: number
+
+  /features/component-responses:
+    get:
+      operationId: featureComponentResponses
+      responses:
+        '400':
+          $ref: '#/components/responses/Unauthorized'
+  /features/file-upload:
+    post:
+      operationId: featureFileUpload
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: ['file']
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Nothing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+
   /pets:
     get:
       operationId: getPets
@@ -30,7 +128,7 @@ paths:
               properties:
                 name:
                   type: string
-              required: ["name"]
+              required: ['name']
       responses:
         '200':
           description: The newly created pet
@@ -38,13 +136,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Pet'
-  /features/component-responses:
-    get:
-      operationId: featureComponentResponses
-      responses:
-        '400':
-          $ref: '#/components/responses/Unauthorized'
-
 
   /pets/default-responses:
     get:
@@ -97,7 +188,7 @@ paths:
                 properties:
                   message:
                     type: string
-                required: ["message"]
+                required: ['message']
 
 
 components:

@@ -1,11 +1,8 @@
 import { SlushyContext } from './SlushyContext'
-import { OpenAPIV3 } from 'openapi-types'
-import { BadRequestError } from './errors/BadRequestError'
-import Ajv from 'ajv'
-import { isReferenceObject } from './isReferenceObject'
+import { isReferenceObject } from './helpers/isReferenceObject'
 
 export class RequestParametersExtractor<TContext> {
-    private readonly validator = new Ajv({ allErrors: true })
+    constructor() {}
 
     /**
      * Extracts all parameters for the current operation from the request.
@@ -14,15 +11,6 @@ export class RequestParametersExtractor<TContext> {
         const { operationObject, req } = context
 
         const params: { [index: string]: any } = {}
-
-        // TODO: This can be moved to the compile step
-        // To validate the input parameters we dynamically create the schema
-        const paramSchema: OpenAPIV3.SchemaObject &
-            Required<Pick<OpenAPIV3.SchemaObject, 'properties'>> & { required: string[] } = {
-            type: 'object',
-            properties: {},
-            required: [],
-        }
 
         for (const parameter of operationObject.parameters || []) {
             if (isReferenceObject(parameter)) {
@@ -46,47 +34,10 @@ export class RequestParametersExtractor<TContext> {
                 )
             }
 
-            let value = parameterInRequestProperty[parameter.in]
-            if (parameter.schema) {
-                paramSchema.properties[parameter.name] = parameter.schema
-                if (parameter.required) {
-                    paramSchema.required.push(parameter.name)
-                }
-                // Some routers will always pass path arguments as strings. To work around validation we need to convert
-                // the type manually.
-                // TODO: Actually revive all data
-                const type = (parameter.schema as OpenAPIV3.NonArraySchemaObject).type
-                if (parameter.in === 'path') {
-                    if (type === 'integer' || type === 'number') {
-                        value = Number(value)
-                    }
-                }
-            }
-
-            params[parameter.name] = value
+            params[parameter.name] = parameterInRequestProperty[parameter.in]
         }
 
-        // TODO: Support more mime types
-        // TODO: Merge requestBody into params instead of it being a separate property
-        const requestBody = operationObject.requestBody
-        if (
-            requestBody &&
-            !isReferenceObject(requestBody) &&
-            requestBody.content['application/json'] &&
-            requestBody.content['application/json'].schema
-        ) {
-            if (requestBody.required) {
-                paramSchema.required.push('requestBody')
-            }
-            paramSchema.properties.requestBody = requestBody.content['application/json'].schema
-            params.requestBody = req.body
-        }
-
-        const isValid = await this.validator.validate(paramSchema, params)
-        if (!isValid) {
-            throw new BadRequestError(this.validator.errorsText())
-        }
-
+        params.requestBody = req.body
         return params as TParams
     }
 }
