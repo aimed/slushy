@@ -35,8 +35,6 @@ commander
             console.error(error, error.stack)
             process.exit(1)
         }
-        // TODO: Replace with generators.
-        //       Example: @slushy/codegen gen ./openapi.yaml ./src/generated ComponentSchemaTypes SlushyResources
     })
 
 commander.parse(process.argv)
