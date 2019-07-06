@@ -1,4 +1,5 @@
 ---
+id: intro
 title: Slushy - Fully typed REST APIs
 ---
 
