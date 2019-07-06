@@ -14,7 +14,7 @@
         "mustache": "^3.0.1",
         "mz": "^2.7.0",
         "prettier": "^1.17.0",
-        "swagger-parser": "^6.0.5"
+        "swagger-parser": "^8.0.0"
     },
     "files": [
         "dist/**/*",
