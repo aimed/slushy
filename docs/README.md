@@ -1,8 +1,12 @@
-An OpenAPI based typescript server code generator. Slushy takes care of the boring parts like typing and route binding for you. All you do is define the schema and implement resources!
+---
+title: Slushy - Fully typed REST APIs
+---
+
+An OpenAPI based typescript server code generator and framework. Slushy takes care of the boring parts like typing and route binding for you. All you do is define the schema and implement resources!
 
 ## What does it do?
 
-You write:
+You define your [OpenApi (Swagger)](https://swagger.io/specification/) schema:
 
 ```yaml
 paths:
@@ -27,36 +31,38 @@ components:
           type: number
 ```
 
-Slushy generates:
+Slushy generates everything you need to get started:
 
 ```ts
-// JSON Schema types
+// Types for all schemas defined in #/components/schemas
 export type Pet = {
   id: number
 }
 
-// Typed responses
+// Types for all responses defined for a given path
 export class GetPetsSuccess {
-  public status: 200
+  public status = 200
   public constructor(public payload: Array<Pet>) {}
 }
+export type GetPetsResponse = GetPetsSuccess
 
-// Typed resources
-export interface PetsResource {
-  getPetsById(request: {}): Promise<GetPetsSuccess>
-}
-
-// Typed routers
+// Fully typed path bindings
 export class PetsResourceRouter {
   bind(router: Router, resource: PetsResource) {
-    router.get('/pets', resource.getPetsById.bind(resource))
+    router.get<GetPetsParams, GetPetsResponse>('/pets', resource.getPetsById.bind(resource))
   }
+}
+
+// Fully typed resource interfaces for you to implement
+export interface PetsResource<Context> {
+  getPetsById(parameters: GetPetsParams, context: Context): Promise<GetPetsResponse>
 }
 ```
 
-You write:
+All that's left for you is to actually implement request handlers based on the generated code:
 
 ```ts
+// Implement all required resources
 export class PetsResourceImplementation implements PetsResource {
   getPetsById() {
     return Promise.resolve(
@@ -68,6 +74,16 @@ export class PetsResourceImplementation implements PetsResource {
     )
   }
 }
+
+// Create the server and start it
+const app = await Slushy.create<Context>({
+  // The ResourcesConfiguration is generated.
+  // It will require you to implement all resources defined in the schema.
+  resourceConfiguration: new ResourcesConfiguration({
+    PetsResource: new PetsResourceImplementation(),
+  }),
+})
+await app.start(3000)
 ```
 
 ## How does it work?

@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/aimed/slushy.svg?branch=master)](https://travis-ci.org/aimed/slushy)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 🚧 Early prototype ahead 🚧
 
@@ -23,7 +24,9 @@ Current features:
 -   Route generation
 
 ## Documentation
+
 For documentation see [https://aimed.github.io/slushy/](https://aimed.github.io/slushy/).
 
 ## Development
+
 Coming up.
