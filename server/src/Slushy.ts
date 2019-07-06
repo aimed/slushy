@@ -18,7 +18,7 @@ export class Slushy<TContext> {
         appFactory = new SlushyApplicationFactory(),
         routerFactory = new SlushyRouterFactory(),
     ) {
-        this.app = appFactory.create()
+        this.app = appFactory.create(props)
         this.router = routerFactory.create(props, this.app)
     }
 
