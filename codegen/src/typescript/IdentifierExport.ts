@@ -1,4 +1,4 @@
-export type IdentifierExport = {
+export interface IdentifierExport {
     identifier: string
     path: string
     exported: boolean

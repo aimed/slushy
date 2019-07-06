@@ -1,8 +1,7 @@
-import { SlushyRequest, SlushyResponse, SlushyContext } from '.'
-
 import { OpenAPIV3 } from 'openapi-types'
-import { OpenApiBridge } from './ServerImpl'
+import { SlushyContext, SlushyRequest, SlushyResponse } from '.'
 import { Logger } from './LoggerFactory'
+import { OpenApiBridge } from './ServerImpl'
 import { PathHttpOperation } from './types/PathHttpOperation'
 
 export class ContextFactory<TContext> {
@@ -14,7 +13,7 @@ export class ContextFactory<TContext> {
         requestId: string,
         logger: Logger,
         openApi: OpenAPIV3.Document,
-        contextFactory: (ctx: SlushyContext<undefined>) => Promise<TContext>
+        contextFactory: (ctx: SlushyContext<undefined>) => Promise<TContext>,
     ): Promise<SlushyContext<TContext>> {
         const partialContext = {
             req,

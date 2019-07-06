@@ -1,9 +1,9 @@
-import { MiddlewareFactory } from './MiddlewareFactory'
 import bodyParser from 'body-parser'
 import { SlushyProps } from '../SlushyProps'
+import { MiddlewareFactory } from './MiddlewareFactory'
 
 export class BodyParserMiddlewareFactory implements MiddlewareFactory {
-    create(_props: SlushyProps<any>) {
+    public create(_props: SlushyProps<any>) {
         return [bodyParser.json()]
     }
 }

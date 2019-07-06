@@ -1,13 +1,13 @@
 import { OpenAPIV3 } from 'openapi-types'
+import * as path from 'path'
+import { TSModule } from '../../typescript/TSModule'
 import { isReferenceObject } from '../../typescript/utils'
 import { Generator } from '../Generator'
-import { TSModule } from '../../typescript/TSModule'
-import * as path from 'path'
 
 export class ComponentSchemaResponsesGenerator implements Generator {
-    dependsOn = []
+    public dependsOn = []
 
-    async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
+    public async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
         const tsFile = tsModule.file(path.join('responses', 'responses.ts'))
 
         if (!document.components) {

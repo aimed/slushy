@@ -10,10 +10,10 @@ export interface ResolvedReference {
  * @deprecated Replaced by TSModule
  */
 export class ModuleResolver {
-    resolve(schema: OpenAPIV3.ReferenceObject): ResolvedReference {
+    public resolve(schema: OpenAPIV3.ReferenceObject): ResolvedReference {
         if (!schema.$ref.startsWith('#/components/schemas/')) {
             throw new Error(
-                "Currently only local refs to '#/components/schemas/' are allowed, you might have forgotten to use swagger-parser.bundle"
+                "Currently only local refs to '#/components/schemas/' are allowed, you might have forgotten to use swagger-parser.bundle",
             )
         }
 

@@ -1,24 +1,24 @@
-import { Generator } from '../Generator'
-import { TSModule } from '../../typescript/TSModule'
-import { OpenAPIV3 } from 'openapi-types'
-import { capitalize } from '../../typescript/utils'
 import { groupBy } from 'lodash'
-import * as path from 'path'
+import { OpenAPIV3 } from 'openapi-types'
+import * as fsPath from 'path'
+import { TSModule } from '../../typescript/TSModule'
+import { capitalize } from '../../typescript/utils'
+import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
+import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
+import { Generator } from '../Generator'
+import { httpVerbPathOperations } from './httpVerbPathOperations'
+import { OpenApiConstantFactory } from './OpenApiConstantFactory'
 import { ParameterTypeFactory } from './ParameterTypeFactory'
+import { ResourceFactory } from './ResourceFactory'
+import { ResourceOperation } from './ResourceOperation'
+import { ResourcesConfigurationDescription, ResourcesConfigurationFactory } from './ResourcesConfigurationFactory'
 import { ResponseTypeFactory } from './ResponseTypeFactory'
 import { RouterFactory } from './RouterFactory'
-import { ResourceOperation } from './ResourceOperation'
-import { httpVerbPathOperations } from './httpVerbPathOperations'
-import { ResourceFactory } from './ResourceFactory'
-import { ResourcesConfigurationFactory, ResourcesConfigurationDescription } from './ResourcesConfigurationFactory'
-import { OpenApiConstantFactory } from './OpenApiConstantFactory'
-import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
-import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
 
 export class ResourcesGenerator implements Generator {
-    dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator]
+    public dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator]
 
-    async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
+    public async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
         const applicationResourceDescriptions: ResourcesConfigurationDescription[] = []
 
         const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({
@@ -30,7 +30,7 @@ export class ResourcesGenerator implements Generator {
 
         // For every resource, e.g. /pet create the response type, the parameter type and the resource router.
         for (const [resourceName, resourcePathDescriptions] of Object.entries(groupedPathsWithResourceName)) {
-            const tsFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}Resource.ts`))
+            const tsFile = tsModule.file(fsPath.join('resources', `${capitalize(resourceName)}Resource.ts`))
             const resourceOperations: ResourceOperation[] = []
 
             // For every path on a resource
@@ -70,12 +70,12 @@ export class ResourcesGenerator implements Generator {
             const resourceFactory = new ResourceFactory()
             const resourceType = resourceFactory.create(resourceName, resourceOperations, tsFile)
 
-            const resourceRouterFile = tsModule.file(path.join('resources', `${capitalize(resourceName)}Router.ts`))
+            const resourceRouterFile = tsModule.file(fsPath.join('resources', `${capitalize(resourceName)}Router.ts`))
             const resourceRouterFactory = new RouterFactory()
             const resourceRouterType = resourceRouterFactory.create(
                 resourceType,
                 resourceOperations,
-                resourceRouterFile
+                resourceRouterFile,
             )
             applicationResourceDescriptions.push({
                 resourceRouterType,
@@ -93,7 +93,7 @@ export class ResourcesGenerator implements Generator {
             applicationResourceDescriptions,
             openApiConstantIdentifier,
             'openApi.ts',
-            applicationConfigurationFile
+            applicationConfigurationFile,
         )
     }
 

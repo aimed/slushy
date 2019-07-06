@@ -1,6 +1,6 @@
+import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 import { TSFile } from '../../typescript/TSFile'
 import { ResourceOperation } from './ResourceOperation'
-import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 
 /**
  * Creates a resource router (resource definition).
@@ -12,7 +12,7 @@ import { TSClassBuilder } from '../../typescript/TSClassBuilder'
  * }
  */
 export class RouterFactory {
-    create(resourceType: string, resourceOperations: Array<ResourceOperation>, tsFile: TSFile): string {
+    public create(resourceType: string, resourceOperations: ResourceOperation[], tsFile: TSFile): string {
         tsFile.import(resourceType)
         tsFile.import('SlushyRouter', '@slushy/server', true)
 
@@ -25,7 +25,7 @@ export class RouterFactory {
             tsFile.import(parameterType)
             tsFile.import(returnType)
             statements.push(
-                `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${operationObject.operationId}.bind(resource))`
+                `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${operationObject.operationId}.bind(resource))`,
             )
         }
 

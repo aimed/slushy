@@ -16,7 +16,7 @@ export class ResourceFactory {
      * @param operations Operations that can be performed on the resource.
      * @returns The resource description name. Example PetsResource.
      */
-    create(resourceName: string, operations: ResourceOperation[], tsFile: TSFile): string {
+    public create(resourceName: string, operations: ResourceOperation[], tsFile: TSFile): string {
         const resourceDescriptionName = `${resourceName}Resource`
         const interfaceBuilder = new TSInterfaceBuilder(resourceDescriptionName, 'TContext')
         tsFile.import('SlushyContext', '@slushy/server', true)

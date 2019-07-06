@@ -1,5 +1,5 @@
-import { SlushyContext } from './SlushyContext'
 import { isReferenceObject } from './helpers/isReferenceObject'
+import { SlushyContext } from './SlushyContext'
 
 export class RequestParametersExtractor<TContext> {
     constructor() {}
@@ -29,8 +29,8 @@ export class RequestParametersExtractor<TContext> {
             if (!hasRequestMapping(parameter.in)) {
                 throw new Error(
                     `Invalid parameter in value '${parameter.in}', only ${Object.keys(parameterInRequestProperty).join(
-                        ', '
-                    )} are supported`
+                        ', ',
+                    )} are supported`,
                 )
             }
 

@@ -9,6 +9,8 @@
     "lint-staged": "^9.0.1",
     "prettier": "^1.18.2",
     "ts-node": "8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "3.5.2"
   },
   "scripts": {
@@ -17,7 +19,8 @@
     "example:start": "ts-node example/src/index.ts",
     "build": "lerna run build --ignore @slushy/example && lerna run build --scope @slushy/example",
     "bootstrap": "lerna bootstrap",
-    "test": "lerna run test"
+    "test": "lerna run test",
+    "lint": "lerna run lint"
   },
   "prettier": "./.prettierrc.json",
   "lint-staged": {

@@ -6,11 +6,9 @@ export interface Generator {
     generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void>
 }
 
-export interface GeneratorConstructor {
-    new (): Generator
-}
+export type GeneratorConstructor = new () => Generator
 
-export function getRequiredGenerators(generators: Array<GeneratorConstructor>) {
+export function getRequiredGenerators(generators: GeneratorConstructor[]) {
     const requiredGenerators = new Set<GeneratorConstructor>()
     const generatorsToTraverse = generators
     let CurrentGenerator: GeneratorConstructor | undefined = generators.splice(0, 1)[0]

@@ -1,6 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { SlushyRequest, SlushyResponse } from './ServerImpl'
 import { Logger } from './LoggerFactory'
+import { SlushyRequest, SlushyResponse } from './ServerImpl'
 
 export type SlushyContext<TContext> = {
     requestId: string

@@ -1,8 +1,8 @@
-import { MiddlewareFactory } from './MiddlewareFactory'
-import { SlushyRequestHandler } from '../ServerImpl'
-import { SlushyProps } from '../SlushyProps'
 import * as UUID from 'uuid'
 import { Logger } from '../LoggerFactory'
+import { SlushyRequestHandler } from '../ServerImpl'
+import { SlushyProps } from '../SlushyProps'
+import { MiddlewareFactory } from './MiddlewareFactory'
 
 export const LoggerSymbol = Symbol('Logger')
 export const RequestIdSymbol = Symbol('RequestId')
@@ -19,7 +19,7 @@ declare global {
 }
 
 export class RequestExtensionMiddlewareFactory implements MiddlewareFactory {
-    create(props: SlushyProps<any>): SlushyRequestHandler[] {
+    public create(props: SlushyProps<any>): SlushyRequestHandler[] {
         return [
             (req, _res, next) => {
                 const requestId = props.getRequestId ? props.getRequestId(req) : UUID.v4()

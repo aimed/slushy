@@ -1,11 +1,12 @@
 import commander from 'commander'
-import { TSModule } from './typescript/TSModule'
-import SwaggerParser from 'swagger-parser'
-import { getRequiredGenerators, GeneratorConstructor } from './generators/Generator'
-import { Generators } from './generators/Generators'
 import { OpenAPIV3 } from 'openapi-types'
+import SwaggerParser from 'swagger-parser'
+import { GeneratorConstructor, getRequiredGenerators } from './generators/Generator'
+import { Generators } from './generators/Generators'
+import { TSModule } from './typescript/TSModule'
 
 commander
+    // tslint:disable-next-line: no-var-requires
     .version(require('../package.json').version, '-v, --version')
     .command('gen <openApiFile> <outDir> [...generators]')
     .action(async (api, outDir, generatorNames = Generators.ResourcesGenerator.name) => {

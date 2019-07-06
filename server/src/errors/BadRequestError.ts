@@ -1,5 +1,5 @@
-import { SlushyError } from './SlushyError'
 import { RequestValidationError } from '../middleware/RequestValidatorMiddlewareFactory'
+import { SlushyError } from './SlushyError'
 
 export class BadRequestError extends SlushyError {
     public readonly status = 400

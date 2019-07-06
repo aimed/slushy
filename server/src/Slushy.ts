@@ -1,13 +1,12 @@
-// import { fs } from 'mz'
-import { SlushyRouter } from './SlushyRouter'
+import { OpenAPIV3 } from 'openapi-types'
+import { DefaultLoggerFactory } from './LoggerFactory'
 import { SlushyApplication } from './ServerImpl'
-import { SlushyRouterFactory } from './SlushyRouterFactory'
 import { SlushyApplicationFactory } from './SlushyApplicationFactory'
-import { SlushyProps } from './SlushyProps'
 import { SlushyConfig } from './SlushyConfig'
 import { SlushyPlugins } from './SlushyPlugins'
-import { DefaultLoggerFactory } from './LoggerFactory'
-import { OpenAPIV3 } from 'openapi-types'
+import { SlushyProps } from './SlushyProps'
+import { SlushyRouter } from './SlushyRouter'
+import { SlushyRouterFactory } from './SlushyRouterFactory'
 
 export class Slushy<TContext> {
     public readonly app: SlushyApplication

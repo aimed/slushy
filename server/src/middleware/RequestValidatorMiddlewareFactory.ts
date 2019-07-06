@@ -1,11 +1,11 @@
-import { MiddlewareFactory } from './MiddlewareFactory'
-import { SlushyProps } from '../SlushyProps'
-import { SlushyRequestHandler } from '../ServerImpl'
-import { PathHttpOperation } from '../types/PathHttpOperation'
-import { getOperationObject } from '../helpers/schema'
-import { isReferenceObject } from '../helpers/isReferenceObject'
-import { OpenAPIV3 } from 'openapi-types'
 import Ajv from 'ajv'
+import { OpenAPIV3 } from 'openapi-types'
+import { isReferenceObject } from '../helpers/isReferenceObject'
+import { getOperationObject } from '../helpers/schema'
+import { SlushyRequestHandler } from '../ServerImpl'
+import { SlushyProps } from '../SlushyProps'
+import { PathHttpOperation } from '../types/PathHttpOperation'
+import { MiddlewareFactory } from './MiddlewareFactory'
 
 type ConstructableJsonSchema = OpenAPIV3.SchemaObject &
     Required<Pick<OpenAPIV3.SchemaObject, 'properties'>> & { required: string[] }
@@ -23,7 +23,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
         unknownFormats: 'ignore',
     })
 
-    create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): SlushyRequestHandler[] {
+    public create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): SlushyRequestHandler[] {
         if (!path) {
             throw new Error('RequestValidatorMiddlewareFactory requires path')
         }
@@ -70,7 +70,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
     }
 
     private buildRequestBodyValidationSchemas(
-        requestBody: OpenAPIV3.RequestBodyObject | undefined
+        requestBody: OpenAPIV3.RequestBodyObject | undefined,
     ): { [contentType: string]: OpenAPIV3.SchemaObject | undefined } {
         const contentTypeSchemas: { [contentType: string]: OpenAPIV3.SchemaObject } = {}
         if (!requestBody) {
@@ -102,7 +102,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
     }
 
     private buildRequestParametersValidationSchema(
-        parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[]
+        parameters: (OpenAPIV3.ParameterObject | OpenAPIV3.ReferenceObject)[],
     ): OpenAPIV3.SchemaObject {
         const schemas = {
             params: {
@@ -135,7 +135,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
 
             if (isReferenceObject(parameter.schema)) {
                 throw new Error(
-                    'Parameter schemas cannot be defined as $ref, you might have forgotten to resolve the schema'
+                    'Parameter schemas cannot be defined as $ref, you might have forgotten to resolve the schema',
                 )
             }
 
