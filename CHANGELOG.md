@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/aimed/slushy/compare/v0.15.7...v0.16.0) (2019-07-06)
+
+
+### Features
+
+* add helmet ([#110](https://github.com/aimed/slushy/issues/110)) ([99d8986](https://github.com/aimed/slushy/commit/99d8986)), closes [#58](https://github.com/aimed/slushy/issues/58)
+
+
+
+
+
 ## [0.15.7](https://github.com/aimed/slushy/compare/v0.15.6...v0.15.7) (2019-07-06)
 
 **Note:** Version bump only for package slushy
