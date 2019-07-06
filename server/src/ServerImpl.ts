@@ -3,18 +3,6 @@
  */
 import express from 'express'
 
-export class SlushyApplicationFactory {
-    public static create(): SlushyApplication {
-        return express()
-    }
-}
-
-export class SlushyRouterImplementationFactory {
-    public static create(): SlushyRouterImplementation {
-        return express.Router()
-    }
-}
-
 export type SlushyRouterImplementation = express.Router
 export type SlushyApplication = express.Application
 export type SlushyRequest = express.Request

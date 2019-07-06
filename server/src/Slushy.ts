@@ -1,6 +1,8 @@
 // import { fs } from 'mz'
 import { SlushyRouter } from './SlushyRouter'
-import { SlushyApplication, SlushyApplicationFactory } from './ServerImpl'
+import { SlushyApplication } from './ServerImpl'
+import { SlushyRouterFactory } from './SlushyRouterFactory'
+import { SlushyApplicationFactory } from './SlushyApplicationFactory'
 import { SlushyProps } from './SlushyProps'
 import { SlushyConfig } from './SlushyConfig'
 import { SlushyPlugins } from './SlushyPlugins'
@@ -8,15 +10,21 @@ import { DefaultLoggerFactory } from './LoggerFactory'
 import { OpenAPIV3 } from 'openapi-types'
 
 export class Slushy<TContext> {
+    public readonly app: SlushyApplication
+    public readonly router: SlushyRouter<TContext>
+
     public constructor(
         public readonly props: Readonly<SlushyProps<TContext>>,
-        public readonly app: SlushyApplication = SlushyApplicationFactory.create(),
-        public readonly router: SlushyRouter<TContext> = new SlushyRouter(props, app)
-    ) {}
+        appFactory = new SlushyApplicationFactory(),
+        routerFactory = new SlushyRouterFactory(),
+    ) {
+        this.app = appFactory.create(props)
+        this.router = routerFactory.create(props, this.app)
+    }
 
     public async start(port: number) {
         return new Promise((resolve, reject) =>
-            this.app.listen(port, (error: Error) => (error ? reject(error) : resolve()))
+            this.app.listen(port, (error: Error) => (error ? reject(error) : resolve())),
         )
     }
 

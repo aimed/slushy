@@ -28,7 +28,7 @@ import { RequestCoercionMiddlewareFactory } from './middleware/RequestCoercionMi
 
 export type RouteHandler<TParams, TResponse, TContext> = (
     params: TParams,
-    context: SlushyContext<TContext>
+    context: SlushyContext<TContext>,
 ) => Promise<TResponse>
 
 export class SlushyRouter<TContext> {
@@ -47,7 +47,7 @@ export class SlushyRouter<TContext> {
 
     public constructor(
         public readonly props: SlushyProps<TContext>,
-        public readonly router: SlushyRouterImplementation
+        public readonly router: SlushyRouterImplementation,
     ) {
         // Extend the request with logger and the requestId
         router.use(...this.requestExtensionsMiddlewareFactory.create(this.props))
@@ -84,7 +84,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -100,7 +100,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -116,7 +116,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -130,7 +130,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -145,7 +145,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -161,7 +161,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -175,7 +175,7 @@ export class SlushyRouter<TContext> {
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
-            this.errorHandler
+            this.errorHandler,
         )
     }
 
@@ -184,7 +184,7 @@ export class SlushyRouter<TContext> {
      * TODO: Move this to bridge.
      */
     protected slushyHandler<TParams, TResponse>(
-        handler: RouteHandler<TParams, TResponse, TContext>
+        handler: RouteHandler<TParams, TResponse, TContext>,
     ): SlushyRequestHandler {
         return async (req, res, _next) => {
             const { openApi, contextFactory } = this.props
@@ -203,7 +203,7 @@ export class SlushyRouter<TContext> {
                     requestId,
                     logger,
                     openApi,
-                    contextFactory
+                    contextFactory,
                 )
 
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
