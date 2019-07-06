@@ -1,6 +1,6 @@
 {
   "name": "@slushy/codegen",
-  "version": "0.15.6",
+  "version": "0.15.7",
   "description": "Slushy CodeGen",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
