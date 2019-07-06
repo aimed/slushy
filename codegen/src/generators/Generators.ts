@@ -1,6 +1,6 @@
+import { ComponentSchemaResponsesGenerator } from './ComponentSchemaResponsesGenerator'
 import { ComponentSchemaTypesGenerator } from './ComponentSchemaTypesGenerator'
 import { ResourcesGenerator } from './ResourcesGenerator'
-import { ComponentSchemaResponsesGenerator } from './ComponentSchemaResponsesGenerator'
 
 export const Generators = {
     [ComponentSchemaTypesGenerator.name]: ComponentSchemaTypesGenerator,

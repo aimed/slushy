@@ -7,7 +7,7 @@ import { capitalize, isReferenceObject } from '../../typescript/utils'
  * export type GetPetByIdParams = { petId: string }
  */
 export class ParameterTypeFactory {
-    declareParameterType(operationObject: OpenAPIV3.OperationObject, tsFile: TSFile): string {
+    public declareParameterType(operationObject: OpenAPIV3.OperationObject, tsFile: TSFile): string {
         const { parameters = [], operationId, requestBody } = operationObject
         const inputTypeSchema = {
             type: 'object' as 'object',
@@ -26,7 +26,7 @@ export class ParameterTypeFactory {
             }
             if (parameter.in === 'body') {
                 throw new Error(
-                    'Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.'
+                    'Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.',
                 )
             }
             if (parameter.required) {

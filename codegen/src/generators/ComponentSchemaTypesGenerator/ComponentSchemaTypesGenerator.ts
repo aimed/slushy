@@ -1,13 +1,13 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { capitalize } from '../../typescript/utils'
-import { TSModule } from '../../typescript/TSModule'
 import * as path from 'path'
+import { TSModule } from '../../typescript/TSModule'
+import { capitalize } from '../../typescript/utils'
 import { Generator } from '../Generator'
 
 export class ComponentSchemaTypesGenerator implements Generator {
-    dependsOn = []
+    public dependsOn = []
 
-    async generate(document: OpenAPIV3.Document, tsModule: TSModule) {
+    public async generate(document: OpenAPIV3.Document, tsModule: TSModule) {
         if (!document.components) {
             return
         }

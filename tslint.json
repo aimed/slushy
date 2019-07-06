@@ -1,0 +1,39 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint-config-prettier"],
+  "rules": {
+    "await-promise": true,
+    "ban": [true, "eval", ["describe", "only"], ["it", "only"]],
+    "class-name": true,
+    "curly": true,
+    "interface-name": [true, "never-prefix"],
+    "no-consecutive-blank-lines": true,
+    "no-floating-promises": true,
+    "no-implicit-dependencies": [true, "dev"],
+    "no-shadowed-variable": true,
+    "no-string-throw": true,
+    "member-access": true,
+    "no-var-keyword": true,
+    "no-var-requires": true,
+    "object-literal-key-quotes": [true, "as-needed"],
+    "ordered-imports": [
+      true,
+      {
+        "grouped-imports": true,
+        "groups": [
+          {
+            "name": "reflect-metadata",
+            "match": "reflect-metadata",
+            "order": 5
+          },
+          { "name": "libraries", "match": ".*", "order": 10 },
+          { "name": "parent directories", "match": "^\\.\\.", "order": 20 },
+          { "name": "current directory", "match": "^\\.", "order": 30 }
+        ]
+      }
+    ],
+    "promise-function-async": true,
+    "cyclomatic-complexity": true
+  },
+  "rulesDirectory": []
+}

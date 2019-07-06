@@ -1,17 +1,17 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { TSFile } from '../../typescript/TSFile'
 import {
     isErrorStatusCode,
-    isStatusCodeRange,
-    StatusCodeRange,
-    StatusCode,
-    statusCodesForRange,
-    StatusCodeDefault,
     isStatusCodeDefault,
+    isStatusCodeRange,
+    StatusCode,
+    StatusCodeDefault,
+    StatusCodeRange,
+    statusCodesForRange,
 } from '../../StatusCodes'
-import { capitalize, isReferenceObject } from '../../typescript/utils'
 import { StatusCodeClassNames } from '../../StatusCodesClassNames'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
+import { TSFile } from '../../typescript/TSFile'
+import { capitalize, isReferenceObject } from '../../typescript/utils'
 
 /**
  * Creates a resource operation response.
@@ -21,7 +21,7 @@ import { TSClassBuilder } from '../../typescript/TSClassBuilder'
  * export type GetPetResponse = GetPetOK | GetPetBadRequest
  */
 export class ResponseTypeFactory {
-    declarePathResponseType(operationObject: OpenAPIV3.OperationObject, tsFile: TSFile): string {
+    public declarePathResponseType(operationObject: OpenAPIV3.OperationObject, tsFile: TSFile): string {
         if (!operationObject.responses) {
             throw new Error('Missing responses')
         }
@@ -52,7 +52,7 @@ export class ResponseTypeFactory {
         responseClassName: string,
         response: OpenAPIV3.ReferenceObject | OpenAPIV3.ResponseObject,
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
-        tsFile: TSFile
+        tsFile: TSFile,
     ) {
         const responseClassBuilder = new TSClassBuilder(responseClassName)
         this.extendBaseClass(responseStatusCode, responseClassBuilder, tsFile)
@@ -65,7 +65,7 @@ export class ResponseTypeFactory {
     private extendBaseClass(
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode,
         responseClassBuilder: TSClassBuilder,
-        tsFile: TSFile
+        tsFile: TSFile,
     ) {
         // If the status code indicates an error, generate an actual error class that can be thrown.
         if (isErrorStatusCode(responseStatusCode)) {
@@ -77,7 +77,7 @@ export class ResponseTypeFactory {
     private addPayload(
         response: OpenAPIV3.ResponseObject | OpenAPIV3.ReferenceObject,
         responseClassBuilder: TSClassBuilder,
-        tsFile: TSFile
+        tsFile: TSFile,
     ) {
         if (isReferenceObject(response)) {
             if (!response.$ref.startsWith('#/components/responses/')) {
@@ -116,7 +116,7 @@ export class ResponseTypeFactory {
     private addStatusCode(
         responseStatusCode: keyof typeof StatusCodeRange | StatusCode | typeof StatusCodeDefault,
         responseClassBuilder: TSClassBuilder,
-        tsFile: TSFile
+        tsFile: TSFile,
     ) {
         // If the status code is a range, the actual status code must be passed as a parameter.
         // Otherwise the status code can be set as a class property directly.

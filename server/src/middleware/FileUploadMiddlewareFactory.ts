@@ -1,16 +1,14 @@
-import { OpenAPIV3 } from 'openapi-types'
-
-import { PathHttpOperation } from '../types/PathHttpOperation'
-
-import { isReferenceObject } from '../helpers/isReferenceObject'
-import { SlushyProps } from '../SlushyProps'
-import { SlushyRequestHandler } from '../ServerImpl'
 import multerFactory from 'multer'
+import { OpenAPIV3 } from 'openapi-types'
+import { isReferenceObject } from '../helpers/isReferenceObject'
+import { getOperationObject, getRequestBody, getRequestContentType } from '../helpers/schema'
+import { SlushyRequestHandler } from '../ServerImpl'
+import { SlushyProps } from '../SlushyProps'
+import { PathHttpOperation } from '../types/PathHttpOperation'
 import { MiddlewareFactory } from './MiddlewareFactory'
-import { getRequestContentType, getOperationObject, getRequestBody } from '../helpers/schema'
 
 export class FileUploadMiddlewareFactory implements MiddlewareFactory {
-    create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
+    public create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
         const requestContentType = getRequestContentType(props.openApi, path, operation)
         // Adapted from https://github.com/byu-oit/openapi-enforcer-multer/blob/master/index.js
         const operationObject = getOperationObject(props.openApi, path, operation) as OpenAPIV3.OperationObject & {
@@ -31,7 +29,7 @@ export class FileUploadMiddlewareFactory implements MiddlewareFactory {
 
             if (isReferenceObject(schema)) {
                 throw new Error(
-                    'A ReferenceObject is not supported for the requestBody of multipart/form-data requests'
+                    'A ReferenceObject is not supported for the requestBody of multipart/form-data requests',
                 )
             }
 
@@ -48,7 +46,7 @@ export class FileUploadMiddlewareFactory implements MiddlewareFactory {
             for (const [propertyName, propertySchema] of Object.entries(schema.properties)) {
                 if (isReferenceObject(propertySchema)) {
                     throw new Error(
-                        'A ReferenceObject is not supported for the requestBody of multipart/form-data requests'
+                        'A ReferenceObject is not supported for the requestBody of multipart/form-data requests',
                     )
                 }
                 if (

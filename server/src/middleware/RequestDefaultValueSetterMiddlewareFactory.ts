@@ -1,14 +1,14 @@
-import { MiddlewareFactory } from './MiddlewareFactory'
+import OpenAPIDefaultSetter from 'openapi-default-setter'
+import { OpenAPIV3 } from 'openapi-types'
+import { isReferenceObject } from '../helpers/isReferenceObject'
+import { getOperationObject } from '../helpers/schema'
+import { SlushyRequestHandler } from '../ServerImpl'
 import { SlushyProps } from '../SlushyProps'
 import { PathHttpOperation } from '../types/PathHttpOperation'
-import { SlushyRequestHandler } from '../ServerImpl'
-import OpenAPIDefaultSetter from 'openapi-default-setter'
-import { isReferenceObject } from '../helpers/isReferenceObject'
-import { OpenAPIV3 } from 'openapi-types'
-import { getOperationObject } from '../helpers/schema'
+import { MiddlewareFactory } from './MiddlewareFactory'
 
 export class RequestDefaultValueSetterMiddlewareFactory implements MiddlewareFactory {
-    create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): Array<SlushyRequestHandler> {
+    public create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): Array<SlushyRequestHandler> {
         if (!path) {
             throw new Error('RequestCoercionMiddlewareFactory requires path')
         }
@@ -26,7 +26,7 @@ export class RequestDefaultValueSetterMiddlewareFactory implements MiddlewareFac
 
         // FIXME: Handle reference objects
         const parameters = (operationObject.parameters || []).filter(
-            val => !isReferenceObject(val)
+            val => !isReferenceObject(val),
         ) as OpenAPIV3.ParameterObject[]
         const defaultSetter = new OpenAPIDefaultSetter({
             parameters,

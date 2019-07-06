@@ -14,7 +14,7 @@ export interface Logger {
 export abstract class Logger {}
 
 export class DefaultLoggerFactory implements LoggerFactory {
-    create(context: string) {
+    public create(context: string) {
         return {
             log: (...params: any[]) => console.log(context, ...params),
             info: (...params: any[]) => console.info(context, ...params),

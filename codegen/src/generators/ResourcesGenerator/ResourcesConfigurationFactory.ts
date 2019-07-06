@@ -1,5 +1,5 @@
-import { TSFile } from '../../typescript/TSFile'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
+import { TSFile } from '../../typescript/TSFile'
 import { TSInterfaceBuilder } from '../../typescript/TSInterfaceBuilder'
 
 /**
@@ -38,16 +38,16 @@ export interface ResourcesConfigurationDescription {
  * }
  */
 export class ResourcesConfigurationFactory {
-    create(
+    public create(
         applicationResourceDescriptions: ResourcesConfigurationDescription[],
         openApiConstantIdentifier: string,
         openApiConstantSourceFile: string,
-        tsFile: TSFile
+        tsFile: TSFile,
     ) {
         const resourcesConfigurationClassBuilder = new TSClassBuilder('ResourcesConfiguration', 'TContext')
         const resourcesConfigurationInterfaceBuilder = new TSInterfaceBuilder('Config', 'TContext')
 
-        let bindings: string[] = []
+        const bindings: string[] = []
         for (const { resourceType, resourceRouterType } of applicationResourceDescriptions) {
             tsFile.import(resourceType)
             tsFile.import(resourceRouterType)

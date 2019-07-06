@@ -1,13 +1,13 @@
-import { MiddlewareFactory } from './MiddlewareFactory'
-import { SlushyProps } from '../SlushyProps'
 import OpenApiRequestCoercer from 'openapi-request-coercer'
-import { SlushyRequestHandler } from '../ServerImpl'
-import { getOperationObject } from '../helpers/schema'
-import { PathHttpOperation } from '../types/PathHttpOperation'
 import { OpenAPIV3 } from 'openapi-types'
+import { getOperationObject } from '../helpers/schema'
+import { SlushyRequestHandler } from '../ServerImpl'
+import { SlushyProps } from '../SlushyProps'
+import { PathHttpOperation } from '../types/PathHttpOperation'
+import { MiddlewareFactory } from './MiddlewareFactory'
 
 export class RequestCoercionMiddlewareFactory implements MiddlewareFactory {
-    create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): Array<SlushyRequestHandler> {
+    public create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): Array<SlushyRequestHandler> {
         if (!path) {
             throw new Error('RequestCoercionMiddlewareFactory requires path')
         }

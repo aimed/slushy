@@ -1,11 +1,11 @@
-import { IdentifierRegistry } from './IdentifierRegistry'
-import { IdentifierImport } from './IdentifierImport'
 import { groupBy } from 'lodash'
-import ts from 'typescript'
-import * as path from 'path'
 import { OpenAPIV3 } from 'openapi-types'
-import { capitalize, isReferenceObject } from './utils'
+import * as path from 'path'
 import * as prettier from 'prettier'
+import ts from 'typescript'
+import { IdentifierImport } from './IdentifierImport'
+import { IdentifierRegistry } from './IdentifierRegistry'
+import { capitalize, isReferenceObject } from './utils'
 
 export class TSFile {
     private readonly imports: IdentifierImport[] = []
@@ -13,8 +13,9 @@ export class TSFile {
     private contents: string[] = []
 
     public constructor(
+        // tslint:disable-next-line: no-shadowed-variable
         public readonly path: string,
-        private readonly registry: IdentifierRegistry = new IdentifierRegistry()
+        private readonly registry: IdentifierRegistry = new IdentifierRegistry(),
     ) {}
 
     /**
@@ -48,26 +49,6 @@ export class TSFile {
     public addNode(node: ts.Node, sourceFile: ts.SourceFile) {
         this.contents.push(node.getText(sourceFile))
         this.registerDeclarationStatementIfApplicable(node)
-    }
-
-    private registerDeclarationStatementIfApplicable(node: ts.Node) {
-        if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) {
-            if (node.name && ts.isIdentifier(node.name)) {
-                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node))
-            }
-        }
-    }
-
-    private getReferencedTypeIdentifier(schema: OpenAPIV3.ReferenceObject): string {
-        // TODO: Replace with resolver function
-        if (!schema.$ref.startsWith('#/components/schemas/')) {
-            throw new Error(
-                "Currently only local refs to '#/components/schemas/' are allowed, you might have forgotten to use swagger-parser.bundle"
-            )
-        }
-
-        const identifier = capitalize(schema.$ref.replace('#/components/schemas/', ''))
-        return identifier
     }
 
     public getTSType(schema: OpenAPIV3.ReferenceObject | OpenAPIV3.SchemaObject | undefined): string {
@@ -127,6 +108,38 @@ export class TSFile {
         }
     }
 
+    public async build(): Promise<string> {
+        const imports = this.resolveImports()
+        const source = [...imports, '', ...this.contents].join('\r')
+        const formatted = prettier.format(source, {
+            parser: 'typescript',
+            semi: false,
+            singleQuote: true,
+            printWidth: 120,
+        })
+        return formatted
+    }
+
+    private registerDeclarationStatementIfApplicable(node: ts.Node) {
+        if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node) || ts.isClassDeclaration(node)) {
+            if (node.name && ts.isIdentifier(node.name)) {
+                this.registry.register(node.name.escapedText.toString(), this.path, ts.isExportDeclaration(node))
+            }
+        }
+    }
+
+    private getReferencedTypeIdentifier(schema: OpenAPIV3.ReferenceObject): string {
+        // TODO: Replace with resolver function
+        if (!schema.$ref.startsWith('#/components/schemas/')) {
+            throw new Error(
+                "Currently only local refs to '#/components/schemas/' are allowed, you might have forgotten to use swagger-parser.bundle",
+            )
+        }
+
+        const identifier = capitalize(schema.$ref.replace('#/components/schemas/', ''))
+        return identifier
+    }
+
     private getTSObjectType(schema: OpenAPIV3.SchemaObject): string {
         const { properties, required = [], additionalProperties } = schema
 
@@ -148,18 +161,6 @@ export class TSFile {
         }
 
         return 'any'
-    }
-
-    public async build(): Promise<string> {
-        const imports = await this.resolveImports()
-        const source = [...imports, '', ...this.contents].join('\r')
-        const formatted = prettier.format(source, {
-            parser: 'typescript',
-            semi: false,
-            singleQuote: true,
-            printWidth: 120,
-        })
-        return formatted
     }
 
     private resolveImports() {
@@ -185,7 +186,7 @@ export class TSFile {
                 : `./${pathRelative}`
             const importedIdentifiers = Array.from(new Set(importsFromFile.map(im => im.identifier))).join(', ')
             importDeclarations.push(
-                `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`
+                `import { ${importedIdentifiers} } from '${pathRelativeNormalized.replace('.ts', '')}'`,
             )
         }
 

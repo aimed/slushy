@@ -1,6 +1,6 @@
-import { SlushyResourceConfiguration } from './SlushyResourceConfiguration'
-import { SlushyContext } from './SlushyContext'
 import { SlushyRequest } from './ServerImpl'
+import { SlushyContext } from './SlushyContext'
+import { SlushyResourceConfiguration } from './SlushyResourceConfiguration'
 
 export interface SlushyConfig<TContext> {
     resourceConfiguration: SlushyResourceConfiguration<TContext>

@@ -1,5 +1,5 @@
-import { Constructor } from '../types/Constructor'
 import * as httpContext from 'express-http-context'
+import { Constructor } from '../types/Constructor'
 
 export const RequestContextMiddleware = httpContext.middleware
 

@@ -1,14 +1,13 @@
-import { PathHttpOperation } from '../types/PathHttpOperation'
-
-import { isReferenceObject } from '../helpers/isReferenceObject'
-import { SlushyProps } from '../SlushyProps'
-import { SlushyRequestHandler } from '../ServerImpl'
 import multerFactory from 'multer'
+import { isReferenceObject } from '../helpers/isReferenceObject'
+import { getRequestBody, getRequestContentType } from '../helpers/schema'
+import { SlushyRequestHandler } from '../ServerImpl'
+import { SlushyProps } from '../SlushyProps'
+import { PathHttpOperation } from '../types/PathHttpOperation'
 import { MiddlewareFactory } from './MiddlewareFactory'
-import { getRequestContentType, getRequestBody } from '../helpers/schema'
 
 export class FileToBodyAssignmentMiddlewareFactory implements MiddlewareFactory {
-    create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
+    public create(props: SlushyProps<any>, path: string, operation: PathHttpOperation): SlushyRequestHandler[] {
         const fields: multerFactory.Field[] = []
         const requestBody = getRequestBody(props.openApi, path, operation)
         const requestContentType = getRequestContentType(props.openApi, path, operation)
@@ -22,7 +21,7 @@ export class FileToBodyAssignmentMiddlewareFactory implements MiddlewareFactory 
 
             if (isReferenceObject(schema)) {
                 throw new Error(
-                    'A ReferenceObject is not supported for the requestBody of multipart/form-data requests'
+                    'A ReferenceObject is not supported for the requestBody of multipart/form-data requests',
                 )
             }
 
@@ -33,7 +32,7 @@ export class FileToBodyAssignmentMiddlewareFactory implements MiddlewareFactory 
             for (const [propertyName, propertySchema] of Object.entries(schema.properties)) {
                 if (isReferenceObject(propertySchema)) {
                     throw new Error(
-                        'A ReferenceObject is not supported for the requestBody of multipart/form-data requests'
+                        'A ReferenceObject is not supported for the requestBody of multipart/form-data requests',
                     )
                 }
 

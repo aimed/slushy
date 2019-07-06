@@ -1,5 +1,5 @@
-import { PathHttpOperation } from '../types/PathHttpOperation'
 import { OpenAPIV3 } from 'openapi-types'
+import { PathHttpOperation } from '../types/PathHttpOperation'
 import { isReferenceObject } from './isReferenceObject'
 
 export function getPathItemObject(document: OpenAPIV3.Document, path: string): OpenAPIV3.PathItemObject {
@@ -13,7 +13,7 @@ export function getPathItemObject(document: OpenAPIV3.Document, path: string): O
 export function getOperationObject(
     document: OpenAPIV3.Document,
     path: string,
-    operation: PathHttpOperation
+    operation: PathHttpOperation,
 ): OpenAPIV3.OperationObject {
     const pathItemObject = getPathItemObject(document, path)
     const operationObject = pathItemObject[operation]
@@ -26,7 +26,7 @@ export function getOperationObject(
 export function getRequestBody(
     document: OpenAPIV3.Document,
     path: string,
-    operation: PathHttpOperation
+    operation: PathHttpOperation,
 ): OpenAPIV3.RequestBodyObject | undefined {
     const operationObject = getOperationObject(document, path, operation)
     if (!operationObject.requestBody) {
@@ -35,7 +35,7 @@ export function getRequestBody(
 
     if (isReferenceObject(operationObject.requestBody)) {
         throw new Error(
-            `A ReferenceObject is not supported for the requestBody of ${operation.toUpperCase()} ${path}, you likely forgot to resolve the OpenApi Schema`
+            `A ReferenceObject is not supported for the requestBody of ${operation.toUpperCase()} ${path}, you likely forgot to resolve the OpenApi Schema`,
         )
     }
 
@@ -45,7 +45,7 @@ export function getRequestBody(
 export function getRequestContentType(
     document: OpenAPIV3.Document,
     path: string,
-    operation: PathHttpOperation
+    operation: PathHttpOperation,
 ): string | undefined {
     const requestBody = getRequestBody(document, path, operation)
     if (!requestBody) {

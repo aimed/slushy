@@ -1,7 +1,7 @@
+import * as fsPath from 'path'
+import { FileSystem } from './FileSystem'
 import { IdentifierRegistry } from './IdentifierRegistry'
 import { TSFile } from './TSFile'
-import { FileSystem } from './FileSystem'
-import * as path from 'path'
 
 export class TSModule {
     private readonly registry = new IdentifierRegistry()
@@ -20,8 +20,8 @@ export class TSModule {
             Array.from(this.files).map(async file => {
                 const [fileName, tsFile] = file
                 const fileContent = await tsFile.build()
-                return this.fileSystem.write(path.join(outDir, fileName), fileContent)
-            })
+                return this.fileSystem.write(fsPath.join(outDir, fileName), fileContent)
+            }),
         )
     }
 }
