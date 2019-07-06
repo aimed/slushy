@@ -92,7 +92,7 @@ await app.start(3000)
 
 ```
 # Install the CLI tool
-yarn install @slushy/codegen
+yarn add @slushy/codegen
 
 # Generate code based on an OpenApi file
 yarn @slushy/codegen gen ./openApi.yaml ./src/generated
@@ -102,10 +102,11 @@ The command line tool takes the following arguments: `@slushy/codegen gen <Open 
 
 Currently the following code generators are supported:
 
-| Generator name                | Description                                                                   |
-| ----------------------------- | ----------------------------------------------------------------------------- |
-| ResourcesGenerator            | (Default) Generates Slushy resources and all required types.                  |
-| ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file. |
+| Generator name                | Description                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------- |
+| ResourcesGenerator            | (Default) Generates Slushy resources and all required types.                    |
+| ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file.   |
+| ComponentResponsesGenerator   | Generates all types for the #/components/responses section of the OpenApi file. |
 
 ## Experimental Features
 
