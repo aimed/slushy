@@ -3,13 +3,18 @@ import { TSModule } from './typescript/TSModule'
 import SwaggerParser from 'swagger-parser'
 import { getRequiredGenerators, GeneratorConstructor } from './generators/Generator'
 import { Generators } from './generators/Generators'
+import { OpenAPIV3 } from 'openapi-types'
 
 commander
     .version(require('../package.json').version, '-v, --version')
     .command('gen <openApiFile> <outDir> [...generators]')
     .action(async (api, outDir, generatorNames = Generators.ResourcesGenerator.name) => {
         try {
-            const document = await SwaggerParser.bundle(api)
+            const document = (await SwaggerParser.bundle(api)) as OpenAPIV3.Document
+            if (document.openapi.startsWith('2')) {
+                throw new Error('Slushy currently only supports OpenApi v3 documents.')
+            }
+
             const tsModule = new TSModule()
 
             const generators: GeneratorConstructor[] = generatorNames

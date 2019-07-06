@@ -1,9 +1,5 @@
 {
-  "packages": [
-    "codegen",
-    "example",
-    "server"
-  ],
+  "packages": ["codegen", "example", "server"],
   "version": "0.15.3",
   "command": {
     "publish": {
@@ -14,7 +10,5 @@
     }
   },
   "npmClient": "yarn",
-  "ignoreChanges": [
-    "**/*.md"
-  ]
+  "ignoreChanges": ["**/*.md"]
 }
