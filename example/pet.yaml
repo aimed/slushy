@@ -54,15 +54,20 @@ paths:
                   query: 
                     type: string
 
-  /validation/path/{path}:
+  /validation/path/{num}/{str}:
     get:
       operationId: validationPath
       parameters:
-        - name: path
+        - name: num
           in: path
           required: true
           schema:
             type: number
+        - name: str
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Test path parameter validation
@@ -71,8 +76,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  path: 
+                  num: 
                     type: number
+                  str: 
+                    type: string
 
   /features/component-responses:
     get:
