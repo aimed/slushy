@@ -5,26 +5,26 @@ An OpenAPI based typescript server code generator. Slushy takes care of the bori
 You write:
 
 ```yaml
-? paths
-: ? /pets
-  : ? get
-    : operationId: getPets
-      ? responses
-      : ? '200'
-        : description: A lot of pets
-          ? content
-          : ? application/json
-            : ? schema
-              : type: array
-                ? items
-                : $ref: '#/components/schemas/pet'
-? components
-: ? schemas
-  : ? Pet
-    : type: object
-      ? properties
-      : ? id
-        : type: number
+paths:
+  /pets:
+    get:
+      operationId: getPets
+      responses:
+        '200':
+          description: A lot of pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pet'
+components:
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: number
 ```
 
 Slushy generates:
@@ -32,59 +32,41 @@ Slushy generates:
 ```ts
 // JSON Schema types
 export type Pet = {
-    id: number
+  id: number
 }
 
 // Typed responses
 export class GetPetsSuccess {
-    public status: 200
-    public constructor(
-        public payload: Array<
-            Pet
-        >
-    ) {}
+  public status: 200
+  public constructor(public payload: Array<Pet>) {}
 }
 
 // Typed resources
 export interface PetsResource {
-    getPetsById(request: {}): Promise<
-        GetPetsSuccess
-    >
+  getPetsById(request: {}): Promise<GetPetsSuccess>
 }
 
 // Typed routers
 export class PetsResourceRouter {
-    bind(
-        router: Router,
-        resource: PetsResource
-    ) {
-        router.get(
-            '/pets',
-            resource.getPetsById.bind(
-                resource
-            )
-        )
-    }
+  bind(router: Router, resource: PetsResource) {
+    router.get('/pets', resource.getPetsById.bind(resource))
+  }
 }
 ```
 
 You write:
 
 ```ts
-export class PetsResourceImplementation
-    implements
-        PetsResource {
-    getPetsById() {
-        return Promise.resolve(
-            new GetPetsSuccess(
-                [
-                    {
-                        id: 1,
-                    },
-                ]
-            )
-        )
-    }
+export class PetsResourceImplementation implements PetsResource {
+  getPetsById() {
+    return Promise.resolve(
+      new GetPetsSuccess([
+        {
+          id: 1,
+        },
+      ]),
+    )
+  }
 }
 ```
 
@@ -118,9 +100,9 @@ You can (and should) enforce limits on the files that are uploaded. The limits c
 
 **Limitations:**
 
--   File uploads are only possible via multipart/form-data.
--   The requestBody MUST be an object and all files MUST be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
--   All files are currently read into a Buffer.
+- File uploads are only possible via multipart/form-data.
+- The requestBody MUST be an object and all files MUST be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
+- All files are currently read into a Buffer.
 
 ## Experimental APIs
 
@@ -132,12 +114,8 @@ For more info see https://github.com/skonves/express-http-context and https://gi
 The [RequestContext] is a per request global state object that can be used to share objects. Out of the box the [RequestContext] provides the [Logger] as well as the [RequestId]. You can retrieve these as described below:
 
 ```ts
-const logger = RequestContext.get(
-    Logger
-)
-const requestId = RequestContext.get(
-    RequestId
-)
+const logger = RequestContext.get(Logger)
+const requestId = RequestContext.get(RequestId)
 ```
 
 You can also attach custom objects to the RequestContext:
@@ -145,13 +123,13 @@ You can also attach custom objects to the RequestContext:
 ```ts
 // In your authentication code (AuthorizationMiddleware.ts):
 authorize() {
-    const user = new User()
-    RequestContext.set(User, user)
+  const user = new User()
+  RequestContext.set(User, user)
 }
 
 // Later in your application:
 doSomething() {
-    const user = RequestContext.get(User)
+  const user = RequestContext.get(User)
 }
 ```
 

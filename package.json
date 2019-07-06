@@ -26,7 +26,7 @@
             "git add"
         ],
         "docs/**/*.md": [
-            "prettier --write --print-width=2",
+            "prettier --write",
             "git add"
         ]
     },
