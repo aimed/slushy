@@ -28,9 +28,14 @@ describe('Validation', () => {
 
     describe('path', () => {
         it('should accept a request if the parameter is correct', async () => {
-            const response = await request(slushy.app).get('/validation/path/1')
+            const response = await request(slushy.app).get('/validation/path/1/1')
             expect(response.status).toBe(200)
-            expect(response.body).toEqual({ path: 1 })
+        })
+
+        it('should coerce path parameters', async () => {
+            const response = await request(slushy.app).get('/validation/path/1/1')
+            expect(response.status).toBe(200)
+            expect(response.body).toEqual({ num: 1, str: '1' })
         })
 
         it('should not accept a request if a required parameter is not set', async () => {
@@ -39,7 +44,7 @@ describe('Validation', () => {
         })
 
         it('should not accept a request if a parameter is of the wrong type', async () => {
-            const response = await request(slushy.app).get('/validation/path/string')
+            const response = await request(slushy.app).get('/validation/path/string/string')
             expect(response.status).toBe(400)
         })
     })
