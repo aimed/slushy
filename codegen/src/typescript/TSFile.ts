@@ -5,7 +5,7 @@ import * as prettier from 'prettier'
 import ts from 'typescript'
 import { IdentifierImport } from './IdentifierImport'
 import { IdentifierRegistry } from './IdentifierRegistry'
-import { capitalize, isReferenceObject } from './utils'
+import { capitalize, isReferenceObject, camelCaseify } from './utils'
 
 export class TSFile {
     private readonly imports: IdentifierImport[] = []
@@ -136,7 +136,7 @@ export class TSFile {
             )
         }
 
-        const identifier = capitalize(schema.$ref.replace('#/components/schemas/', ''))
+        const identifier = capitalize(camelCaseify(schema.$ref.replace('#/components/schemas/', '')))
         return identifier
     }
 

@@ -1,5 +1,6 @@
 import { OpenAPIV3 } from 'openapi-types'
 import { capitalize } from '../utils'
+import { camelCaseify } from './utils'
 
 export interface ResolvedReference {
     path: string
@@ -17,7 +18,7 @@ export class ModuleResolver {
             )
         }
 
-        const symbol = capitalize(schema.$ref.replace('#/components/schemas/', ''))
+        const symbol = capitalize(camelCaseify(schema.$ref.replace('#/components/schemas/', '')))
         const path = './types'
 
         return {

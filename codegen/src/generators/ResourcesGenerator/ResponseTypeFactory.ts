@@ -11,7 +11,7 @@ import {
 import { StatusCodeClassNames } from '../../StatusCodesClassNames'
 import { TSClassBuilder } from '../../typescript/TSClassBuilder'
 import { TSFile } from '../../typescript/TSFile'
-import { capitalize, isReferenceObject } from '../../typescript/utils'
+import { camelCaseify, capitalize, isReferenceObject } from '../../typescript/utils'
 
 /**
  * Creates a resource operation response.
@@ -84,7 +84,7 @@ export class ResponseTypeFactory {
                 throw new Error('A status code reference must point to #/components/responses/')
             }
 
-            const responseType = `${response.$ref.replace('#/components/responses/', '')}Response`
+            const responseType = `${camelCaseify(response.$ref.replace('#/components/responses/', ''))}Response`
             tsFile.import(responseType)
             responseClassBuilder.addConstructorParameter({
                 name: 'payload',

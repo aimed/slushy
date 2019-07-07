@@ -2,7 +2,7 @@ import { groupBy } from 'lodash'
 import { OpenAPIV3 } from 'openapi-types'
 import * as fsPath from 'path'
 import { TSModule } from '../../typescript/TSModule'
-import { capitalize } from '../../typescript/utils'
+import { camelCaseify, capitalize } from '../../typescript/utils'
 import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
 import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
 import { Generator } from '../Generator'
@@ -100,15 +100,17 @@ export class ResourcesGenerator implements Generator {
     /**
      * For a given path create a resource name.
      * @example
-     * /         -> Index
-     * /pets     -> Pets
-     * /pets/:id -> Pets
+     * /          -> Index
+     * /pets      -> Pets
+     * /pets/:id  -> Pets
+     * /pets-test -> PetsTest
      */
     private getResourceNameForPath(path: string): string {
         const [, prefix] = path.split('/')
         if (!prefix || prefix.startsWith('{')) {
             return capitalize('index')
         }
-        return capitalize(prefix)
+        const normalizedPrefix = camelCaseify(prefix)
+        return capitalize(normalizedPrefix)
     }
 }
