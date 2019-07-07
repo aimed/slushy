@@ -1,24 +1,23 @@
 import { ContextFactory } from './ContextFactory'
 import { SlushyError } from './errors/SlushyError'
-import { Logger } from './LoggerFactory'
+import { DefaultLoggerFactory, Logger } from './LoggerFactory'
 import { ApiDocMiddlewareFactory } from './middleware/ApiDocMiddlewareFactory'
 import { BodyParserMiddlewareFactory } from './middleware/BodyParserMiddlewareFactory'
 import { FileToBodyAssignmentMiddlewareFactory } from './middleware/FileToBodyAssignmentMiddlewareFactory'
 import { FileUploadMiddlewareFactory } from './middleware/FileUploadMiddlewareFactory'
+import { MiddlewareFactory } from './middleware/MiddlewareFactory'
 import { RequestCoercionMiddlewareFactory } from './middleware/RequestCoercionMiddlewareFactory'
 import { RequestContextMiddlewareFactory } from './middleware/RequestContextMiddlewareFactory'
 import { RequestDefaultValueSetterMiddlewareFactory } from './middleware/RequestDefaultValueSetterMiddlewareFactory'
-import {
-    LoggerSymbol,
-    RequestExtensionMiddlewareFactory,
-    RequestIdSymbol,
-} from './middleware/RequestExtensionMiddlewareFactory'
+import { RequestExtensionMiddlewareFactory } from './middleware/RequestExtensionMiddlewareFactory'
 import { RequestValidatorMiddlewareFactory } from './middleware/RequestValidatorMiddlewareFactory'
 import { RequestContext } from './requestContext/RequestContext'
 import { RequestId } from './RequestId'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
 import {
+    LoggerSymbol,
     OpenApiBridge,
+    RequestIdSymbol,
     SlushyErrorRequestHandler,
     SlushyRequestHandler,
     SlushyRouterImplementation,
@@ -35,31 +34,28 @@ export class SlushyRouter<TContext> {
     private readonly requestParameterExtractor = new RequestParametersExtractor()
     private readonly contextFactory = new ContextFactory<TContext>()
     private readonly openApiBridge = new OpenApiBridge()
-    private readonly bodyParserMiddlewareFactory = new BodyParserMiddlewareFactory()
-    private readonly requestValidatorMiddlewareFactory = new RequestValidatorMiddlewareFactory()
     private readonly apiDocMiddlewareFactory = new ApiDocMiddlewareFactory()
-    private readonly requestContextMiddleware = new RequestContextMiddlewareFactory()
-    private readonly fileUploadMiddlewareFactory = new FileUploadMiddlewareFactory()
-    private readonly fileToBodyAssignmentMiddlewareFactory = new FileToBodyAssignmentMiddlewareFactory()
-    private readonly requestExtensionsMiddlewareFactory = new RequestExtensionMiddlewareFactory()
-    private readonly requestCoersionMiddlewareFactory = new RequestCoercionMiddlewareFactory()
-    private readonly requestDefaultValueSetterMiddlewareFactory = new RequestDefaultValueSetterMiddlewareFactory()
 
     public constructor(
         public readonly props: SlushyProps<TContext>,
         public readonly router: SlushyRouterImplementation,
+        private readonly middlewareFactories: Array<new () => MiddlewareFactory> = [
+            RequestExtensionMiddlewareFactory,
+            BodyParserMiddlewareFactory,
+            RequestDefaultValueSetterMiddlewareFactory,
+            RequestCoercionMiddlewareFactory,
+            FileUploadMiddlewareFactory,
+            RequestValidatorMiddlewareFactory,
+            FileToBodyAssignmentMiddlewareFactory,
+            // This needs to run after all other middlewares
+            RequestContextMiddlewareFactory,
+        ],
     ) {
-        // Extend the request with logger and the requestId
-        router.use(...this.requestExtensionsMiddlewareFactory.create(this.props))
-
-        router.use(...this.bodyParserMiddlewareFactory.create(this.props))
         router.use('/api-docs', ...this.apiDocMiddlewareFactory.create(this.props))
-        // This needs to run after all body parser middlewares.
-        router.use(...this.requestContextMiddleware.create(this.props))
     }
 
     private errorHandler: SlushyErrorRequestHandler = (error, req, res, _next) => {
-        const logger = req[LoggerSymbol] || console
+        const logger = req[LoggerSymbol] || new DefaultLoggerFactory().create(req[RequestIdSymbol] || '')
         try {
             error = this.props.transformError ? this.props.transformError(error, req) : error
         } catch (error) {
@@ -76,10 +72,9 @@ export class SlushyRouter<TContext> {
     }
 
     public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'get'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'get'),
-        ]
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'get'))
         this.router.get(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
@@ -89,13 +84,9 @@ export class SlushyRouter<TContext> {
     }
 
     public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'get'),
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'get'),
-            ...this.fileUploadMiddlewareFactory.create(this.props, path, 'post'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'post'),
-            ...this.fileToBodyAssignmentMiddlewareFactory.create(this.props, path, 'post'),
-        ]
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'post'))
         this.router.post(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
@@ -105,13 +96,9 @@ export class SlushyRouter<TContext> {
     }
 
     public put<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'put'),
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'put'),
-            ...this.fileUploadMiddlewareFactory.create(this.props, path, 'put'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'put'),
-            ...this.fileToBodyAssignmentMiddlewareFactory.create(this.props, path, 'put'),
-        ]
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'put'))
         this.router.put(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
@@ -121,11 +108,9 @@ export class SlushyRouter<TContext> {
     }
 
     public delete<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'delete'),
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'delete'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'delete'),
-        ]
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'delete'))
         this.router.delete(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
@@ -135,12 +120,9 @@ export class SlushyRouter<TContext> {
     }
 
     public options<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'options'),
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'options'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'options'),
-        ]
-
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'options'))
         this.router.options(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
@@ -150,13 +132,9 @@ export class SlushyRouter<TContext> {
     }
 
     public patch<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'patch'),
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'patch'),
-            ...this.fileUploadMiddlewareFactory.create(this.props, path, 'patch'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'patch'),
-            ...this.fileToBodyAssignmentMiddlewareFactory.create(this.props, path, 'patch'),
-        ]
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'patch'))
         this.router.patch(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
@@ -166,11 +144,9 @@ export class SlushyRouter<TContext> {
     }
 
     public head<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = [
-            ...this.requestDefaultValueSetterMiddlewareFactory.create(this.props, path, 'head'),
-            ...this.requestCoersionMiddlewareFactory.create(this.props, path, 'head'),
-            ...this.requestValidatorMiddlewareFactory.create(this.props, path, 'head'),
-        ]
+        const middlewares = this.middlewareFactories
+            .map(Factory => new Factory())
+            .map(factory => factory.create(this.props, path, 'head'))
         this.router.head(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,

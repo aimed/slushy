@@ -1,16 +1,14 @@
-import { Slushy, SlushyConfig, SlushyPlugins, BadRequestError } from '@slushy/server'
-import { PetsResourceImpl } from './PetsResourceImpl'
-import { ResourcesConfiguration } from './generated/ResourcesConfiguration'
+import { BadRequestError, Slushy, SlushyConfig } from '@slushy/server'
+import { RequestValidationError } from '@slushy/server/dist/middleware/RequestValidatorMiddlewareFactory'
 import { Context } from './Context'
 import { FeaturesResourceImpl } from './FeaturesResourceImpl'
-import { RequestValidationError } from '@slushy/server/dist/middleware/RequestValidatorMiddlewareFactory'
+import { ResourcesConfiguration } from './generated/ResourcesConfiguration'
 import { HttpResourceImpl } from './HttpResourceImpl'
+import { PetsResourceImpl } from './PetsResourceImpl'
 import { ValidationResourceImpl } from './ValidationResourceImpl'
 
 export class SlushyFactory {
-    public static async create(
-        config: Partial<SlushyConfig<Context>> & Partial<SlushyPlugins> = {}
-    ): Promise<Slushy<Context>> {
+    public static async create(config: Partial<SlushyConfig<Context>> = {}): Promise<Slushy<Context>> {
         const slushy = await Slushy.create<Context>({
             transformError: (error, _req) => {
                 if (error instanceof RequestValidationError) {
