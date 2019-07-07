@@ -1,42 +1,42 @@
+import { SlushyContext } from '@slushy/server'
+import { Context } from './Context'
 import {
-    HttpResource,
-    GetParams,
-    GetResponse,
-    PutParams,
-    PutResponse,
-    PostParams,
-    PostResponse,
+    DeleteOK,
     DeleteParams,
     DeleteResponse,
+    GetOK,
+    GetParams,
+    GetResponse,
+    HttpResource,
+    PatchOK,
     PatchParams,
     PatchResponse,
-    GetOK,
-    PutOK,
     PostOK,
-    DeleteOK,
-    PatchOK,
+    PostParams,
+    PostResponse,
+    PutOK,
+    PutParams,
+    PutResponse,
 } from './generated/resources/HttpResource'
-import { Context } from './Context'
-import { SlushyContext } from '@slushy/server'
 
 export class HttpResourceImpl implements HttpResource<Context> {
-    async get(_params: GetParams, _context: SlushyContext<Context>): Promise<GetResponse> {
+    public async get(_params: GetParams, _context: SlushyContext<Context>): Promise<GetResponse> {
         return new GetOK()
     }
 
-    async put(_params: PutParams, _context: SlushyContext<Context>): Promise<PutResponse> {
+    public async put(_params: PutParams, _context: SlushyContext<Context>): Promise<PutResponse> {
         return new PutOK()
     }
 
-    async post(_params: PostParams, _context: SlushyContext<Context>): Promise<PostResponse> {
+    public async post(_params: PostParams, _context: SlushyContext<Context>): Promise<PostResponse> {
         return new PostOK()
     }
 
-    async delete(_params: DeleteParams, _context: SlushyContext<Context>): Promise<DeleteResponse> {
+    public async delete(_params: DeleteParams, _context: SlushyContext<Context>): Promise<DeleteResponse> {
         return new DeleteOK()
     }
 
-    async patch(_params: PatchParams, _context: SlushyContext<Context>): Promise<PatchResponse> {
+    public async patch(_params: PatchParams, _context: SlushyContext<Context>): Promise<PatchResponse> {
         return new PatchOK()
     }
 }

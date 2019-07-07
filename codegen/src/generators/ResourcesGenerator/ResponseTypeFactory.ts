@@ -97,19 +97,28 @@ export class ResponseTypeFactory {
             return
         }
 
-        // TODO: Handle more cases.
-        const jsonResponseType = response.content['application/json']
-        if (!jsonResponseType) {
+        const responseContents = Object.entries(response.content)
+        if (responseContents.length === 0) {
+            return
+        }
+
+        if (responseContents.length !== 1) {
+            throw new Error('Only a single content type for responses is allowed')
+        }
+
+        const [, responseObject] = responseContents[0]
+
+        if (!responseObject) {
             throw new Error('No content for application/json defined')
         }
 
-        if (!jsonResponseType.schema) {
+        if (!responseObject.schema) {
             throw new Error('No response schema is defined')
         }
 
         responseClassBuilder.addConstructorParameter({
             name: 'payload',
-            type: tsFile.getTSType(jsonResponseType.schema),
+            type: tsFile.getTSType(responseObject.schema),
         })
     }
 

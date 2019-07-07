@@ -1,27 +1,40 @@
+import { SlushyContext } from '@slushy/server'
+import * as fs from 'fs'
+import { Context } from './Context'
+import { FeatureFileDownloadOK } from './generated/resources/FeatureResource'
 import {
-    FeaturesResource,
+    FeatureComponentResponsesBadRequest,
     FeatureComponentResponsesParams,
     FeatureComponentResponsesResponse,
-    FeatureComponentResponsesBadRequest,
+    FeatureFileDownloadParams,
+    FeatureFileUploadOK,
     FeatureFileUploadParams,
     FeatureFileUploadResponse,
-    FeatureFileUploadOK,
+    FeaturesResource,
 } from './generated/resources/FeaturesResource'
-import { Context } from './Context'
-import { SlushyContext } from '@slushy/server'
 
 export class FeaturesResourceImpl implements FeaturesResource<Context> {
-    async featureComponentResponses(
+    public async featureComponentResponses(
         _params: FeatureComponentResponsesParams,
-        _context: SlushyContext<Context>
+        _context: SlushyContext<Context>,
     ): Promise<FeatureComponentResponsesResponse> {
         throw new FeatureComponentResponsesBadRequest({ errors: [{ message: '' }] })
     }
 
-    async featureFileUpload(
+    public async featureFileUpload(
         params: FeatureFileUploadParams,
-        _context: SlushyContext<Context>
+        _context: SlushyContext<Context>,
     ): Promise<FeatureFileUploadResponse> {
         return new FeatureFileUploadOK({ content: params.requestBody.file.buffer.toString() })
+    }
+
+    public async featureFileDownload(
+        _params: FeatureFileDownloadParams,
+        _context: SlushyContext<Context>,
+    ): Promise<FeatureFileUploadResponse> {
+        const file = await new Promise((resolve, reject) =>
+            fs.readFile(__filename, (err, buffer) => (err ? reject(err) : resolve(buffer))),
+        )
+        return new FeatureFileDownloadOK(file)
     }
 }

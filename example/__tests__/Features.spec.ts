@@ -1,9 +1,9 @@
-import request from 'supertest'
-import { testLoggerFactory } from './testLoggerFactory'
 import { Slushy } from '@slushy/server'
+import * as fs from 'fs'
+import request from 'supertest'
 import { Context } from '../src/Context'
 import { SlushyFactory } from '../src/SlushyFactory'
-import * as fs from 'fs'
+import { testLoggerFactory } from './testLoggerFactory'
 
 describe('Features', () => {
     let slushy: Slushy<Context>
@@ -32,6 +32,16 @@ describe('Features', () => {
                     .attach('file', __filename)
                 expect(response.status).toBe(200)
                 expect(response.body.content).toBe(fs.readFileSync(__filename).toString())
+            })
+        })
+    })
+
+    describe('File downloads', () => {
+        describe('Server', () => {
+            it('should send a file', async () => {
+                const response = await request(slushy.app).get('/features/file-download')
+                expect(response.status).toBe(200)
+                expect(response.body).toBeTruthy()
             })
         })
     })
