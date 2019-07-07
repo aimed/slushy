@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.17.0](https://github.com/aimed/slushy/compare/v0.16.3...v0.17.0) (2019-07-07)
+
+
+### Features
+
+* attach more data to the request ([#112](https://github.com/aimed/slushy/issues/112)) ([b7efa44](https://github.com/aimed/slushy/commit/b7efa44))
+
+
+
+
+
 ## [0.16.3](https://github.com/aimed/slushy/compare/v0.16.2...v0.16.3) (2019-07-07)
 
 **Note:** Version bump only for package @slushy/example
