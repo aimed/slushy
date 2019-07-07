@@ -193,7 +193,7 @@ export class SlushyRouter<TContext> {
                 }
 
                 if (resourceResponse.payload) {
-                    let contentType: string | undefined = this.getContentType(req, resourceResponse)
+                    const contentType = this.getContentType(req, resourceResponse)
                     if (!res.headersSent && contentType) {
                         res.type(contentType)
                     }
