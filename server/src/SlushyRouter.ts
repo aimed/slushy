@@ -1,5 +1,6 @@
 import { ContextFactory } from './ContextFactory'
 import { SlushyError } from './errors/SlushyError'
+import { isReferenceObject } from './helpers/isReferenceObject'
 import { DefaultLoggerFactory, Logger } from './LoggerFactory'
 import { ApiDocMiddlewareFactory } from './middleware/ApiDocMiddlewareFactory'
 import { BodyParserMiddlewareFactory } from './middleware/BodyParserMiddlewareFactory'
@@ -17,8 +18,10 @@ import { RequestParametersExtractor } from './RequestParametersExtractor'
 import {
     LoggerSymbol,
     OpenApiBridge,
+    OperationObjectSymbol,
     RequestIdSymbol,
     SlushyErrorRequestHandler,
+    SlushyRequest,
     SlushyRequestHandler,
     SlushyRouterImplementation,
 } from './ServerImpl'
@@ -190,6 +193,10 @@ export class SlushyRouter<TContext> {
                 }
 
                 if (resourceResponse.payload) {
+                    const contentType = this.getContentType(req, resourceResponse)
+                    if (!res.headersSent && contentType) {
+                        res.type(contentType)
+                    }
                     res.send(resourceResponse.payload).status(resourceResponse.status)
                 } else {
                     res.sendStatus(resourceResponse.status)
@@ -205,5 +212,18 @@ export class SlushyRouter<TContext> {
                 }
             }
         }
+    }
+
+    private getContentType(req: SlushyRequest, resourceResponse: { status: number; payload?: any }) {
+        const operationObject = req[OperationObjectSymbol]
+        // FIXME: Lookup range
+        const responseObject = (operationObject.responses || {})[`${resourceResponse.status}`]
+
+        if (!responseObject || isReferenceObject(responseObject)) {
+            return
+        }
+
+        const responseTypes = Object.keys(responseObject.content || {})
+        return responseTypes[0]
     }
 }

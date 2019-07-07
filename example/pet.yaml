@@ -111,6 +111,19 @@ paths:
                 properties:
                   content:
                     type: string
+  /features/file-download:
+    get:
+      operationId: featureFileDownload
+      description: File download
+      summary: File download
+      responses:
+        '200':
+          description: A test file
+          content: 
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
 
   /pets:
     get:
