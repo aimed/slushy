@@ -1,6 +1,5 @@
 import { Server } from 'http'
 import { OpenAPIV3 } from 'openapi-types'
-import { DefaultLoggerFactory } from './LoggerFactory'
 import { SlushyApplication } from './ServerImpl'
 import { SlushyApplicationFactory } from './SlushyApplicationFactory'
 import { SlushyConfig } from './SlushyConfig'
@@ -36,7 +35,6 @@ export class Slushy<TContext> {
         const openApi = JSON.parse(config.resourceConfiguration.getOpenApiSchema()) as OpenAPIV3.Document
         const slushy = new Slushy({
             openApi,
-            loggerFactory: new DefaultLoggerFactory(),
             ...config,
         })
         await slushy.initialise()

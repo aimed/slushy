@@ -1,5 +1,6 @@
+import { OpenAPIV3 } from 'openapi-types'
 import * as UUID from 'uuid'
-import { Logger } from '../LoggerFactory'
+import { DefaultLoggerFactory, Logger } from '../LoggerFactory'
 import { SlushyRequestHandler } from '../ServerImpl'
 import { SlushyProps } from '../SlushyProps'
 import { MiddlewareFactory } from './MiddlewareFactory'
@@ -14,6 +15,8 @@ declare global {
         interface Request {
             [LoggerSymbol]: Logger
             [RequestIdSymbol]: string
+            [PathItemObjectSymbol]: OpenAPIV3.PathItemObject
+            [OperationObjectSymbol]: OpenAPIV3.OperationObject
         }
     }
 }
@@ -27,7 +30,7 @@ export class RequestExtensionMiddlewareFactory implements MiddlewareFactory {
                 next()
             },
             (req, _res, next) => {
-                const logger = props.loggerFactory.create(req[RequestIdSymbol])
+                const logger = (props.loggerFactory || new DefaultLoggerFactory()).create(req[RequestIdSymbol])
                 req[LoggerSymbol] = logger
                 next()
             },
