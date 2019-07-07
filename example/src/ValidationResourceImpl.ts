@@ -1,27 +1,37 @@
+import { SlushyContext } from '@slushy/server'
+import { Context } from './Context'
 import {
-    ValidationResource,
-    ValidationQueryParams,
-    ValidationQueryResponse,
-    ValidationQueryOK,
+    ValidationHeaderOK,
+    ValidationHeaderParams,
+    ValidationHeaderResponse,
+    ValidationPathOK,
     ValidationPathParams,
     ValidationPathResponse,
-    ValidationPathOK,
+    ValidationQueryOK,
+    ValidationQueryParams,
+    ValidationQueryResponse,
+    ValidationResource,
 } from './generated/resources/ValidationResource'
-import { Context } from './Context'
-import { SlushyContext } from '@slushy/server'
 
 export class ValidationResourceImpl implements ValidationResource<Context> {
-    async validationQuery(
+    public async validationQuery(
         params: ValidationQueryParams,
         _context: SlushyContext<Context>,
     ): Promise<ValidationQueryResponse> {
         return new ValidationQueryOK({ query: params.query })
     }
 
-    async validationPath(
+    public async validationPath(
         params: ValidationPathParams,
         _context: SlushyContext<Context>,
     ): Promise<ValidationPathResponse> {
         return new ValidationPathOK({ num: params.num, str: params.str })
+    }
+
+    public async validationHeader(
+        params: ValidationHeaderParams,
+        _context: SlushyContext<Context>,
+    ): Promise<ValidationHeaderResponse> {
+        return new ValidationHeaderOK({ header: params['x-header'] })
     }
 }

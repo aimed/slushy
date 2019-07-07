@@ -150,7 +150,10 @@ export class TSFile {
                 const isRequired = required.includes(propertyName)
                 const propertyDef = properties[propertyName]
                 const propertyDefString = this.getTSType(propertyDef)
-                propertyDefs.push(`${propertyName}${isRequired ? '' : '?'}: ${propertyDefString}`)
+                const propertyQuote = new RegExp('[^a-zA-Z0-9]').test(propertyName) ? "'" : ''
+                propertyDefs.push(
+                    `${propertyQuote}${propertyName}${propertyQuote}${isRequired ? '' : '?'}: ${propertyDefString}`,
+                )
             }
 
             if (additionalProperties) {

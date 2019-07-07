@@ -1,8 +1,8 @@
-import request from 'supertest'
-import { testLoggerFactory } from './testLoggerFactory'
 import { Slushy } from '@slushy/server'
+import request from 'supertest'
 import { Context } from '../src/Context'
 import { SlushyFactory } from '../src/SlushyFactory'
+import { testLoggerFactory } from './testLoggerFactory'
 
 describe('Validation', () => {
     let slushy: Slushy<Context>
@@ -22,6 +22,21 @@ describe('Validation', () => {
 
         it('should not accept a request a required parameter is not set', async () => {
             const response = await request(slushy.app).get('/validation/query')
+            expect(response.status).toBe(400)
+        })
+    })
+
+    describe('header', () => {
+        it('should accept a request if the parameter is correct', async () => {
+            const response = await request(slushy.app)
+                .get('/validation/header')
+                .set('x-header', 'x-header')
+            expect(response.status).toBe(200)
+            expect(response.body).toEqual({ header: 'x-header' })
+        })
+
+        it('should not accept a request a required parameter is not set', async () => {
+            const response = await request(slushy.app).get('/validation/header')
             expect(response.status).toBe(400)
         })
     })

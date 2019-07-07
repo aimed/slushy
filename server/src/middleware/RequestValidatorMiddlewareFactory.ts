@@ -142,6 +142,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
             const schemaKeyMap: { [index: string]: keyof typeof schemas | undefined } = {
                 path: 'params',
                 query: 'query',
+                header: 'headers',
             }
             const schemaKey = schemaKeyMap[parameter.in]
 

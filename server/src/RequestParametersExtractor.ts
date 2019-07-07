@@ -20,6 +20,7 @@ export class RequestParametersExtractor<TContext> {
             const parameterInRequestProperty = {
                 path: req.params[parameter.name],
                 query: req.query[parameter.name],
+                header: req.headers[parameter.name],
             }
 
             const hasRequestMapping = (inValue: string): inValue is keyof typeof parameterInRequestProperty => {
