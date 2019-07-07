@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/aimed/slushy/compare/v0.17.0...v0.18.0) (2019-07-07)
+
+
+### Features
+
+* support file downloads and custom content types ([#113](https://github.com/aimed/slushy/issues/113)) ([547e329](https://github.com/aimed/slushy/commit/547e329))
+
+
+
+
+
 # [0.17.0](https://github.com/aimed/slushy/compare/v0.16.3...v0.17.0) (2019-07-07)
 
 
