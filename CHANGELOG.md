@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.16.3](https://github.com/aimed/slushy/compare/v0.16.2...v0.16.3) (2019-07-07)
+
+
+### Bug Fixes
+
+* build valid names for resouces with dashes ([e7e8a42](https://github.com/aimed/slushy/commit/e7e8a42))
+* lint ([2caa24b](https://github.com/aimed/slushy/commit/2caa24b))
+
+
+
+
+
 ## [0.16.2](https://github.com/aimed/slushy/compare/v0.16.1...v0.16.2) (2019-07-06)
 
 **Note:** Version bump only for package slushy
