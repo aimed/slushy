@@ -1,37 +1,41 @@
-import { OpenAPIV3 } from 'openapi-types'
 import * as UUID from 'uuid'
-import { DefaultLoggerFactory, Logger } from '../LoggerFactory'
-import { SlushyRequestHandler } from '../ServerImpl'
+import { getOperationObject, getPathItemObject } from '../helpers/schema'
+import { DefaultLoggerFactory } from '../LoggerFactory'
+import {
+    LoggerSymbol,
+    OperationObjectSymbol,
+    PathItemObjectSymbol,
+    RequestIdSymbol,
+    SlushyRequestHandler,
+} from '../ServerImpl'
 import { SlushyProps } from '../SlushyProps'
+import { PathHttpOperation } from '../types/PathHttpOperation'
 import { MiddlewareFactory } from './MiddlewareFactory'
 
-export const LoggerSymbol = Symbol('Logger')
-export const RequestIdSymbol = Symbol('RequestId')
-export const PathItemObjectSymbol = Symbol('PathItemObject')
-export const OperationObjectSymbol = Symbol('OperationObject')
-
-declare global {
-    namespace Express {
-        interface Request {
-            [LoggerSymbol]: Logger
-            [RequestIdSymbol]: string
-            [PathItemObjectSymbol]: OpenAPIV3.PathItemObject
-            [OperationObjectSymbol]: OpenAPIV3.OperationObject
-        }
-    }
-}
-
 export class RequestExtensionMiddlewareFactory implements MiddlewareFactory {
-    public create(props: SlushyProps<any>): SlushyRequestHandler[] {
+    public create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): SlushyRequestHandler[] {
+        if (!path) {
+            throw new Error('Path required')
+        }
+
+        if (!operation) {
+            throw new Error('Operation required')
+        }
+
+        const pathItemObject = getPathItemObject(props.openApi, path)
+        const operationObject = getOperationObject(props.openApi, path, operation)
+
         return [
             (req, _res, next) => {
+                req[PathItemObjectSymbol] = pathItemObject
+                req[OperationObjectSymbol] = operationObject
+
                 const requestId = props.getRequestId ? props.getRequestId(req) : UUID.v4()
                 req[RequestIdSymbol] = requestId
-                next()
-            },
-            (req, _res, next) => {
-                const logger = (props.loggerFactory || new DefaultLoggerFactory()).create(req[RequestIdSymbol])
+
+                const logger = (props.loggerFactory || new DefaultLoggerFactory()).create(requestId)
                 req[LoggerSymbol] = logger
+
                 next()
             },
         ]

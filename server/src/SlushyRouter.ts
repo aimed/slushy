@@ -1,6 +1,6 @@
 import { ContextFactory } from './ContextFactory'
 import { SlushyError } from './errors/SlushyError'
-import { Logger } from './LoggerFactory'
+import { DefaultLoggerFactory, Logger } from './LoggerFactory'
 import { ApiDocMiddlewareFactory } from './middleware/ApiDocMiddlewareFactory'
 import { BodyParserMiddlewareFactory } from './middleware/BodyParserMiddlewareFactory'
 import { FileToBodyAssignmentMiddlewareFactory } from './middleware/FileToBodyAssignmentMiddlewareFactory'
@@ -9,17 +9,15 @@ import { MiddlewareFactory } from './middleware/MiddlewareFactory'
 import { RequestCoercionMiddlewareFactory } from './middleware/RequestCoercionMiddlewareFactory'
 import { RequestContextMiddlewareFactory } from './middleware/RequestContextMiddlewareFactory'
 import { RequestDefaultValueSetterMiddlewareFactory } from './middleware/RequestDefaultValueSetterMiddlewareFactory'
-import {
-    LoggerSymbol,
-    RequestExtensionMiddlewareFactory,
-    RequestIdSymbol,
-} from './middleware/RequestExtensionMiddlewareFactory'
+import { RequestExtensionMiddlewareFactory } from './middleware/RequestExtensionMiddlewareFactory'
 import { RequestValidatorMiddlewareFactory } from './middleware/RequestValidatorMiddlewareFactory'
 import { RequestContext } from './requestContext/RequestContext'
 import { RequestId } from './RequestId'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
 import {
+    LoggerSymbol,
     OpenApiBridge,
+    RequestIdSymbol,
     SlushyErrorRequestHandler,
     SlushyRequestHandler,
     SlushyRouterImplementation,
@@ -57,7 +55,7 @@ export class SlushyRouter<TContext> {
     }
 
     private errorHandler: SlushyErrorRequestHandler = (error, req, res, _next) => {
-        const logger = req[LoggerSymbol] || console
+        const logger = req[LoggerSymbol] || new DefaultLoggerFactory().create(req[RequestIdSymbol] || '')
         try {
             error = this.props.transformError ? this.props.transformError(error, req) : error
         } catch (error) {
