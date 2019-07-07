@@ -1,11 +1,11 @@
 import { SlushyContext } from '@slushy/server'
 import * as fs from 'fs'
 import { Context } from './Context'
-import { FeatureFileDownloadOK } from './generated/resources/FeatureResource'
 import {
     FeatureComponentResponsesBadRequest,
     FeatureComponentResponsesParams,
     FeatureComponentResponsesResponse,
+    FeatureFileDownloadOK,
     FeatureFileDownloadParams,
     FeatureFileUploadOK,
     FeatureFileUploadParams,
