@@ -53,6 +53,25 @@ paths:
                 properties:
                   query: 
                     type: string
+  /validation/header:
+    get:
+      operationId: validationHeader
+      parameters:
+        - name: x-header
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Test header parameter validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  header: 
+                    type: string
 
   /validation/path/{num}/{str}:
     get:
