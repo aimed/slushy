@@ -5,7 +5,7 @@ import * as prettier from 'prettier'
 import ts from 'typescript'
 import { IdentifierImport } from './IdentifierImport'
 import { IdentifierRegistry } from './IdentifierRegistry'
-import { capitalize, isReferenceObject, camelCaseify } from './utils'
+import { camelCaseify, capitalize, isReferenceObject } from './utils'
 
 export class TSFile {
     private readonly imports: IdentifierImport[] = []
