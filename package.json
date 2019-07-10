@@ -11,7 +11,7 @@
     "ts-node": "8.3.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "3.5.2"
+    "typescript": "3.5.3"
   },
   "scripts": {
     "example": "yarn example:gen && yarn example:start",
