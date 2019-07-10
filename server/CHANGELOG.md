@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/aimed/slushy/compare/v0.19.1...v0.20.0) (2019-07-10)
+
+
+### Features
+
+* set default values on the request body (closes [#127](https://github.com/aimed/slushy/issues/127)) ([#128](https://github.com/aimed/slushy/issues/128)) ([4aa1607](https://github.com/aimed/slushy/commit/4aa1607))
+
+
+
+
+
 ## [0.19.1](https://github.com/aimed/slushy/compare/v0.19.0...v0.19.1) (2019-07-10)
 
 **Note:** Version bump only for package @slushy/server
