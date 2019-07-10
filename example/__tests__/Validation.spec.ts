@@ -41,6 +41,26 @@ describe('Validation', () => {
         })
     })
 
+    describe('body', () => {
+        describe('default values', () => {
+            it('should set the default value', async () => {
+                const response = await request(slushy.app)
+                    .post('/validation/body/set-defaults')
+                    .send({})
+                expect(response.status).toBe(200)
+                expect(response.body).toEqual({ default: 'default' })
+            })
+
+            it('should pass values without defaults', async () => {
+                const response = await request(slushy.app)
+                    .post('/validation/body/set-defaults')
+                    .send({ noDefault: 'noDefault' })
+                expect(response.status).toBe(200)
+                expect(response.body).toEqual({ default: 'default', noDefault: 'noDefault' })
+            })
+        })
+    })
+
     describe('path', () => {
         it('should accept a request if the parameter is correct', async () => {
             const response = await request(slushy.app).get('/validation/path/1/1')

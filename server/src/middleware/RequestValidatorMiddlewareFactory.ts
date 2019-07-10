@@ -21,6 +21,7 @@ export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
     private readonly validator = new Ajv({
         allErrors: true,
         unknownFormats: 'ignore',
+        useDefaults: true,
     })
 
     public create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): SlushyRequestHandler[] {
