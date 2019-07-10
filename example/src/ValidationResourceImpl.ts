@@ -1,6 +1,9 @@
 import { SlushyContext } from '@slushy/server'
 import { Context } from './Context'
 import {
+    ValidationBodyDefaultValueOK,
+    ValidationBodyDefaultValueParams,
+    ValidationBodyDefaultValueResponse,
     ValidationHeaderOK,
     ValidationHeaderParams,
     ValidationHeaderResponse,
@@ -14,6 +17,16 @@ import {
 } from './generated/resources/ValidationResource'
 
 export class ValidationResourceImpl implements ValidationResource<Context> {
+    public async validationBodyDefaultValue(
+        params: ValidationBodyDefaultValueParams,
+        _context: SlushyContext<Context>,
+    ): Promise<ValidationBodyDefaultValueResponse> {
+        return new ValidationBodyDefaultValueOK({
+            default: params.requestBody.default,
+            noDefault: params.requestBody.noDefault,
+        })
+    }
+
     public async validationQuery(
         params: ValidationQueryParams,
         _context: SlushyContext<Context>,

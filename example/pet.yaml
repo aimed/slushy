@@ -72,7 +72,34 @@ paths:
                 properties:
                   header: 
                     type: string
-
+  /validation/body/set-defaults:
+    post:
+      operationId: validationBodyDefaultValue
+      description: Test body default value setter
+      summary: Test body default value setter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                default:
+                  type: string
+                  default: default
+                noDefault:
+                  type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  default:
+                    type: string
+                  noDefault:
+                    type: string
   /validation/path/{num}/{str}:
     get:
       operationId: validationPath
