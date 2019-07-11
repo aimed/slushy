@@ -161,6 +161,6 @@ Visit the GitHub project at [{{site.github.repository_url}}]({{site.github.repos
 
 <ul>
 {% for link in site.data.nav %}
-<li><a href="{{link.to}}">{{link.name}}</a></li>
+<li><a href="{{site.github.url}}{{link.to}}">{{link.name}}</a></li>
 {% endfor %}
 </ul>
