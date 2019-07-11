@@ -9,7 +9,6 @@
     "interface-name": [true, "never-prefix"],
     "no-consecutive-blank-lines": true,
     "no-floating-promises": true,
-    "no-implicit-dependencies": [true, "dev"],
     "no-shadowed-variable": true,
     "no-string-throw": true,
     "member-access": true,
