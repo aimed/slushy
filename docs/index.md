@@ -156,3 +156,11 @@ Note that currently the identifier always is a class and the value an instance o
 ## Development
 
 Visit the GitHub project at [{{site.github.repository_url}}]({{site.github.repository_url}}).
+
+## More
+
+<ul>
+{% for link in site.data.nav %}
+<li><a href="{{link.to}}">{{link.name}}</a></li>
+{% endfor %}
+</ul>
