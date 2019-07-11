@@ -1,6 +1,6 @@
 ---
-id: limitations
-title: Limitations
+id: FAQ
+title: FAQ
 ---
 
 When using Slushy, there are a few limitations to your OpenApi Schema:
