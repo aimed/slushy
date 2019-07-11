@@ -127,7 +127,7 @@ You can (and should) enforce limits on the files that are uploaded. The limits c
 ### Request Context
 
 Slushy currently supports a [RequestContext] through the continuation local storage and async hooks APIs. That is why it might not work with some libraries (e.g. async).
-For more info see https://github.com/skonves/express-http-context and https://github.com/Jeff-Lewis/cls-hooked.
+For more info see [https://github.com/skonves/express-http-context](https://github.com/skonves/express-http-context) and [https://github.com/Jeff-Lewis/cls-hooked](https://github.com/Jeff-Lewis/cls-hooked).
 
 The [RequestContext] is a per request global state object that can be used to share objects. Out of the box the [RequestContext] provides the [Logger] as well as the [RequestId]. You can retrieve these as described below:
 
@@ -152,3 +152,7 @@ doSomething() {
 ```
 
 Note that currently the identifier always is a class and the value an instance of that class. The [RequestContext] will throw if no instance has been bound to a given identifier.
+
+## Development
+
+Visit the GitHub project at [{{site.github.repository_url}}]({{site.github.repository_url}}).
