@@ -20,9 +20,9 @@
     "templates/**/*"
   ],
   "scripts": {
-    "build": "tsc",
-    "test": "jest",
-    "lint": "tslint -p ./"
+    "build": "../node_modules/.bin/tsc",
+    "test": "../node_modules/.bin/jest",
+    "lint": "../node_modules/.bin/tslint -p ./"
   },
   "prettier": "../.prettierrc.json",
   "lint-staged": {

@@ -27,8 +27,8 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "build": "tsc",
-    "lint": "tslint -p ./"
+    "build": "../node_modules/.bin/tsc",
+    "lint": "../node_modules/.bin/tslint -p ./"
   },
   "prettier": "../.prettierrc.json",
   "lint-staged": {

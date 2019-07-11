@@ -19,11 +19,12 @@
     }
   },
   "dependencies": {
-    "@slushy/server": "file:../server"
+    "@slushy/server": "file:../server",
+    "@slushy/codegen": "file:../codegen"
   },
   "scripts": {
-    "test": "yarn generate && yarn jest",
-    "generate": "node ../node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
+    "test": "yarn generate && node ../node_modules/.bin/jest",
+    "generate": "node ./node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
     "build": "yarn generate && tsc --noEmit",
     "start": "ts-node src/index.ts"
   }
