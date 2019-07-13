@@ -109,7 +109,19 @@ Currently the following code generators are supported:
 | ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file.   |
 | ComponentResponsesGenerator   | Generates all types for the #/components/responses section of the OpenApi file. |
 
-## Experimental Features
+## Features
+
+### Host interactive Api documentation
+
+Hosting of the Api documentation can be enabled by passing the path to Slushy:
+
+```ts
+SlushyFactory.create({
+  docs: {
+    path: '/api-docs',
+  },
+})
+```
 
 ### File uploads
 
@@ -119,7 +131,7 @@ You can (and should) enforce limits on the files that are uploaded. The limits c
 **Limitations:**
 
 - File uploads are only possible via multipart/form-data.
-- The requestBody MUST be an object and all files MUST be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
+- The requestBody must be an object and all files must be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
 - All files are currently read into a Buffer.
 
 ## Experimental APIs
