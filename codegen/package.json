@@ -13,7 +13,6 @@
     "commander": "^2.20.0",
     "fs-extra": "^8.0.1",
     "lodash": "^4.17.14",
-    "mz": "^2.7.0",
     "prettier": "^1.17.0",
     "swagger-parser": "^8.0.0"
   },

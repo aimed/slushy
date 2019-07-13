@@ -1004,20 +1004,19 @@
     any-observable "^0.3.0"
 
 "@slushy/codegen@file:codegen":
-  version "0.20.4"
+  version "0.20.5"
   dependencies:
     commander "^2.20.0"
     fs-extra "^8.0.1"
     lodash "^4.17.14"
-    mz "^2.7.0"
     prettier "^1.17.0"
     swagger-parser "^8.0.0"
 
 "@slushy/example@file:example":
-  version "0.20.4"
+  version "0.20.5"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v1/npm-@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v1/npm-@slushy/server"
+    "@slushy/codegen" "file:../../../Library/Caches/Yarn/v4/npm-@slushy-example-0.20.5-91d297f1-292e-491d-b8e0-feb2126ee6af-1563025516961/node_modules/@slushy/codegen"
+    "@slushy/server" "file:../../../Library/Caches/Yarn/v4/npm-@slushy-example-0.20.5-91d297f1-292e-491d-b8e0-feb2126ee6af-1563025516961/node_modules/@slushy/server"
 
 "@slushy/server@file:server":
   version "0.20.4"
@@ -1169,12 +1168,6 @@
   resolved "https://registry.npmjs.org/@types/multer/-/multer-1.3.7.tgz#9fe1de9f44f401ff2eaf0d4468cf16935a9c6866"
   dependencies:
     "@types/express" "*"
-
-"@types/mz@0.0.32":
-  version "0.0.32"
-  resolved "https://registry.npmjs.org/@types/mz/-/mz-0.0.32.tgz#e8248b4e41424c052edc1725dd33650c313a3659"
-  dependencies:
-    "@types/node" "*"
 
 "@types/node@*":
   version "12.0.10"
