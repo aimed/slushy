@@ -29,7 +29,8 @@
   "scripts": {
     "build": "../node_modules/.bin/tsc",
     "lint": "../node_modules/.bin/tslint -p ./",
-    "link": "yarn link"
+    "link": "yarn link",
+    "clean": "rm -rf node_modules/ && rm -rf dist/ && rm -f tsconfig.tsbuildinfo"
   },
   "prettier": "../.prettierrc.json",
   "lint-staged": {

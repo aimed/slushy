@@ -28,6 +28,7 @@
     "build": "yarn generate && tsc --noEmit",
     "start": "ts-node src/index.ts",
     "link": "yarn link",
-    "postlink": "yarn link @slushy/codegen && yarn link @slushy/server"
+    "postlink": "yarn link @slushy/codegen && yarn link @slushy/server",
+    "clean": "rm -rf node_modules/ && rm -rf dist/ && rm -f tsconfig.tsbuildinfo"
   }
 }
