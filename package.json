@@ -31,7 +31,7 @@
     "typescript": "^3.5.2"
   },
   "scripts": {
-    "postinstall": "lerna exec yarn install",
+    "postinstall": "lerna exec yarn install && yarn bootstrap",
     "example": "yarn example:gen && yarn example:start",
     "example:gen": "ts-node codegen/src/index.ts gen example/pet.yaml example/src/generated",
     "example:start": "ts-node example/src/index.ts",
