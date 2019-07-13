@@ -6,7 +6,9 @@
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
   "license": "MIT",
-  "bin": "./dist/index.js",
+  "bin": {
+    "slushy-codegen": "./bin/slushy-codegen"
+  },
   "dependencies": {
     "commander": "^2.20.0",
     "fs-extra": "^8.0.1",
