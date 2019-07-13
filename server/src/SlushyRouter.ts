@@ -54,7 +54,9 @@ export class SlushyRouter<TContext> {
             RequestContextMiddlewareFactory,
         ],
     ) {
-        router.use('/api-docs', ...this.apiDocMiddlewareFactory.create(this.props))
+        if (props.docs && props.docs.path) {
+            router.use(props.docs.path, ...this.apiDocMiddlewareFactory.create(this.props))
+        }
     }
 
     private errorHandler: SlushyErrorRequestHandler = (error, req, res, _next) => {
