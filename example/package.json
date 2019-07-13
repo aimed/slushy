@@ -26,6 +26,8 @@
     "test": "yarn generate && node ../node_modules/.bin/jest",
     "generate": "node ./node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
     "build": "yarn generate && tsc --noEmit",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "link": "yarn link",
+    "postlink": "yarn link @slushy/codegen && yarn link @slushy/server"
   }
 }

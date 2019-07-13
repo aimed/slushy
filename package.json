@@ -36,7 +36,8 @@
     "example:gen": "ts-node codegen/src/index.ts gen example/pet.yaml example/src/generated",
     "example:start": "ts-node example/src/index.ts",
     "build": "lerna run build --sort",
-    "bootstrap": "lerna bootstrap --force-local",
+    "bootstrap": "lerna bootstrap --force-local && yarn link",
+    "link": "lerna run link",
     "test": "lerna run test",
     "lint": "lerna run lint"
   },

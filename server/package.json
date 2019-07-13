@@ -28,7 +28,8 @@
   },
   "scripts": {
     "build": "../node_modules/.bin/tsc",
-    "lint": "../node_modules/.bin/tslint -p ./"
+    "lint": "../node_modules/.bin/tslint -p ./",
+    "link": "yarn link"
   },
   "prettier": "../.prettierrc.json",
   "lint-staged": {
