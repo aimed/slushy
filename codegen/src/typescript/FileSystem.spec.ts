@@ -1,4 +1,4 @@
-import { fs } from 'mz'
+import * as fs from 'fs-extra'
 import * as path from 'path'
 import { FileSystem } from './FileSystem'
 
@@ -7,18 +7,18 @@ import { FileSystem } from './FileSystem'
  * @param dir The directory to remove.
  */
 async function removeDirWithFilesRecursive(dir: string) {
-    if (await fs.exists(dir)) {
-        const files = await fs.readdir(dir)
+    if (fs.existsSync(dir)) {
+        const files = fs.readdirSync(dir)
 
         for (const file of files) {
-            if ((await fs.stat(path.join(dir, file))).isDirectory()) {
+            if (fs.statSync(path.join(dir, file)).isDirectory()) {
                 await removeDirWithFilesRecursive(path.join(dir, file))
             } else {
-                await fs.unlink(path.join(dir, file))
+                fs.unlinkSync(path.join(dir, file))
             }
         }
 
-        await fs.rmdir(dir)
+        fs.rmdirSync(dir)
     }
 }
 
@@ -37,9 +37,9 @@ describe('FileSystem', () => {
 
     beforeAll(async () => {
         // Do never remove a directory that already exists.
-        if (await fs.exists(TEST_DIR)) {
+        if (fs.existsSync(TEST_DIR)) {
             throw new Error(
-                `Directory ${TEST_DIR} exists, but is needed for tests. If this is an artifact of a failed test, please remove it manually.`
+                `Directory ${TEST_DIR} exists, but is needed for tests. If this is an artifact of a failed test, please remove it manually.`,
             )
         }
 
@@ -53,20 +53,20 @@ describe('FileSystem', () => {
     })
 
     it('should write a file in an existing dir', async () => {
-        await fs.mkdir(TEST_DIR)
+        fs.mkdirSync(TEST_DIR)
 
         await fileSystem.write(path.join(TEST_DIR, 'test.txt'), 'test')
-        expect(await fs.exists(path.join(TEST_DIR, 'test.txt'))).toBe(true)
-        expect((await fs.readFile(path.join(TEST_DIR, 'test.txt'))).toString()).toBe('test')
+        expect(fs.existsSync(path.join(TEST_DIR, 'test.txt'))).toBe(true)
+        expect(fs.readFileSync(path.join(TEST_DIR, 'test.txt')).toString()).toBe('test')
     })
 
     it('should write a file in a non existing directory', async () => {
         await fileSystem.write(path.join(TEST_DIR, 'test.txt'), 'test')
-        expect(await fs.exists(path.join(TEST_DIR, 'test.txt'))).toBe(true)
+        expect(fs.existsSync(path.join(TEST_DIR, 'test.txt'))).toBe(true)
     })
 
     it('should write a file in a subdirectory in a non existing directory', async () => {
         await fileSystem.write(path.join(TEST_DIR, 'sub', 'test.txt'), 'test')
-        expect(await fs.exists(path.join(TEST_DIR, 'sub', 'test.txt'))).toBe(true)
+        expect(fs.existsSync(path.join(TEST_DIR, 'sub', 'test.txt'))).toBe(true)
     })
 })
