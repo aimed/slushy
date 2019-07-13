@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import commander from 'commander'
 import { OpenAPIV3 } from 'openapi-types'
 import SwaggerParser from 'swagger-parser'
