@@ -96,10 +96,10 @@ await app.start(3000)
 yarn add @slushy/codegen
 
 # Generate code based on an OpenApi file
-yarn slushy-codegen gen ./openApi.yaml ./src/generated
+yarn slushy gen ./openApi.yaml ./src/generated
 ```
 
-The command line tool takes the following arguments: `slushy-codegen gen <Open Api File> <Generated Code Dir> [Code generators]`.
+The command line tool takes the following arguments: `slushy gen <Open Api File> <Generated Code Dir> [Code generators]`.
 
 Currently the following code generators are supported:
 

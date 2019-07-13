@@ -7,7 +7,7 @@
   "author": "Maximilian Taeschner",
   "license": "MIT",
   "bin": {
-    "slushy-codegen": "./bin/slushy-codegen"
+    "slushy": "./bin/slushy-codegen"
   },
   "dependencies": {
     "commander": "^2.20.0",
