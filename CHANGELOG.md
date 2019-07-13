@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.20.5](https://github.com/aimed/slushy/compare/v0.20.4...v0.20.5) (2019-07-13)
+
+
+### Bug Fixes
+
+* codegen bin commands ([#133](https://github.com/aimed/slushy/issues/133)) ([8bd7d16](https://github.com/aimed/slushy/commit/8bd7d16))
+
+
+
+
+
 ## [0.20.4](https://github.com/aimed/slushy/compare/v0.20.3...v0.20.4) (2019-07-13)
 
 **Note:** Version bump only for package slushy
