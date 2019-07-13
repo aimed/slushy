@@ -109,19 +109,33 @@ Currently the following code generators are supported:
 | ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file.   |
 | ComponentResponsesGenerator   | Generates all types for the #/components/responses section of the OpenApi file. |
 
-## Features
+## Server
 
-### Host interactive Api documentation
+### Configuration
+
+#### Custom base path
+
+You can configure a custom base path:
+
+```ts
+Slushy.create({
+  basePath: '/api/v1',
+})
+```
+
+#### Host interactive Api documentation
 
 Hosting of the Api documentation can be enabled by passing the path to Slushy:
 
 ```ts
-SlushyFactory.create({
+Slushy.create({
   docs: {
     path: '/api-docs',
   },
 })
 ```
+
+## Features
 
 ### File uploads
 
