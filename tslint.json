@@ -9,13 +9,13 @@
     "interface-name": [true, "never-prefix"],
     "no-consecutive-blank-lines": true,
     "no-floating-promises": true,
-    "no-implicit-dependencies": [true, "dev"],
     "no-shadowed-variable": true,
     "no-string-throw": true,
     "member-access": true,
     "no-var-keyword": true,
     "no-var-requires": true,
     "object-literal-key-quotes": [true, "as-needed"],
+    "comment-type": [true, "doc", "singleline"],
     "ordered-imports": [
       true,
       {
