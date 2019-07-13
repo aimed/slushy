@@ -15,6 +15,7 @@
     "no-var-keyword": true,
     "no-var-requires": true,
     "object-literal-key-quotes": [true, "as-needed"],
+    "comment-type": [true, "doc", "singleline"],
     "ordered-imports": [
       true,
       {
