@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.20.3",
+  "version": "0.20.4",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
@@ -19,8 +19,8 @@
     }
   },
   "dependencies": {
-    "@slushy/server": "file:../server",
-    "@slushy/codegen": "file:../codegen"
+    "@slushy/codegen": "file:../codegen",
+    "@slushy/server": "file:../server"
   },
   "scripts": {
     "test": "yarn generate && node ../node_modules/.bin/jest",
