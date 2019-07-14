@@ -1,6 +1,7 @@
 import { OpenAPIV3 } from 'openapi-types'
 import { TSFile } from '../../typescript/TSFile'
 import { capitalize, isReferenceObject } from '../../typescript/utils'
+
 /**
  * Creates a resource operation parameter.
  * @example
@@ -8,7 +9,7 @@ import { capitalize, isReferenceObject } from '../../typescript/utils'
  */
 export class ParameterTypeFactory {
     public declareParameterType(operationObject: OpenAPIV3.OperationObject, tsFile: TSFile): string {
-        const { parameters = [], operationId, requestBody } = operationObject
+        const { parameters = [], operationId } = operationObject
         const inputTypeSchema = {
             type: 'object' as 'object',
             properties: {} as {
@@ -17,6 +18,7 @@ export class ParameterTypeFactory {
             additionalProperties: false,
             required: [] as string[],
         }
+
         for (const parameter of parameters) {
             if (isReferenceObject(parameter)) {
                 throw new Error('Parameter $ref definitions are not supported, maybe you forgot to bundle.')
@@ -36,29 +38,7 @@ export class ParameterTypeFactory {
                 ...parameter.schema,
             }
         }
-        if (requestBody) {
-            if (isReferenceObject(requestBody)) {
-                throw new Error('RequestBody $ref definitions are not supported, maybe you forgot to bundle.')
-            }
-            const requestBodySchema: OpenAPIV3.SchemaObject &
-                Required<Pick<OpenAPIV3.NonArraySchemaObject, 'oneOf'>> = {
-                type: 'object',
-                oneOf: [],
-            }
-            for (const requestBodyMimeType of Object.keys(requestBody.content)) {
-                const mediaObject = requestBody.content[requestBodyMimeType]
-                if (!mediaObject.schema) {
-                    // TODO: Maybe it is not?
-                    throw new Error(`Schema is required for MIME type ${requestBodyMimeType}`)
-                }
-                requestBodySchema.oneOf.push(mediaObject.schema)
-            }
-            const requestBodyInputKey = 'requestBody'
-            inputTypeSchema.properties[requestBodyInputKey] = requestBodySchema
-            if (requestBody.required) {
-                inputTypeSchema.required.push(requestBodyInputKey)
-            }
-        }
+
         const parameterTypeName = capitalize(`${operationId}Params`)
         const parameterTypeString = tsFile.getTSType(inputTypeSchema)
         const parameterTypeDeclaration = `export type ${parameterTypeName} = ${parameterTypeString}`

@@ -7,6 +7,12 @@ import { IdentifierImport } from './IdentifierImport'
 import { IdentifierRegistry } from './IdentifierRegistry'
 import { camelCaseify, capitalize, isReferenceObject } from './utils'
 
+const FLAG = `
+/* tslint:disable */
+// This file has been auto generated.
+// Do not modify!
+`
+
 export class TSFile {
     private readonly imports: IdentifierImport[] = []
 
@@ -110,7 +116,7 @@ export class TSFile {
 
     public async build(): Promise<string> {
         const imports = this.resolveImports()
-        const source = [...imports, '', ...this.contents].join('\r')
+        const source = [FLAG, ...imports, '', ...this.contents].join('\r')
         const formatted = prettier.format(source, {
             parser: 'typescript',
             semi: false,

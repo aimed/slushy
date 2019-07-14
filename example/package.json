@@ -24,11 +24,12 @@
   },
   "scripts": {
     "test": "yarn generate && node ../node_modules/.bin/jest",
-    "generate": "node ./node_modules/@slushy/codegen/dist/index.js gen ./pet.yaml ./src/generated",
+    "lint": "../node_modules/.bin/tslint -p ./",
+    "generate": "./node_modules/.bin/slushy gen ./pet.yaml ./src/generated",
     "build": "yarn generate && tsc --noEmit",
     "start": "ts-node src/index.ts",
     "link": "yarn link",
     "postlink": "yarn link @slushy/codegen && yarn link @slushy/server",
-    "clean": "rm -rf node_modules/ && rm -rf dist/ && rm -f tsconfig.tsbuildinfo"
+    "clean": "rm -rf node_modules/ && rm -rf dist/ && rm -f tsconfig.tsbuildinfo && rm -rf ./src/generated"
   }
 }

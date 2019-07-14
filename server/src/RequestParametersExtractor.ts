@@ -1,13 +1,11 @@
 import { isReferenceObject } from './helpers/isReferenceObject'
-import { SlushyContext } from './SlushyContext'
+import { SlushyInfo } from './SlushyInfo'
 
-export class RequestParametersExtractor<TContext> {
-    constructor() {}
-
+export class RequestParametersExtractor {
     /**
      * Extracts all parameters for the current operation from the request.
      */
-    public async getParameters<TParams>(context: SlushyContext<TContext>): Promise<TParams> {
+    public async getParameters<TParams, TBody>(context: SlushyInfo) {
         const { operationObject, req } = context
 
         const params: { [index: string]: any } = {}
@@ -38,7 +36,9 @@ export class RequestParametersExtractor<TContext> {
             params[parameter.name] = parameterInRequestProperty[parameter.in]
         }
 
-        params.requestBody = req.body
-        return params as TParams
+        return {
+            params: params as TParams,
+            body: req.body as TBody,
+        }
     }
 }

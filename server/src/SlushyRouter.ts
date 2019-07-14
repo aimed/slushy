@@ -27,12 +27,14 @@ import {
     SlushyRequestHandler,
     SlushyRouterImplementation,
 } from './ServerImpl'
-import { SlushyContext } from './SlushyContext'
+import { SlushyInfo } from './SlushyInfo'
 import { SlushyProps } from './SlushyProps'
 
-export type RouteHandler<TParams, TResponse, TContext> = (
+export type RouteHandler<TParams, TBody, TResponse, TContext> = (
     params: TParams,
-    context: SlushyContext<TContext>,
+    body: TBody,
+    context: TContext,
+    info: SlushyInfo,
 ) => Promise<TResponse>
 
 interface ResponseLike {
@@ -102,7 +104,7 @@ export class SlushyRouter<TContext> {
         }
     }
 
-    public get<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
+    public get<TParams, TBody, TResponse>(path: string, handler: RouteHandler<TParams, TBody, TResponse, TContext>) {
         const middlewares = this.middlewareFactories
             .map(Factory => new Factory())
             .map(factory => factory.create(this.props, path, 'get'))
@@ -114,7 +116,7 @@ export class SlushyRouter<TContext> {
         )
     }
 
-    public post<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
+    public post<TParams, TBody, TResponse>(path: string, handler: RouteHandler<TParams, TBody, TResponse, TContext>) {
         const middlewares = this.middlewareFactories
             .map(Factory => new Factory())
             .map(factory => factory.create(this.props, path, 'post'))
@@ -126,19 +128,7 @@ export class SlushyRouter<TContext> {
         )
     }
 
-    public put<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = this.middlewareFactories
-            .map(Factory => new Factory())
-            .map(factory => factory.create(this.props, path, 'put'))
-        this.router.put(
-            this.openApiBridge.makeRouterPath(path),
-            ...middlewares,
-            this.slushyHandler(handler),
-            this.errorHandler,
-        )
-    }
-
-    public delete<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
+    public delete<TParams, TBody, TResponse>(path: string, handler: RouteHandler<TParams, TBody, TResponse, TContext>) {
         const middlewares = this.middlewareFactories
             .map(Factory => new Factory())
             .map(factory => factory.create(this.props, path, 'delete'))
@@ -150,11 +140,11 @@ export class SlushyRouter<TContext> {
         )
     }
 
-    public options<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
+    public put<TParams, TBody, TResponse>(path: string, handler: RouteHandler<TParams, TBody, TResponse, TContext>) {
         const middlewares = this.middlewareFactories
             .map(Factory => new Factory())
-            .map(factory => factory.create(this.props, path, 'options'))
-        this.router.options(
+            .map(factory => factory.create(this.props, path, 'put'))
+        this.router.put(
             this.openApiBridge.makeRouterPath(path),
             ...middlewares,
             this.slushyHandler(handler),
@@ -162,7 +152,7 @@ export class SlushyRouter<TContext> {
         )
     }
 
-    public patch<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
+    public patch<TParams, TBody, TResponse>(path: string, handler: RouteHandler<TParams, TBody, TResponse, TContext>) {
         const middlewares = this.middlewareFactories
             .map(Factory => new Factory())
             .map(factory => factory.create(this.props, path, 'patch'))
@@ -174,24 +164,12 @@ export class SlushyRouter<TContext> {
         )
     }
 
-    public head<TParams, TResponse>(path: string, handler: RouteHandler<TParams, TResponse, TContext>) {
-        const middlewares = this.middlewareFactories
-            .map(Factory => new Factory())
-            .map(factory => factory.create(this.props, path, 'head'))
-        this.router.head(
-            this.openApiBridge.makeRouterPath(path),
-            ...middlewares,
-            this.slushyHandler(handler),
-            this.errorHandler,
-        )
-    }
-
     /**
      * Creates a resource handler compatible with the underlying framework.
      * TODO: Move this to bridge.
      */
-    protected slushyHandler<TParams, TResponse>(
-        handler: RouteHandler<TParams, TResponse, TContext>,
+    protected slushyHandler<TParams, TBody, TResponse>(
+        handler: RouteHandler<TParams, TBody, TResponse, TContext>,
     ): SlushyRequestHandler {
         return async (req, res, _next) => {
             const { openApi, contextFactory } = this.props
@@ -204,7 +182,7 @@ export class SlushyRouter<TContext> {
             logger.log(`${req.method} ${req.path}`)
 
             try {
-                const context = await this.contextFactory.buildContext(
+                const { context, info } = await this.contextFactory.create(
                     req,
                     res,
                     requestId,
@@ -213,8 +191,8 @@ export class SlushyRouter<TContext> {
                     contextFactory,
                 )
 
-                const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
-                const resourceResponse = await handler(parameters, context)
+                const { params, body } = await this.requestParameterExtractor.getParameters<TParams, TBody>(info)
+                const resourceResponse = await handler(params, body, context, info)
                 if (!isResponseLike(resourceResponse)) {
                     throw new ResponseValidationError('Unexpected response', resourceResponse)
                 }

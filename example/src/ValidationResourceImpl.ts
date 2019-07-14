@@ -1,6 +1,6 @@
-import { SlushyContext } from '@slushy/server'
 import { Context } from './Context'
 import {
+    ValidationBodyDefaultValueBody,
     ValidationBodyDefaultValueOK,
     ValidationBodyDefaultValueParams,
     ValidationBodyDefaultValueResponse,
@@ -21,40 +21,28 @@ import {
 
 export class ValidationResourceImpl implements ValidationResource<Context> {
     public async validationBodyDefaultValue(
-        params: ValidationBodyDefaultValueParams,
-        _context: SlushyContext<Context>,
+        _params: ValidationBodyDefaultValueParams,
+        body: ValidationBodyDefaultValueBody,
     ): Promise<ValidationBodyDefaultValueResponse> {
         return new ValidationBodyDefaultValueOK({
-            default: params.requestBody.default,
-            noDefault: params.requestBody.noDefault,
+            default: body.default,
+            noDefault: body.noDefault,
         })
     }
 
-    public async validationQuery(
-        params: ValidationQueryParams,
-        _context: SlushyContext<Context>,
-    ): Promise<ValidationQueryResponse> {
+    public async validationQuery(params: ValidationQueryParams): Promise<ValidationQueryResponse> {
         return new ValidationQueryOK({ query: params.query })
     }
 
-    public async validationPath(
-        params: ValidationPathParams,
-        _context: SlushyContext<Context>,
-    ): Promise<ValidationPathResponse> {
+    public async validationPath(params: ValidationPathParams): Promise<ValidationPathResponse> {
         return new ValidationPathOK({ num: params.num, str: params.str })
     }
 
-    public async validationHeader(
-        params: ValidationHeaderParams,
-        _context: SlushyContext<Context>,
-    ): Promise<ValidationHeaderResponse> {
+    public async validationHeader(params: ValidationHeaderParams): Promise<ValidationHeaderResponse> {
         return new ValidationHeaderOK({ header: params['x-header'] })
     }
 
-    public async validationResponse(
-        _params: ValidationResponseParams,
-        _context: SlushyContext<Context>,
-    ): Promise<ValidationResponseResponse> {
+    public async validationResponse(_params: ValidationResponseParams): Promise<ValidationResponseResponse> {
         return new ValidationResponseOK({ data: { notAString: true } as any })
     }
 }
