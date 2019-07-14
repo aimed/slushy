@@ -33,7 +33,21 @@ paths:
       responses:
         '200':
           description: Test http operation
-
+  /validation/response:
+    get:
+      operationId: validationResponse
+      description: Test response validation
+      summary: Test response validation
+      responses:
+        '200':
+          description: Test response validation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
   /validation/query:
     get:
       operationId: validationQuery
@@ -91,6 +105,7 @@ paths:
                   type: string
       responses:
         '200':
+          description: Test body default value setter
           content:
             application/json:
               schema:
