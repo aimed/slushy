@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/aimed/slushy/compare/v0.20.6...v0.21.0) (2019-07-14)
+
+
+### Features
+
+* response validation ([#135](https://github.com/aimed/slushy/issues/135)) ([26a0034](https://github.com/aimed/slushy/commit/26a0034)), closes [#107](https://github.com/aimed/slushy/issues/107) [#59](https://github.com/aimed/slushy/issues/59)
+
+
+
+
+
 ## [0.20.4](https://github.com/aimed/slushy/compare/v0.20.3...v0.20.4) (2019-07-13)
 
 **Note:** Version bump only for package @slushy/server
