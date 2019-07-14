@@ -45,7 +45,7 @@ function isResponseLike(maybe: unknown): maybe is ResponseLike {
         return false
     }
 
-    if (typeof maybe != 'object') {
+    if (typeof maybe !== 'object') {
         return false
     }
 
