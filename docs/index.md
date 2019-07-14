@@ -145,8 +145,18 @@ You can (and should) enforce limits on the files that are uploaded. The limits c
 **Limitations:**
 
 - File uploads are only possible via multipart/form-data.
-- The requestBody must be an object and all files must be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
+- The request body must be an object and all files must be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
 - All files are currently read into a Buffer.
+
+## Limitations
+
+When using Slushy, there are a few limitations to your OpenApi schema:
+
+- Every operation can only have a single response content type.
+- Every operation with a request body can only accept a single request content type.
+- Only multipart/form-data and application/json are accepted request content types.
+- Only application/json response content types will be validated.
+- All references are resolved at code generation time, which means validation will not adapt to remote schema changes.
 
 ## Experimental APIs
 
