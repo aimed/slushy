@@ -12,4 +12,11 @@ export interface SlushyConfig<TContext> {
     getRequestId?: (req: SlushyRequest) => string
     transformError?: (error: unknown, req: SlushyRequest) => any
     loggerFactory?: LoggerFactory
+    basePath?: string
+    docs?: {
+        /**
+         * Host interactive Api documentation on this path.
+         */
+        path?: string
+    }
 }

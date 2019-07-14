@@ -83,4 +83,11 @@ describe('Validation', () => {
             expect(response.status).toBe(400)
         })
     })
+
+    describe('response', () => {
+        it('should not send a response if it fails validation', async () => {
+            const response = await request(slushy.app).get('/validation/response')
+            expect(response.status).toBe(500)
+        })
+    })
 })

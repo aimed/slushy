@@ -13,10 +13,16 @@ export abstract class SlushyError extends Error {
     public abstract readonly payload?: any
 
     /**
+     * Internal meta data of the error.
+     */
+    public readonly metaData: any[]
+
+    /**
      * @param message An optional internal error message.
      */
-    public constructor(message?: string) {
+    public constructor(message?: string, ...metaData: any[]) {
         super(message)
         Object.setPrototypeOf(this, new.target.prototype)
+        this.metaData = metaData
     }
 }

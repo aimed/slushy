@@ -109,7 +109,33 @@ Currently the following code generators are supported:
 | ComponentSchemaTypesGenerator | Generates all types for the #/components/schemas section of the OpenApi file.   |
 | ComponentResponsesGenerator   | Generates all types for the #/components/responses section of the OpenApi file. |
 
-## Experimental Features
+## Server
+
+### Configuration
+
+#### Custom base path
+
+You can configure a custom base path:
+
+```ts
+Slushy.create({
+  basePath: '/api/v1',
+})
+```
+
+#### Host interactive Api documentation
+
+Hosting of the Api documentation can be enabled by passing the path to Slushy:
+
+```ts
+Slushy.create({
+  docs: {
+    path: '/api-docs',
+  },
+})
+```
+
+## Features
 
 ### File uploads
 
@@ -119,8 +145,19 @@ You can (and should) enforce limits on the files that are uploaded. The limits c
 **Limitations:**
 
 - File uploads are only possible via multipart/form-data.
-- The requestBody MUST be an object and all files MUST be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
+- The request body must be an object and all files must be on the root of the object (e.g. `{ file: Buffer, otherBodyProperty: string }`).
 - All files are currently read into a Buffer.
+
+## Limitations
+
+When using Slushy, there are a few limitations to your OpenApi schema:
+
+- Every operation can only have a single response content type.
+- Every operation with a request body can only accept a single request content type.
+- Only multipart/form-data and application/json are accepted request content types.
+- Only application/json response content types will be validated.
+- All references are resolved at code generation time, which means validation will not adapt to remote schema changes.
+- Status code ranges are not fully supported yet (request and response validation).
 
 ## Experimental APIs
 

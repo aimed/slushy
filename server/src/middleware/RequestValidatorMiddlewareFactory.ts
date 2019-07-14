@@ -20,8 +20,9 @@ export class RequestValidationError extends Error {
 export class RequestValidatorMiddlewareFactory implements MiddlewareFactory {
     private readonly validator = new Ajv({
         allErrors: true,
-        unknownFormats: 'ignore',
         useDefaults: true,
+        unknownFormats: 'ignore',
+        logger: false,
     })
 
     public create(props: SlushyProps<any>, path?: string, operation?: PathHttpOperation): SlushyRequestHandler[] {

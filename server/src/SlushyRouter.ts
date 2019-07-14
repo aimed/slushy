@@ -1,4 +1,5 @@
 import { ContextFactory } from './ContextFactory'
+import { ResponseValidationError } from './errors'
 import { SlushyError } from './errors/SlushyError'
 import { isReferenceObject } from './helpers/isReferenceObject'
 import { DefaultLoggerFactory, Logger } from './LoggerFactory'
@@ -15,6 +16,7 @@ import { RequestValidatorMiddlewareFactory } from './middleware/RequestValidator
 import { RequestContext } from './requestContext/RequestContext'
 import { RequestId } from './RequestId'
 import { RequestParametersExtractor } from './RequestParametersExtractor'
+import { ResponseValidator } from './ResponseValidator'
 import {
     LoggerSymbol,
     OpenApiBridge,
@@ -33,11 +35,34 @@ export type RouteHandler<TParams, TResponse, TContext> = (
     context: SlushyContext<TContext>,
 ) => Promise<TResponse>
 
+interface ResponseLike {
+    status: number
+    payload?: any
+}
+
+function isResponseLike(maybe: unknown): maybe is ResponseLike {
+    if (maybe == null) {
+        return false
+    }
+
+    if (typeof maybe !== 'object') {
+        return false
+    }
+
+    const obj = maybe as ResponseLike
+    if (typeof obj.status !== 'number') {
+        return false
+    }
+
+    return true
+}
+
 export class SlushyRouter<TContext> {
     private readonly requestParameterExtractor = new RequestParametersExtractor()
     private readonly contextFactory = new ContextFactory<TContext>()
     private readonly openApiBridge = new OpenApiBridge()
     private readonly apiDocMiddlewareFactory = new ApiDocMiddlewareFactory()
+    private readonly responseValidator: ResponseValidator
 
     public constructor(
         public readonly props: SlushyProps<TContext>,
@@ -54,7 +79,10 @@ export class SlushyRouter<TContext> {
             RequestContextMiddlewareFactory,
         ],
     ) {
-        router.use('/api-docs', ...this.apiDocMiddlewareFactory.create(this.props))
+        this.responseValidator = new ResponseValidator(props)
+        if (props.docs && props.docs.path) {
+            router.use(props.docs.path, ...this.apiDocMiddlewareFactory.create(this.props))
+        }
     }
 
     private errorHandler: SlushyErrorRequestHandler = (error, req, res, _next) => {
@@ -186,25 +214,32 @@ export class SlushyRouter<TContext> {
                 )
 
                 const parameters = await this.requestParameterExtractor.getParameters<TParams>(context)
-                // FIXME: Remove cast again for type safety.
-                const resourceResponse = ((await handler(parameters, context)) as unknown) as {
-                    status: number
-                    payload?: any
+                const resourceResponse = await handler(parameters, context)
+                if (!isResponseLike(resourceResponse)) {
+                    throw new ResponseValidationError('Unexpected response', resourceResponse)
+                }
+
+                const contentType = this.getContentType(req, resourceResponse)
+                if (contentType) {
+                    this.responseValidator.validateResponse(
+                        resourceResponse.status,
+                        resourceResponse.payload,
+                        contentType,
+                        req[OperationObjectSymbol],
+                    )
                 }
 
                 if (resourceResponse.payload) {
-                    const contentType = this.getContentType(req, resourceResponse)
                     if (!res.headersSent && contentType) {
                         res.type(contentType)
                     }
-                    res.send(resourceResponse.payload).status(resourceResponse.status)
+                    res.status(resourceResponse.status).send(resourceResponse.payload)
                 } else {
                     res.sendStatus(resourceResponse.status)
                 }
             } catch (error) {
-                // TODO: Move some things to slushy request extension that extends the express request, e.g. operationObject, pathObject, requestId, logger, the context itself?
                 if (error instanceof SlushyError) {
-                    logger.log(error.payload)
+                    logger.log(error.payload, error.metaData)
                     res.status(error.status).send(error.payload)
                 } else {
                     logger.error(error, 'Unexpected error')

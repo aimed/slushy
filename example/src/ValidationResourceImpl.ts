@@ -14,6 +14,9 @@ import {
     ValidationQueryParams,
     ValidationQueryResponse,
     ValidationResource,
+    ValidationResponseOK,
+    ValidationResponseParams,
+    ValidationResponseResponse,
 } from './generated/resources/ValidationResource'
 
 export class ValidationResourceImpl implements ValidationResource<Context> {
@@ -46,5 +49,12 @@ export class ValidationResourceImpl implements ValidationResource<Context> {
         _context: SlushyContext<Context>,
     ): Promise<ValidationHeaderResponse> {
         return new ValidationHeaderOK({ header: params['x-header'] })
+    }
+
+    public async validationResponse(
+        _params: ValidationResponseParams,
+        _context: SlushyContext<Context>,
+    ): Promise<ValidationResponseResponse> {
+        return new ValidationResponseOK({ data: { notAString: true } as any })
     }
 }

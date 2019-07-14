@@ -1,3 +1,4 @@
 {
-    "cSpell.words": ["APIV", "Taeschner", "codegen", "commitlint", "lerna", "openapi"]
+  "cSpell.words": ["APIV", "Taeschner", "codegen", "commitlint", "lerna", "openapi"],
+  "daddy-jest.jestPath": "${workspaceFolder}/node_modules/.bin/jest"
 }
