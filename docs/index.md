@@ -157,6 +157,7 @@ When using Slushy, there are a few limitations to your OpenApi schema:
 - Only multipart/form-data and application/json are accepted request content types.
 - Only application/json response content types will be validated.
 - All references are resolved at code generation time, which means validation will not adapt to remote schema changes.
+- Status code ranges are not fully supported yet (request and response validation).
 
 ## Experimental APIs
 
