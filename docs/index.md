@@ -50,13 +50,18 @@ export type GetPetsResponse = GetPetsSuccess
 // Fully typed path bindings
 export class PetsResourceRouter {
   bind(router: Router, resource: PetsResource) {
-    router.get<GetPetsParams, GetPetsResponse>('/pets', resource.getPetsById.bind(resource))
+    router.get<GetPetsParams, GetPetsByIdBody, GetPetsResponse>('/pets', resource.getPetsById.bind(resource))
   }
 }
 
 // Fully typed resource interfaces for you to implement
-export interface PetsResource<Context> {
-  getPetsById(parameters: GetPetsParams, context: Context): Promise<GetPetsResponse>
+export interface PetsResource<TContext> {
+  getPetsById(
+    params: GetPetsByIdParams,
+    body: GetPetsByIdBody,
+    context: TContext,
+    info: SlushyInfo,
+  ): Promise<GetPetsResponse>
 }
 ```
 
@@ -64,8 +69,8 @@ All that's left for you is to actually implement request handlers based on the g
 
 ```ts
 // Implement all required resources
-export class PetsResourceImplementation implements PetsResource {
-  getPetsById() {
+export class PetsResourceImplementation implements PetsResource<Context> {
+  getPetsById(params: GetPetsByIdParams, body: GetPetsByIdBody, context: Context, info: SlushyInfo) {
     return Promise.resolve(
       new GetPetsSuccess([
         {

@@ -10,6 +10,10 @@ export interface ResourceOperation {
      */
     parameterType: string
     /**
+     * @example GetPetByIdBody
+     */
+    bodyType: string
+    /**
      * @example GetPetByIdResponse
      */
     returnType: string

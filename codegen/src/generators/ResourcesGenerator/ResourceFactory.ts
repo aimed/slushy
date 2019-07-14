@@ -5,8 +5,8 @@ import { ResourceOperation } from './ResourceOperation'
 /**
  * Creates a resource description.
  * @example
- * export interface PetsResource {
- *  getPetById(params: GetPetByIdParams): Promise<GetPetByIdResponse>
+ * export interface PetsResource<TContext> {
+ *  getPetById(params: GetPetByIdParams, body: GetPetByIdBody, context: TContext): Promise<GetPetByIdResponse>
  * }
  */
 export class ResourceFactory {
@@ -19,9 +19,10 @@ export class ResourceFactory {
     public create(resourceName: string, operations: ResourceOperation[], tsFile: TSFile): string {
         const resourceDescriptionName = `${resourceName}Resource`
         const interfaceBuilder = new TSInterfaceBuilder(resourceDescriptionName, 'TContext')
-        tsFile.import('SlushyContext', '@slushy/server', true)
 
         for (const operation of operations) {
+            tsFile.import('SlushyInfo', '@slushy/server', true)
+            tsFile.import(operation.bodyType)
             tsFile.import(operation.returnType)
             tsFile.import(operation.parameterType)
 
@@ -30,7 +31,9 @@ export class ResourceFactory {
                 returnType: `Promise<${operation.returnType}>`,
                 parameters: [
                     { name: 'params', type: operation.parameterType },
-                    { name: 'context', type: 'SlushyContext<TContext>' },
+                    { name: 'body', type: operation.bodyType },
+                    { name: 'context', type: 'TContext' },
+                    { name: 'info', type: 'SlushyInfo' },
                 ],
             })
         }

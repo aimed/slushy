@@ -1,6 +1,6 @@
 import { LoggerFactory } from './LoggerFactory'
 import { SlushyRequest } from './ServerImpl'
-import { SlushyContext } from './SlushyContext'
+import { SlushyInfo } from './SlushyInfo'
 import { SlushyResourceConfiguration } from './SlushyResourceConfiguration'
 
 /**
@@ -8,7 +8,7 @@ import { SlushyResourceConfiguration } from './SlushyResourceConfiguration'
  */
 export interface SlushyConfig<TContext> {
     resourceConfiguration: SlushyResourceConfiguration<TContext>
-    contextFactory: (partialContext: SlushyContext<undefined>) => Promise<TContext>
+    contextFactory: (info: SlushyInfo) => Promise<TContext>
     getRequestId?: (req: SlushyRequest) => string
     transformError?: (error: unknown, req: SlushyRequest) => any
     loggerFactory?: LoggerFactory

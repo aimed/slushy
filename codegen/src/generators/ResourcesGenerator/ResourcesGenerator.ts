@@ -6,6 +6,7 @@ import { camelCaseify, capitalize } from '../../typescript/utils'
 import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
 import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
 import { Generator } from '../Generator'
+import { BodyTypeFactory } from './BodyTypeFactory'
 import { httpVerbPathOperations } from './httpVerbPathOperations'
 import { OpenApiConstantFactory } from './OpenApiConstantFactory'
 import { ParameterTypeFactory } from './ParameterTypeFactory'
@@ -54,11 +55,15 @@ export class ResourcesGenerator implements Generator {
                     const parameterTypeFactory = new ParameterTypeFactory()
                     const parameterType = parameterTypeFactory.declareParameterType(operationObject, tsFile)
 
+                    const bodyTypeFactory = new BodyTypeFactory()
+                    const bodyType = bodyTypeFactory.declareBodyType(operationObject, tsFile)
+
                     const resourceOperation: ResourceOperation = {
                         name: operationObject.operationId,
                         path,
                         returnType: responseType,
                         parameterType,
+                        bodyType,
                         pathItemObject,
                         method: pathOperationKey,
                         operationObject,

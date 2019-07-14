@@ -17,15 +17,16 @@ export class RouterFactory {
         tsFile.import('SlushyRouter', '@slushy/server', true)
 
         const statements: string[] = []
-        for (const { path, operationObject, method, parameterType, returnType } of resourceOperations) {
+        for (const { path, operationObject, method, parameterType, bodyType, returnType } of resourceOperations) {
             if (!operationObject.operationId) {
                 throw new Error('Missing operationId')
             }
 
             tsFile.import(parameterType)
+            tsFile.import(bodyType)
             tsFile.import(returnType)
             statements.push(
-                `router.${method}<${parameterType}, ${returnType}>('${path}', resource.${operationObject.operationId}.bind(resource))`,
+                `router.${method}<${parameterType}, ${bodyType}, ${returnType}>('${path}', resource.${operationObject.operationId}.bind(resource))`,
             )
         }
 

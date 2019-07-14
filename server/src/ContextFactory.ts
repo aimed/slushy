@@ -1,5 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types'
-import { SlushyContext, SlushyRequest, SlushyResponse } from '.'
+import { SlushyInfo, SlushyRequest, SlushyResponse } from '.'
 import { Logger } from './LoggerFactory'
 import { OpenApiBridge } from './ServerImpl'
 import { PathHttpOperation } from './types/PathHttpOperation'
@@ -7,15 +7,15 @@ import { PathHttpOperation } from './types/PathHttpOperation'
 export class ContextFactory<TContext> {
     public constructor(private readonly openApiBridge = new OpenApiBridge()) {}
 
-    public async buildContext(
+    public async create(
         req: SlushyRequest,
         res: SlushyResponse,
         requestId: string,
         logger: Logger,
         openApi: OpenAPIV3.Document,
-        contextFactory: (ctx: SlushyContext<undefined>) => Promise<TContext>,
-    ): Promise<SlushyContext<TContext>> {
-        const partialContext = {
+        contextFactory: (info: SlushyInfo) => Promise<TContext>,
+    ) {
+        const info = {
             req,
             res,
             requestId,
@@ -23,11 +23,8 @@ export class ContextFactory<TContext> {
             pathItemObject: this.getPathItemObject(req, openApi),
             operationObject: this.getOperationObject(req, openApi),
         }
-        const context = await contextFactory(partialContext as SlushyContext<any>)
-        return {
-            ...partialContext,
-            context,
-        }
+        const context = await contextFactory(info)
+        return { info, context }
     }
 
     protected getPathItemObject(req: SlushyRequest, openApi: OpenAPIV3.Document): OpenAPIV3.PathItemObject {
