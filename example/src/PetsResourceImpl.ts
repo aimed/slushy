@@ -1,5 +1,6 @@
 import { Context } from './Context'
 import {
+    CreatePetBody,
     CreatePetOK,
     CreatePetParams,
     CreatePetResponse,
@@ -15,7 +16,6 @@ import {
     UploadPetPictureOK,
     UploadPetPictureParams,
     UploadPetPictureResponse,
-    CreatePetBody,
 } from './generated/resources/PetsResource'
 import { Pet } from './generated/types'
 

@@ -1,7 +1,7 @@
 import { LoggerFactory } from '@slushy/server'
 
 export class TestLoggerFactory implements LoggerFactory {
-    create() {
+    public create() {
         return {
             log: jest.fn(),
             info: jest.fn(),
