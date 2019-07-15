@@ -1,8 +1,10 @@
 import { groupBy } from 'lodash'
 import { OpenAPIV3 } from 'openapi-types'
 import * as fsPath from 'path'
+import SwaggerParser from 'swagger-parser'
 import { TSModule } from '../../typescript/TSModule'
 import { camelCaseify, capitalize } from '../../typescript/utils'
+import { ComponentParametersGenerator } from '../ComponentParametersGenerator'
 import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
 import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
 import { Generator } from '../Generator'
@@ -17,9 +19,13 @@ import { ResponseTypeFactory } from './ResponseTypeFactory'
 import { RouterFactory } from './RouterFactory'
 
 export class ResourcesGenerator implements Generator {
-    public dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator]
+    public dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator, ComponentParametersGenerator]
 
-    public async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
+    public async generate(
+        document: OpenAPIV3.Document,
+        tsModule: TSModule,
+        references: SwaggerParser.$Refs,
+    ): Promise<void> {
         const applicationResourceDescriptions: ResourcesConfigurationDescription[] = []
 
         const pathsWithResourceName = Object.entries(document.paths).map(([path, pathItemObject]) => ({
@@ -53,7 +59,12 @@ export class ResourcesGenerator implements Generator {
                     const responseType = responseTypeFactory.declarePathResponseType(operationObject, tsFile)
 
                     const parameterTypeFactory = new ParameterTypeFactory()
-                    const parameterType = parameterTypeFactory.declareParameterType(operationObject, tsFile)
+                    const parameterType = parameterTypeFactory.declareParameterType(
+                        // Dereference parameters here to support common parameters
+                        operationObject,
+                        tsFile,
+                        references,
+                    )
 
                     const bodyTypeFactory = new BodyTypeFactory()
                     const bodyType = bodyTypeFactory.declareBodyType(operationObject, tsFile)

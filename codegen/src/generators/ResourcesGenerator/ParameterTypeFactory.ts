@@ -1,4 +1,5 @@
 import { OpenAPIV3 } from 'openapi-types'
+import SwaggerParser from 'swagger-parser'
 import { TSFile } from '../../typescript/TSFile'
 import { capitalize, isReferenceObject } from '../../typescript/utils'
 
@@ -8,7 +9,11 @@ import { capitalize, isReferenceObject } from '../../typescript/utils'
  * export type GetPetByIdParams = { petId: string }
  */
 export class ParameterTypeFactory {
-    public declareParameterType(operationObject: OpenAPIV3.OperationObject, tsFile: TSFile): string {
+    public declareParameterType(
+        operationObject: OpenAPIV3.OperationObject,
+        tsFile: TSFile,
+        references: SwaggerParser.$Refs,
+    ): string {
         const { parameters = [], operationId } = operationObject
         const inputTypeSchema = {
             type: 'object' as 'object',
@@ -19,18 +24,24 @@ export class ParameterTypeFactory {
             required: [] as string[],
         }
 
-        for (const parameter of parameters) {
+        for (let parameter of parameters) {
             if (isReferenceObject(parameter)) {
-                throw new Error('Parameter $ref definitions are not supported, maybe you forgot to bundle.')
+                parameter = references.get(parameter.$ref)
+                if (isReferenceObject(parameter)) {
+                    throw new Error('Could not resolve parameter reference.')
+                }
             }
+
             if (!parameter.schema) {
                 throw new Error(`No schema defined for parameter ${parameter.name} of operation ${operationId}.`)
             }
+
             if (parameter.in === 'body') {
                 throw new Error(
                     'Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.',
                 )
             }
+
             if (parameter.required) {
                 inputTypeSchema.required.push(parameter.name)
             }

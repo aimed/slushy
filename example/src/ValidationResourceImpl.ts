@@ -31,7 +31,7 @@ export class ValidationResourceImpl implements ValidationResource<Context> {
     }
 
     public async validationQuery(params: ValidationQueryParams): Promise<ValidationQueryResponse> {
-        return new ValidationQueryOK({ query: params.query })
+        return new ValidationQueryOK({ query: params.query, refQueryParameter: params.refQueryParameter })
     }
 
     public async validationPath(params: ValidationPathParams): Promise<ValidationPathResponse> {

@@ -15,9 +15,9 @@ describe('Validation', () => {
 
     describe('query', () => {
         it('should accept a request if the parameter is correct', async () => {
-            const response = await request(slushy.app).get('/validation/query?query=queryValue')
+            const response = await request(slushy.app).get('/validation/query?query=queryValue&refQueryParameter=1')
             expect(response.status).toBe(200)
-            expect(response.body).toEqual({ query: 'queryValue' })
+            expect(response.body).toEqual({ query: 'queryValue', refQueryParameter: 1 })
         })
 
         it('should not accept a request a required parameter is not set', async () => {

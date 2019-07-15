@@ -1,0 +1,1 @@
+export { ComponentParametersGenerator } from './ComponentParametersGenerator'
