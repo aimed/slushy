@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/aimed/slushy/compare/v0.21.3...v0.22.0) (2019-07-15)
+
+
+### Features
+
+* common parameters ([#143](https://github.com/aimed/slushy/issues/143)) ([530e681](https://github.com/aimed/slushy/commit/530e681))
+
+
+
+
+
 ## [0.21.2](https://github.com/aimed/slushy/compare/v0.21.1...v0.21.2) (2019-07-15)
 
 
