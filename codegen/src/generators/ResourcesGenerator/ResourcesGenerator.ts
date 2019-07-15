@@ -3,6 +3,7 @@ import { OpenAPIV3 } from 'openapi-types'
 import * as fsPath from 'path'
 import { TSModule } from '../../typescript/TSModule'
 import { camelCaseify, capitalize } from '../../typescript/utils'
+import { ComponentParametersGenerator } from '../ComponentParametersGenerator'
 import { ComponentSchemaResponsesGenerator } from '../ComponentSchemaResponsesGenerator'
 import { ComponentSchemaTypesGenerator } from '../ComponentSchemaTypesGenerator'
 import { Generator } from '../Generator'
@@ -17,7 +18,7 @@ import { ResponseTypeFactory } from './ResponseTypeFactory'
 import { RouterFactory } from './RouterFactory'
 
 export class ResourcesGenerator implements Generator {
-    public dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator]
+    public dependsOn = [ComponentSchemaTypesGenerator, ComponentSchemaResponsesGenerator, ComponentParametersGenerator]
 
     public async generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void> {
         const applicationResourceDescriptions: ResourcesConfigurationDescription[] = []

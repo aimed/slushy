@@ -23,14 +23,17 @@ export class ParameterTypeFactory {
             if (isReferenceObject(parameter)) {
                 throw new Error('Parameter $ref definitions are not supported, maybe you forgot to bundle.')
             }
+
             if (!parameter.schema) {
                 throw new Error(`No schema defined for parameter ${parameter.name} of operation ${operationId}.`)
             }
+
             if (parameter.in === 'body') {
                 throw new Error(
                     'Parameters with `in: body` are not allowed, please use `requestBody` instead. For more details see https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#requestBodyObject.',
                 )
             }
+
             if (parameter.required) {
                 inputTypeSchema.required.push(parameter.name)
             }
