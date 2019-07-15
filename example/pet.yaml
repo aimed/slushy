@@ -57,6 +57,7 @@ paths:
           required: true
           schema:
             type: string
+        - $ref: '#/components/parameters/refQueryParameter'
       responses:
         '200':
           description: Test query parameter validation
@@ -67,6 +68,8 @@ paths:
                 properties:
                   query: 
                     type: string
+                  refQueryParameter:
+                    type: number
   /validation/header:
     get:
       operationId: validationHeader
@@ -273,6 +276,13 @@ paths:
 
 
 components:
+  parameters:
+    refQueryParameter:
+      in: query
+      required: false
+      name: refQueryParameter
+      schema:
+        type: number
   schemas:
     Pet:
       type: object

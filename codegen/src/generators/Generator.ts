@@ -1,9 +1,10 @@
 import { OpenAPIV3 } from 'openapi-types'
+import SwaggerParser from 'swagger-parser'
 import { TSModule } from '../typescript/TSModule'
 
 export interface Generator {
     dependsOn: Array<new () => Generator>
-    generate(document: OpenAPIV3.Document, tsModule: TSModule): Promise<void>
+    generate(document: OpenAPIV3.Document, tsModule: TSModule, references: SwaggerParser.$Refs): Promise<void>
 }
 
 export type GeneratorConstructor = new () => Generator

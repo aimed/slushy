@@ -12,6 +12,7 @@ commander
     .action(async (api, outDir, generatorNames = Generators.ResourcesGenerator.name) => {
         try {
             const document = (await SwaggerParser.bundle(api)) as OpenAPIV3.Document
+            const references = await SwaggerParser.resolve(api)
             if (document.openapi.startsWith('2')) {
                 throw new Error('Slushy currently only supports OpenApi v3 documents.')
             }
@@ -28,7 +29,7 @@ commander
             const requiredGenerators = getRequiredGenerators(generators)
             for (const Generator of requiredGenerators) {
                 const generator = new Generator()
-                await generator.generate(document, tsModule)
+                await generator.generate(document, tsModule, references)
             }
 
             await tsModule.build(outDir)
