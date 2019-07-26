@@ -1004,7 +1004,7 @@
     any-observable "^0.3.0"
 
 "@slushy/codegen@file:codegen":
-  version "0.20.5"
+  version "0.22.0"
   dependencies:
     commander "^2.20.0"
     fs-extra "^8.0.1"
@@ -1013,13 +1013,13 @@
     swagger-parser "^8.0.0"
 
 "@slushy/example@file:example":
-  version "0.20.5"
+  version "0.22.3"
   dependencies:
-    "@slushy/codegen" "file:../../../Library/Caches/Yarn/v4/npm-@slushy-example-0.20.5-91d297f1-292e-491d-b8e0-feb2126ee6af-1563025516961/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../Library/Caches/Yarn/v4/npm-@slushy-example-0.20.5-91d297f1-292e-491d-b8e0-feb2126ee6af-1563025516961/node_modules/@slushy/server"
+    "@slushy/codegen" "file:codegen"
+    "@slushy/server" "file:server"
 
 "@slushy/server@file:server":
-  version "0.20.4"
+  version "0.22.3"
   dependencies:
     ajv "^6.10.0"
     body-parser "^1.19.0"
@@ -3161,10 +3161,12 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-husky@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-3.0.0.tgz#de63821a7049dc412b1afd753c259e2f6e227562"
+husky@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-3.0.1.tgz#06152c28e129622b05fa09c494209de8cf2dfb59"
+  integrity sha512-PXBv+iGKw23GHUlgELRlVX9932feFL407/wHFwtsGeArp0dDM4u+/QusSQwPKxmNgjpSL+ustbOdQ2jetgAZbA==
   dependencies:
+    chalk "^2.4.2"
     cosmiconfig "^5.2.1"
     execa "^1.0.0"
     get-stdin "^7.0.0"
