@@ -1027,7 +1027,7 @@
 "@slushy/codegen@file:codegen":
   version "0.22.0"
   dependencies:
-    commander "^3.0.0"
+    commander "^2.20.0"
     fs-extra "^8.0.1"
     lodash "^4.17.14"
     prettier "^1.17.0"
@@ -1036,8 +1036,8 @@
 "@slushy/example@file:example":
   version "0.22.3"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.3-cd7f3c10-525b-40cc-a6a8-9983fb55e7ef-1565337163765/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.3-cd7f3c10-525b-40cc-a6a8-9983fb55e7ef-1565337163765/node_modules/@slushy/server"
+    "@slushy/codegen" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.3-1ee8d822-a444-4f1f-bcd5-38080273b716-1565337719639/node_modules/@slushy/codegen"
+    "@slushy/server" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.3-1ee8d822-a444-4f1f-bcd5-38080273b716-1565337719639/node_modules/@slushy/server"
 
 "@slushy/server@file:server":
   version "0.22.3"
@@ -1888,11 +1888,6 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
 commander@^2.12.1, commander@^2.20.0, commander@^2.7.1, commander@~2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
-
-commander@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-3.0.0.tgz#0641ea00838c7a964627f04cddc336a2deddd60a"
-  integrity sha512-pl3QrGOBa9RZaslQiqnnKX2J068wcQw7j9AIaBQ9/JEp5RY6je4jKTImg0Bd+rpoONSe7GUFSgkxLeo17m3Pow==
 
 compare-func@^1.3.1:
   version "1.3.2"
