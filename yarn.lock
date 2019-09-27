@@ -1036,8 +1036,8 @@
 "@slushy/example@file:example":
   version "0.22.3"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.3-b8f8effb-46aa-4f19-bc4d-c433750dd4f7-1569598123835/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.3-b8f8effb-46aa-4f19-bc4d-c433750dd4f7-1569598123835/node_modules/@slushy/server"
+    "@slushy/codegen" "file:codegen"
+    "@slushy/server" "file:server"
 
 "@slushy/server@file:server":
   version "0.22.3"
@@ -1172,9 +1172,10 @@
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/lodash@4.14.135":
-  version "4.14.135"
-  resolved "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.135.tgz#d2607c35dd68f70c2b35ba020c667493dedd8447"
+"@types/lodash@4.14.140":
+  version "4.14.140"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.140.tgz#8d2bd55e6a22221cd662bbb85969eb00ec283da6"
+  integrity sha512-OU57uYCUUv9s8lgQTYuQlL6xkttWtz8VLCJSnt8ikla9+UXqMGJ8adCprSw7egJHSHwGvFpGhfpQDtHm/NQ3Cw==
 
 "@types/mime@*":
   version "2.0.1"
