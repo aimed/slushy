@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.22.4 (2019-09-28)
+
+**Note:** Version bump only for package @slushy/codegen
+
+
+
+
+
 # [0.22.0](https://github.com/aimed/slushy/compare/v0.21.3...v0.22.0) (2019-07-15)
 
 
