@@ -1025,7 +1025,7 @@
     any-observable "^0.3.0"
 
 "@slushy/codegen@file:codegen":
-  version "0.22.4"
+  version "0.22.5"
   dependencies:
     commander "^2.20.0"
     fs-extra "^8.0.1"
@@ -1034,13 +1034,13 @@
     swagger-parser "^8.0.0"
 
 "@slushy/example@file:example":
-  version "0.22.4"
+  version "0.22.7"
   dependencies:
     "@slushy/codegen" "file:codegen"
     "@slushy/server" "file:server"
 
 "@slushy/server@file:server":
-  version "0.22.4"
+  version "0.22.7"
   dependencies:
     ajv "^6.10.0"
     body-parser "^1.19.0"
@@ -1139,9 +1139,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/helmet@^0.0.43":
-  version "0.0.43"
-  resolved "https://registry.npmjs.org/@types/helmet/-/helmet-0.0.43.tgz#2a3f7da435088501f2901f68c3e402f79e5b2a9b"
+"@types/helmet@^0.0.44":
+  version "0.0.44"
+  resolved "https://registry.yarnpkg.com/@types/helmet/-/helmet-0.0.44.tgz#cbded9530a7c4d8a9163fc7e017f0892acd1bb81"
+  integrity sha512-MPZ7HoCGLoajTZhy3hMWHvdiOMHCZJ51U2Bve25oujn3G7KdXy0G3iRS0dUpVtKOGMNcuBF6yLDRpNdm2JH0OQ==
   dependencies:
     "@types/express" "*"
 
