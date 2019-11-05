@@ -10,7 +10,7 @@
     "slushy": "./bin/slushy-codegen"
   },
   "dependencies": {
-    "commander": "^2.20.0",
+    "commander": "^4.0.0",
     "fs-extra": "^8.0.1",
     "lodash": "^4.17.14",
     "prettier": "^1.17.0",
