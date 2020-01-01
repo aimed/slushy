@@ -1130,7 +1130,7 @@
     any-observable "^0.3.0"
 
 "@slushy/codegen@file:codegen":
-  version "0.22.15"
+  version "0.22.17"
   dependencies:
     commander "^4.0.1"
     fs-extra "^8.0.1"
@@ -1139,7 +1139,7 @@
     swagger-parser "^8.0.0"
 
 "@slushy/example@file:example":
-  version "0.22.16"
+  version "0.22.17"
   dependencies:
     "@slushy/codegen" "file:codegen"
     "@slushy/server" "file:server"
@@ -1340,9 +1340,10 @@
   dependencies:
     "@types/superagent" "*"
 
-"@types/swagger-ui-express@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@types/swagger-ui-express/-/swagger-ui-express-3.0.0.tgz#7c3217cb6d900be1601053d791cfd16725cddd22"
+"@types/swagger-ui-express@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/swagger-ui-express/-/swagger-ui-express-4.1.0.tgz#307b7c16ec06a34510067aaffcd077055c092476"
+  integrity sha512-k6a+ivG1IpopddLcBAsYDbYQ9KU06Sixt8MUaBfnIOSLmWtKQhKpna/bQaM5KDssAiPvpD+wibo3rgq6Tg3r8Q==
   dependencies:
     "@types/express" "*"
     "@types/serve-static" "*"
