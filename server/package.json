@@ -1,6 +1,6 @@
 {
   "name": "@slushy/server",
-  "version": "0.22.19",
+  "version": "0.22.20",
   "description": "Slushy Server",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

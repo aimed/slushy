@@ -4,7 +4,7 @@
     "example",
     "server"
   ],
-  "version": "0.22.19",
+  "version": "0.22.20",
   "command": {
     "publish": {
       "conventionalCommits": true,
