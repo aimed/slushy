@@ -1283,13 +1283,13 @@
     swagger-parser "^8.0.0"
 
 "@slushy/example@file:example":
-  version "0.22.21"
+  version "0.22.22"
   dependencies:
-    "@slushy/codegen" "file:codegen"
-    "@slushy/server" "file:server"
+    "@slushy/codegen" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.22-cb73c90f-644d-4da9-bd6d-1083d12081b4-1582606006220/node_modules/@slushy/codegen"
+    "@slushy/server" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.22-cb73c90f-644d-4da9-bd6d-1083d12081b4-1582606006220/node_modules/@slushy/server"
 
 "@slushy/server@file:server":
-  version "0.22.20"
+  version "0.22.22"
   dependencies:
     ajv "^6.10.0"
     body-parser "^1.19.0"
@@ -1301,7 +1301,7 @@
     openapi-default-setter "^2.0.4"
     openapi-request-coercer "^2.3.0"
     swagger-ui-express "^4.0.2"
-    uuid "^3.3.2"
+    uuid "^7.0.0"
 
 "@types/babel__core@^7.1.0":
   version "7.1.2"
@@ -7291,6 +7291,11 @@ utils-merge@1.0.1:
 uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
+
+uuid@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.0.tgz#1833d4b9ce50b732bfaa271f9cb74e974d303c79"
+  integrity sha512-LNUrNsXdI/fUsypJbWM8Jt4DgQdFAZh41p9C7WE9Cn+CULOEkoG2lgQyH68v3wnIy5K3fN4jdSt270K6IFA3MQ==
 
 v8-to-istanbul@^4.0.1:
   version "4.1.2"
