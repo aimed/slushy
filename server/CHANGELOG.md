@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.23](https://github.com/aimed/slushy/compare/v0.22.22...v0.22.23) (2020-02-25)
+
+**Note:** Version bump only for package @slushy/server
+
+
+
+
+
 ## [0.22.22](https://github.com/aimed/slushy/compare/v0.22.21...v0.22.22) (2020-02-24)
 
 **Note:** Version bump only for package @slushy/server
