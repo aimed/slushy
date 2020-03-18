@@ -1253,7 +1253,7 @@
     type-detect "4.0.8"
 
 "@slushy/codegen@file:codegen":
-  version "0.22.21"
+  version "0.22.29"
   dependencies:
     commander "^5.0.0"
     fs-extra "^8.0.1"
@@ -1262,10 +1262,10 @@
     swagger-parser "^8.0.0"
 
 "@slushy/example@file:example":
-  version "0.22.28"
+  version "0.22.29"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.28-c855ba9d-0d9f-4c55-902f-6da5657589fb-1584339228730/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.28-c855ba9d-0d9f-4c55-902f-6da5657589fb-1584339228730/node_modules/@slushy/server"
+    "@slushy/codegen" "file:codegen"
+    "@slushy/server" "file:server"
 
 "@slushy/server@file:server":
   version "0.22.27"
@@ -1477,10 +1477,10 @@
     "@types/express" "*"
     "@types/serve-static" "*"
 
-"@types/uuid@7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-7.0.0.tgz#9f6993ccc8210efa90bda7e1afabbb06a9f860cd"
-  integrity sha512-RiX1I0lK9WFLFqy2xOxke396f0wKIzk5sAll0tL4J4XDYJXURI7JOs96XQb3nP+2gEpQ/LutBb66jgiT5oQshQ==
+"@types/uuid@7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-7.0.2.tgz#d680a9c596ef84abf5c4c07a32ffd66d582526f8"
+  integrity sha512-8Ly3zIPTnT0/8RCU6Kg/G3uTICf9sRwYOpUzSIM3503tLIKcnJPRuinHhXngJUy2MntrEf6dlpOHXJju90Qh5w==
 
 "@types/yargs-parser@*":
   version "13.1.0"
