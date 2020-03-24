@@ -1,6 +1,6 @@
 {
   "name": "@slushy/example",
-  "version": "0.22.32",
+  "version": "0.22.33",
   "main": "dist/index.js",
   "repository": "https://github.com/aimed/slushy",
   "author": "Maximilian Taeschner",
