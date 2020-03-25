@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.22.34](https://github.com/aimed/slushy/compare/v0.22.33...v0.22.34) (2020-03-25)
+
+**Note:** Version bump only for package slushy
+
+
+
+
+
 ## [0.22.33](https://github.com/aimed/slushy/compare/v0.22.32...v0.22.33) (2020-03-24)
 
 **Note:** Version bump only for package slushy
