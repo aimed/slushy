@@ -3,7 +3,7 @@
 
 
 "@slushy/codegen@file:../codegen":
-  version "0.22.30"
+  version "0.22.33"
   dependencies:
     commander "^5.0.0"
     fs-extra "^9.0.0"
@@ -12,7 +12,7 @@
     swagger-parser "^8.0.0"
 
 "@slushy/server@file:../server":
-  version "0.22.32"
+  version "0.22.34"
   dependencies:
     ajv "^6.10.0"
     body-parser "^1.19.0"
@@ -24,7 +24,7 @@
     openapi-default-setter "^2.0.4"
     openapi-request-coercer "^2.3.0"
     swagger-ui-express "^4.0.2"
-    uuid "^7.0.0"
+    uuid "^8.0.0"
 
 "@types/body-parser@*":
   version "1.17.0"
@@ -849,10 +849,10 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
-uuid@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.0.tgz#1833d4b9ce50b732bfaa271f9cb74e974d303c79"
-  integrity sha512-LNUrNsXdI/fUsypJbWM8Jt4DgQdFAZh41p9C7WE9Cn+CULOEkoG2lgQyH68v3wnIy5K3fN4jdSt270K6IFA3MQ==
+uuid@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.0.0.tgz#bc6ccf91b5ff0ac07bbcdbf1c7c4e150db4dbb6c"
+  integrity sha512-jOXGuXZAWdsTH7eZLtyXMqUb9EcWMGZNbL9YcGBJl4MH4nrxHmZJhEHvyLFrkxo+28uLb/NYRcStH48fnD0Vzw==
 
 validator@^10.11.0:
   version "10.11.0"
