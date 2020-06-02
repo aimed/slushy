@@ -1272,8 +1272,8 @@
 "@slushy/example@file:example":
   version "0.22.34"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.34-f27b67cb-f1a2-486a-bf6f-d792e60986d5-1590035823456/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v4/npm-@slushy-example-0.22.34-f27b67cb-f1a2-486a-bf6f-d792e60986d5-1590035823456/node_modules/@slushy/server"
+    "@slushy/codegen" "file:codegen"
+    "@slushy/server" "file:server"
 
 "@slushy/server@file:server":
   version "0.22.34"
@@ -1288,7 +1288,7 @@
     openapi-default-setter "^2.0.4"
     openapi-request-coercer "^2.3.0"
     swagger-ui-express "^4.0.2"
-    uuid "^8.1.0"
+    uuid "^7.0.0"
 
 "@types/babel__core@^7.1.0":
   version "7.1.2"
@@ -1435,10 +1435,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/node@*", "@types/node@13.9.3":
-  version "13.9.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.3.tgz#6356df2647de9eac569f9a52eda3480fa9e70b4d"
-  integrity sha512-01s+ac4qerwd6RHD+mVbOEsraDHSgUaefQlEdBbUolnQFjKwCr7luvAlEwW1RFojh67u0z4OUTjPn9LEl4zIkA==
+"@types/node@*", "@types/node@14.0.9":
+  version "14.0.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.9.tgz#43896ab87fc82bda1dfd600cdf44a0c8a64e11d2"
+  integrity sha512-0sCTiXKXELOBxvZLN4krQ0FPOAA7ij+6WwvD0k/PHd9/KAkr4dXel5J9fh6F4x1FwAQILqAWkmpeuS6mjf1iKA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -7160,10 +7160,10 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
-uuid@^8.1.0:
-  version "8.1.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.1.0.tgz#6f1536eb43249f473abc6bd58ff983da1ca30d8d"
-  integrity sha512-CI18flHDznR0lq54xBycOVmphdCYnQLKn8abKn7PXUiKUGdEd+/l9LWNJmugXel4hXq7S+RMNl34ecyC9TntWg==
+uuid@^7.0.0:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 v8-to-istanbul@^4.0.1:
   version "4.1.2"
