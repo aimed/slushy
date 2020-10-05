@@ -1272,8 +1272,8 @@
 "@slushy/example@file:example":
   version "0.22.34"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v6/npm-@slushy-example-0.22.34-24b4aac1-e988-408f-8545-6c35a30fa924-1601938209845/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v6/npm-@slushy-example-0.22.34-24b4aac1-e988-408f-8545-6c35a30fa924-1601938209845/node_modules/@slushy/server"
+    "@slushy/codegen" "file:../../../.cache/yarn/v6/npm-@slushy-example-0.22.34-e54ff98c-af38-4f8d-8d41-69464a44e99a-1601939192011/node_modules/@slushy/codegen"
+    "@slushy/server" "file:../../../.cache/yarn/v6/npm-@slushy-example-0.22.34-e54ff98c-af38-4f8d-8d41-69464a44e99a-1601939192011/node_modules/@slushy/server"
 
 "@slushy/server@file:server":
   version "0.22.34"
@@ -1288,7 +1288,7 @@
     openapi-default-setter "^2.0.4"
     openapi-request-coercer "^2.3.0"
     swagger-ui-express "^4.0.2"
-    uuid "^8.3.1"
+    uuid "^7.0.0"
 
 "@types/babel__core@^7.1.0":
   version "7.1.2"
@@ -7160,10 +7160,10 @@ uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
-uuid@^8.3.1:
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
-  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
+uuid@^7.0.0:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
+  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 v8-to-istanbul@^4.0.1:
   version "4.1.2"
