@@ -1272,8 +1272,8 @@
 "@slushy/example@file:example":
   version "0.22.34"
   dependencies:
-    "@slushy/codegen" "file:../../../.cache/yarn/v6/npm-@slushy-example-0.22.34-35779049-2f56-42e2-bd0e-5f1b6185889e-1602068142006/node_modules/@slushy/codegen"
-    "@slushy/server" "file:../../../.cache/yarn/v6/npm-@slushy-example-0.22.34-35779049-2f56-42e2-bd0e-5f1b6185889e-1602068142006/node_modules/@slushy/server"
+    "@slushy/codegen" "file:codegen"
+    "@slushy/server" "file:server"
 
 "@slushy/server@file:server":
   version "0.22.34"
@@ -1435,10 +1435,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/node@*", "@types/node@13.9.3":
-  version "13.9.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-13.9.3.tgz#6356df2647de9eac569f9a52eda3480fa9e70b4d"
-  integrity sha512-01s+ac4qerwd6RHD+mVbOEsraDHSgUaefQlEdBbUolnQFjKwCr7luvAlEwW1RFojh67u0z4OUTjPn9LEl4zIkA==
+"@types/node@*", "@types/node@14.14.8":
+  version "14.14.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.8.tgz#2127bd81949a95c8b7d3240f3254352d72563aec"
+  integrity sha512-z/5Yd59dCKI5kbxauAJgw6dLPzW+TNOItNE00PkpzNwUIEwdj/Lsqwq94H5DdYBX7C13aRA0CY32BK76+neEUA==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
